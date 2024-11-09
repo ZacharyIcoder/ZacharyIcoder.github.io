@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"appservice.club","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Online聊天卡顿崩溃原因和聊天数据源的优化测试反馈的问题有一些是界面卡顿，测试的问题不易重现和追查困难。 怎么判断主线程是不是发生了卡顿？一般来说，用户感受得到的卡顿大概有三个特征：  FPS 降低 CPU 占用率很高 主线程 Runloop 执行了很久  我们先思考一下，界面卡顿是由哪些原因导致的？">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Online聊天卡顿崩溃原因和聊天数据源的优化">
+<meta property="og:url" content="http://appservice.club/2020/07/20/Online%E8%81%8A%E5%A4%A9%E5%8D%A1%E9%A1%BF%E5%B4%A9%E6%BA%83%E5%8E%9F%E5%9B%A0%E5%92%8C%E8%81%8A%E5%A4%A9%E6%95%B0%E6%8D%AE%E6%BA%90%E7%9A%84%E4%BC%98%E5%8C%96/index.html">
+<meta property="og:site_name" content="梦幻泡影">
+<meta property="og:description" content="Online聊天卡顿崩溃原因和聊天数据源的优化测试反馈的问题有一些是界面卡顿，测试的问题不易重现和追查困难。 怎么判断主线程是不是发生了卡顿？一般来说，用户感受得到的卡顿大概有三个特征：  FPS 降低 CPU 占用率很高 主线程 Runloop 执行了很久  我们先思考一下，界面卡顿是由哪些原因导致的？">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://appservice.club/2020/07/20/Online%E8%81%8A%E5%A4%A9%E5%8D%A1%E9%A1%BF%E5%B4%A9%E6%BA%83%E5%8E%9F%E5%9B%A0%E5%92%8C%E8%81%8A%E5%A4%A9%E6%95%B0%E6%8D%AE%E6%BA%90%E7%9A%84%E4%BC%98%E5%8C%96/onlineyouhua0.png">
+<meta property="og:image" content="http://appservice.club/2020/07/20/Online%E8%81%8A%E5%A4%A9%E5%8D%A1%E9%A1%BF%E5%B4%A9%E6%BA%83%E5%8E%9F%E5%9B%A0%E5%92%8C%E8%81%8A%E5%A4%A9%E6%95%B0%E6%8D%AE%E6%BA%90%E7%9A%84%E4%BC%98%E5%8C%96/onlineyouhua1.png">
+<meta property="article:published_time" content="2020-07-20T03:08:22.000Z">
+<meta property="article:modified_time" content="2020-07-20T05:53:54.942Z">
+<meta property="article:author" content="ZacharyIcoderKong">
+<meta property="article:tag" content="SAMIM">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://appservice.club/2020/07/20/Online%E8%81%8A%E5%A4%A9%E5%8D%A1%E9%A1%BF%E5%B4%A9%E6%BA%83%E5%8E%9F%E5%9B%A0%E5%92%8C%E8%81%8A%E5%A4%A9%E6%95%B0%E6%8D%AE%E6%BA%90%E7%9A%84%E4%BC%98%E5%8C%96/onlineyouhua0.png">
+
+<link rel="canonical" href="http://appservice.club/2020/07/20/Online%E8%81%8A%E5%A4%A9%E5%8D%A1%E9%A1%BF%E5%B4%A9%E6%BA%83%E5%8E%9F%E5%9B%A0%E5%92%8C%E8%81%8A%E5%A4%A9%E6%95%B0%E6%8D%AE%E6%BA%90%E7%9A%84%E4%BC%98%E5%8C%96/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Online聊天卡顿崩溃原因和聊天数据源的优化 | 梦幻泡影</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">梦幻泡影</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">孔思哲的博客空间</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://appservice.club/2020/07/20/Online%E8%81%8A%E5%A4%A9%E5%8D%A1%E9%A1%BF%E5%B4%A9%E6%BA%83%E5%8E%9F%E5%9B%A0%E5%92%8C%E8%81%8A%E5%A4%A9%E6%95%B0%E6%8D%AE%E6%BA%90%E7%9A%84%E4%BC%98%E5%8C%96/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ZacharyIcoderKong">
+      <meta itemprop="description" content="一切有为法，如梦幻泡影，如露亦如电，应作如是观。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="梦幻泡影">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Online聊天卡顿崩溃原因和聊天数据源的优化
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-07-20 11:08:22 / 修改时间：13:53:54" itemprop="dateCreated datePublished" datetime="2020-07-20T11:08:22+08:00">2020-07-20</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/SAMIM/" itemprop="url" rel="index"><span itemprop="name">SAMIM</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Online聊天卡顿崩溃原因和聊天数据源的优化"><a href="#Online聊天卡顿崩溃原因和聊天数据源的优化" class="headerlink" title="Online聊天卡顿崩溃原因和聊天数据源的优化"></a>Online聊天卡顿崩溃原因和聊天数据源的优化</h1><p>测试反馈的问题有一些是界面卡顿，测试的问题不易重现和追查困难。</p>
+<h3 id="怎么判断主线程是不是发生了卡顿？"><a href="#怎么判断主线程是不是发生了卡顿？" class="headerlink" title="怎么判断主线程是不是发生了卡顿？"></a>怎么判断主线程是不是发生了卡顿？</h3><p>一般来说，用户感受得到的卡顿大概有三个特征：</p>
+<ol>
+<li>FPS 降低</li>
+<li>CPU 占用率很高</li>
+<li>主线程 Runloop 执行了很久</li>
+</ol>
+<h3 id="我们先思考一下，界面卡顿是由哪些原因导致的？"><a href="#我们先思考一下，界面卡顿是由哪些原因导致的？" class="headerlink" title="我们先思考一下，界面卡顿是由哪些原因导致的？"></a>我们先思考一下，界面卡顿是由哪些原因导致的？</h3><span id="more"></span> 
+
+<ol>
+<li>死锁：主线程拿到锁 A，需要获得锁 B，而同时某个子线程拿了锁 B，需要锁 A，这样相互等待就死锁了。</li>
+<li>抢锁：主线程需要访问 DB，而此时某个子线程往 DB 插入大量数据。通常抢锁的体验是偶尔卡一阵子，过会就恢复了。</li>
+<li>主线程大量 IO：主线程为了方便直接写入大量数据，会导致界面卡顿。</li>
+<li>主线程大量计算：算法不合理，导致主线程某个函数占用大量 CPU。</li>
+<li>大量的 UI 绘制：复杂的 UI、图文混排等，带来大量的 UI 绘制。</li>
+</ol>
+<ul>
+<li>关于UI绘制的优化之前就已完善，在展示数据源之前就已把要展示的数据源都先计算好布局，等UI展示时直接用计算好的布局直接展示，不需要在UI展示刷新时重复计算UI布局数据。</li>
+<li>关于消息列表的大量数据更新（用户接收大量消息和发送消息需要更新数据库，会产生抢锁和写入读取及更新大量数据的问题）已用计时器定时按需刷新UI来缓解同时更新大量数据时，更新的全量数据同时刷新UI带来的界面刷新压力。</li>
+</ul>
+<h3 id="最近Online更新的是关于聊天页面的数据源优化"><a href="#最近Online更新的是关于聊天页面的数据源优化" class="headerlink" title="最近Online更新的是关于聊天页面的数据源优化"></a>最近Online更新的是关于聊天页面的数据源优化</h3><p>聊天页面最基础的便是聊天当中的数据源（聊天信息）了，iOS可变数据源的容器通常都是可变数组，但可变数组 NSMutableArray 不是线程安全的，这就带来一个问题，主线程我们多次操作 都没有问题，但是多线程下短时间内有大量的读写操作的时候是否会引起数据的错乱？只要简单测试下 答案就会不言而喻，NSMutableArray在多线程下操作很容易引起数组越界从而导致crash。</p>
+<h4 id="开源工具YYThreadSafeArray的问题"><a href="#开源工具YYThreadSafeArray的问题" class="headerlink" title="开源工具YYThreadSafeArray的问题"></a>开源工具YYThreadSafeArray的问题</h4><p>先来看开源界常用的开源工具类YYKit中的YYThreadSafeArray，旨在提供线程安全的数组，其原理是继承NSMutableArray的，并且对其中必要的方法加锁来保证线程安全。但是YYThreadSafeArray依然有一些多线程方面的问题。</p>
+<p>诚如YYThreadSafeArray 注释的那样 Fast enumerate(for..in) and enumerator is not thread safe （快速for..in枚举和枚举器不是线程安全的）</p>
+<img src="/2020/07/20/Online%E8%81%8A%E5%A4%A9%E5%8D%A1%E9%A1%BF%E5%B4%A9%E6%BA%83%E5%8E%9F%E5%9B%A0%E5%92%8C%E8%81%8A%E5%A4%A9%E6%95%B0%E6%8D%AE%E6%BA%90%E7%9A%84%E4%BC%98%E5%8C%96/onlineyouhua0.png" class="">
+
+
+<h5 id="问题1：调用枚举方法导致死锁"><a href="#问题1：调用枚举方法导致死锁" class="headerlink" title="问题1：调用枚举方法导致死锁"></a>问题1：调用枚举方法导致死锁</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Fast enumerate(for..in) and enumerator is not thread safe,</span><br><span class="line"> use enumerate using block instead. When enumerate or sort with block/callback,</span><br><span class="line"> do *NOT* send message to the array inside the block/callback.</span><br></pre></td></tr></table></figure>
+
+<p>如下调用方式导致死锁</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">YYThreadSafeArray *array = [[YYThreadSafeArray alloc] initWithObjects:@&quot;hello world&quot;, nil];</span><br><span class="line">[array enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) &#123;</span><br><span class="line">    [array count];</span><br><span class="line">&#125;];</span><br></pre></td></tr></table></figure>
+
+<img src="/2020/07/20/Online%E8%81%8A%E5%A4%A9%E5%8D%A1%E9%A1%BF%E5%B4%A9%E6%BA%83%E5%8E%9F%E5%9B%A0%E5%92%8C%E8%81%8A%E5%A4%A9%E6%95%B0%E6%8D%AE%E6%BA%90%E7%9A%84%E4%BC%98%E5%8C%96/onlineyouhua1.png" class="">
+
+<p>原因分析：YYThreadSafeArray使用加锁的方式保证线程安全。加的锁是信号量：dispatch_semaphore。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#define LOCK(...) dispatch_semaphore_wait(_lock, DISPATCH_TIME_FOREVER); \</span><br><span class="line">__VA_ARGS__; \</span><br><span class="line">dispatch_semaphore_signal(_lock);</span><br></pre></td></tr></table></figure>
+
+<p>dispatch_semaphore并不是可重入的。因此，遇到重入的情况，就会发生死锁问题。举的例子只是其中一个死锁场景。</p>
+<p>YY选择使用dispatch_semaphore的原因，可能是判断dispatch_semaphore的执行效率较高。可以参考YY对各种锁的效率测评：<a href="https://blog.ibireme.com/2016/01/16/spinlock_is_unsafe_in_ios/">https://blog.ibireme.com/2016/01/16/spinlock_is_unsafe_in_ios&#x2F;</a></p>
+<p>修复方法：<br>使用pthread_mutex替代dispatch_semaphore。pthread_mutex有参数可以设置为可重入。在YY测试的执行效率上，可重入的pthread_mutex是可重入锁中效率较高的一个。</p>
+<h5 id="问题2：for-in循环的线程不安全"><a href="#问题2：for-in循环的线程不安全" class="headerlink" title="问题2：for-in循环的线程不安全"></a>问题2：for-in循环的线程不安全</h5><p>YYThreadSafeArray在只用for-in循环时，是无法保证线程安全的。</p>
+<p>调用方式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">YYThreadSafeArray *threadSafeArray = [[YYThreadSafeArray alloc] init];</span><br><span class="line">for (int i = 0; i &lt; 1000000; i++) &#123;</span><br><span class="line">    [threadSafeArray addObject:@(i)];</span><br><span class="line">&#125;</span><br><span class="line">dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^&#123;</span><br><span class="line">    for (int i = 0; i &lt; 100000; i++) &#123;</span><br><span class="line">        [threadSafeArray removeLastObject];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line">for (id obj in threadSafeArray) &#123;</span><br><span class="line">    (void)obj;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>此时大概率会抛出异常：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">*** Terminating app due to uncaught exception &#x27;NSGenericException&#x27;, reason: &#x27;*** Collection &lt;YYThreadSafeArray: 0x60000165aa20&gt; was mutated while being enumerated.&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>原因分析：<br>在执行for-in循环时，会调用NSArray的如下方法</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">- (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state</span><br><span class="line">                                  objects:(id __unsafe_unretained[])stackbuf</span><br><span class="line">                                    count:(NSUInteger)len;</span><br></pre></td></tr></table></figure>
+
+<p>for-in循环之所以有更高的效率，是因为在循环时，它并非每次都访问NSArray数组，而是直接将一段NSArray数组，当作一个C数组来访问，直接便利这个C数组。对于NSArray来说，state.itemsPtr字段将返回这个C数组的指针。</p>
+<p>但在这个方法中加锁，锁住的只是寻找这个C数组的过程，并不能锁住整个for-in循环过程。所以，当多线程进入时，会抛出was mutated while being enumerated异常。</p>
+<p>修复方法：<br>这个问题没有想到优雅的修复方法。有2种不怎么优雅的方式可选：</p>
+<ol>
+<li>让调用方用enumerateObjectsUsingBlock这种遍历方法替代for-in循环，但在效率上肯定有折损；</li>
+<li>将YYThreadSafeArray种的锁暴露出去，让业务方在for-in循环时自行加锁。</li>
+</ol>
+<p>但这两种方法都依赖于调用方以一个特定的姿势来调用。如果调用姿势无法保证，YYThreadSafeArray也无法保证线程安全了。</p>
+<h4 id="那如何实现一个线程安全的NSMutabeArray，以保证多个线程对数组操作（遍历，插入，删除）的安全？（对应Online聊天中各线程接受消息发送消息更新UI场景）"><a href="#那如何实现一个线程安全的NSMutabeArray，以保证多个线程对数组操作（遍历，插入，删除）的安全？（对应Online聊天中各线程接受消息发送消息更新UI场景）" class="headerlink" title="那如何实现一个线程安全的NSMutabeArray，以保证多个线程对数组操作（遍历，插入，删除）的安全？（对应Online聊天中各线程接受消息发送消息更新UI场景）"></a>那如何实现一个线程安全的NSMutabeArray，以保证多个线程对数组操作（遍历，插入，删除）的安全？（对应Online聊天中各线程接受消息发送消息更新UI场景）</h4><p>在实际开发中，有多个类可能在不同线程中同时操作消息数组，除了插入删除外，还有遍历，并且线程A在遍历时，线程B可能直接把数组给清空了，直接crash。 还有资源竞争造成的死锁。</p>
+<p>要解决这个线程安全的问题，需要明白两个知识点</p>
+<h5 id="1-nonatomic-和atomic"><a href="#1-nonatomic-和atomic" class="headerlink" title="1.nonatomic 和atomic"></a>1.nonatomic 和atomic</h5><p>这两个关键字是用来修饰成员变量的。前者是非原子操作即线程可以随便访问成员变量，后者是原子操作即线程访问按照一定的规则进行。</p>
+<p>nonatomic:</p>
+<p>如果只存在单个线程访问成员变量，用它修饰是非常不错的，因为没有对访问进行线程加锁，效率非常高。但是正因为没有加锁，所以可能同时进行读写，导致不可预期的错误。</p>
+<p>atomic:</p>
+<p>用atomic修饰成员变量，会给成员变量的getter 和 setter方法加锁，使访问每次只能进行一个，避免多个线程同时操作成员变量，所以适用于多线程访问成员变量的场景。<br>虽然atomic修饰的成员变量在多线程去访问时不会出现错误，但结果不一定准确：</p>
+<blockquote>
+<p>比如说有一个成员变量name,当a线程去getter name的值，同时有b线程和c线程对name 进行setter值，那么name的值就不确定了，可能是b线程操作之前的值，也有可能是b线程操作之后的值，也有可能是c线程操作之后的值。</p>
+</blockquote>
+<h5 id="2-dispatch-barrier-async-和dispatch-barrier-sync"><a href="#2-dispatch-barrier-async-和dispatch-barrier-sync" class="headerlink" title="2.dispatch_barrier_async 和dispatch_barrier_sync"></a>2.dispatch_barrier_async 和dispatch_barrier_sync</h5><p>这是GDC里面的两个栅栏方法，需要配合队列使用。其作用是拦住前面添加到队列的任务，让这些任务执行完成，然后再执行栅栏里的任务，两个方法的区别是：</p>
+<ol>
+<li>dispatch_barrier_async不阻塞主线程；</li>
+<li>dispatch_barrier_sync阻塞主线程，非得等到栅栏里的任务执行完成程序才能执行主线程的任务。</li>
+<li>另外一点需要明确的是，栅栏函数只对主队列和自身所在队列有影响，其他队列不受影响。</li>
+</ol>
+<p>如果在队列中的栅栏之后再添加任务，则此任务要等到栅栏里的任务完成后才会执行。</p>
+<p>看一段代码就一目了然了</p>
+<p>先使用 dispatch_barrier_sync</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">dispatch_queue_t concurrent_queue = dispatch_queue_create(&quot;concurrent&quot;, DISPATCH_QUEUE_CONCURRENT);</span><br><span class="line">    dispatch_async(concurrent_queue, ^&#123;</span><br><span class="line">        for (int i = 0; i &lt; 500; i++) &#123;</span><br><span class="line">            if (i % 100 == 0) &#123;</span><br><span class="line">                NSLog(@&quot;任务一%d&quot;,i);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    </span><br><span class="line">    dispatch_async(concurrent_queue, ^&#123;</span><br><span class="line">        for (int i = 0; i &lt; 50; i++) &#123;</span><br><span class="line">            if (i % 10 == 0) &#123;</span><br><span class="line">                NSLog(@&quot;任务二%d&quot;,i);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    </span><br><span class="line">    dispatch_async(concurrent_queue, ^&#123;</span><br><span class="line">        for (int i = 0; i &lt; 30; i++) &#123;</span><br><span class="line">            if (i % 5 == 0) &#123;</span><br><span class="line">                NSLog(@&quot;任务三%d&quot;,i);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    </span><br><span class="line">    // 这里使用同步栅栏函数</span><br><span class="line">    dispatch_barrier_sync(concurrent_queue, ^&#123;</span><br><span class="line">        for (int i = 0; i &lt; 40; i++) &#123;</span><br><span class="line">            if (i % 5 == 0) &#123;</span><br><span class="line">                NSLog(@&quot;-------同步barrier的任务%d-------&quot;,i);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    </span><br><span class="line">    NSLog(@&quot;外面的任务&quot;);</span><br><span class="line">    </span><br><span class="line">    dispatch_async(concurrent_queue, ^&#123;</span><br><span class="line">        for (int i = 0; i &lt; 3; i++) &#123;</span><br><span class="line">            NSLog(@&quot;任务四%d&quot;,i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    </span><br><span class="line">    dispatch_async(concurrent_queue, ^&#123;</span><br><span class="line">        for (int i = 0; i &lt; 3; i++) &#123;</span><br><span class="line">            NSLog(@&quot;任务六%d&quot;,i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure>
+
+<p>打印结果如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">2019-07-31 17:22:17.599644+0800 ArrayTest[14396:408598] 任务一0</span><br><span class="line">2019-07-31 17:22:17.599644+0800 ArrayTest[14396:408597] 任务三0</span><br><span class="line">2019-07-31 17:22:17.599644+0800 ArrayTest[14396:408596] 任务二0</span><br><span class="line">2019-07-31 17:22:17.599823+0800 ArrayTest[14396:408598] 任务一100</span><br><span class="line">2019-07-31 17:22:17.599823+0800 ArrayTest[14396:408597] 任务三5</span><br><span class="line">2019-07-31 17:22:17.599824+0800 ArrayTest[14396:408596] 任务二10</span><br><span class="line">2019-07-31 17:22:17.599931+0800 ArrayTest[14396:408597] 任务三10</span><br><span class="line">2019-07-31 17:22:17.599949+0800 ArrayTest[14396:408598] 任务一200</span><br><span class="line">2019-07-31 17:22:17.599932+0800 ArrayTest[14396:408596] 任务二20</span><br><span class="line">2019-07-31 17:22:17.600011+0800 ArrayTest[14396:408597] 任务三15</span><br><span class="line">2019-07-31 17:22:17.600252+0800 ArrayTest[14396:408598] 任务一300</span><br><span class="line">2019-07-31 17:22:17.600424+0800 ArrayTest[14396:408597] 任务三20</span><br><span class="line">2019-07-31 17:22:17.600626+0800 ArrayTest[14396:408598] 任务一400</span><br><span class="line">2019-07-31 17:22:17.600784+0800 ArrayTest[14396:408597] 任务三25</span><br><span class="line">2019-07-31 17:22:17.601275+0800 ArrayTest[14396:408596] 任务二30</span><br><span class="line">2019-07-31 17:22:17.601423+0800 ArrayTest[14396:408596] 任务二40</span><br><span class="line">2019-07-31 17:22:17.601702+0800 ArrayTest[14396:408489] -------同步barrier的任务0-------</span><br><span class="line">2019-07-31 17:22:17.601942+0800 ArrayTest[14396:408489] -------同步barrier的任务5-------</span><br><span class="line">2019-07-31 17:22:17.602155+0800 ArrayTest[14396:408489] -------同步barrier的任务10-------</span><br><span class="line">2019-07-31 17:22:17.602368+0800 ArrayTest[14396:408489] -------同步barrier的任务15-------</span><br><span class="line">2019-07-31 17:22:17.602592+0800 ArrayTest[14396:408489] -------同步barrier的任务20-------</span><br><span class="line">2019-07-31 17:22:17.602798+0800 ArrayTest[14396:408489] -------同步barrier的任务25-------</span><br><span class="line">2019-07-31 17:22:17.603012+0800 ArrayTest[14396:408489] -------同步barrier的任务30-------</span><br><span class="line">2019-07-31 17:22:17.616610+0800 ArrayTest[14396:408489] -------同步barrier的任务35-------</span><br><span class="line">2019-07-31 17:22:17.616736+0800 ArrayTest[14396:408489] 外面的任务</span><br><span class="line">2019-07-31 17:22:17.616874+0800 ArrayTest[14396:408598] 任务六0</span><br><span class="line">2019-07-31 17:22:17.616899+0800 ArrayTest[14396:408597] 任务四0</span><br><span class="line">2019-07-31 17:22:17.617111+0800 ArrayTest[14396:408598] 任务六1</span><br><span class="line">2019-07-31 17:22:17.617199+0800 ArrayTest[14396:408597] 任务四1</span><br><span class="line">2019-07-31 17:22:17.617345+0800 ArrayTest[14396:408598] 任务六2</span><br><span class="line">2019-07-31 17:22:17.617427+0800 ArrayTest[14396:408597] 任务四2</span><br></pre></td></tr></table></figure>
+
+<p>再使用dispatch_barrier_async</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// 这里使用异步栅栏函数</span><br><span class="line">dispatch_barrier_async(concurrent_queue, ^&#123;</span><br><span class="line">    for (int i = 0; i &lt; 40; i++) &#123;</span><br><span class="line">        if (i % 5 == 0) &#123;</span><br><span class="line">            NSLog(@&quot;-------异步barrier的任务%d-------&quot;,i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>打印结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">2019-07-31 17:25:28.130839+0800 ArrayTest[14457:413975] 任务一0</span><br><span class="line">2019-07-31 17:25:28.130846+0800 ArrayTest[14457:413977] 任务三0</span><br><span class="line">2019-07-31 17:25:28.130839+0800 ArrayTest[14457:413986] 任务二0</span><br><span class="line">2019-07-31 17:25:28.131042+0800 ArrayTest[14457:413977] 任务三5</span><br><span class="line">2019-07-31 17:25:28.131067+0800 ArrayTest[14457:413986] 任务二10</span><br><span class="line">2019-07-31 17:25:28.131043+0800 ArrayTest[14457:413975] 任务一100</span><br><span class="line">2019-07-31 17:25:28.131130+0800 ArrayTest[14457:413977] 任务三10</span><br><span class="line">2019-07-31 17:25:28.131157+0800 ArrayTest[14457:413975] 任务一200</span><br><span class="line">2019-07-31 17:25:28.131172+0800 ArrayTest[14457:413986] 任务二20</span><br><span class="line">2019-07-31 17:25:28.131238+0800 ArrayTest[14457:413977] 任务三15</span><br><span class="line">2019-07-31 17:25:28.130880+0800 ArrayTest[14457:413837] 外面的任务</span><br><span class="line">2019-07-31 17:25:28.131664+0800 ArrayTest[14457:413975] 任务一300</span><br><span class="line">2019-07-31 17:25:28.131828+0800 ArrayTest[14457:413977] 任务三20</span><br><span class="line">2019-07-31 17:25:28.131980+0800 ArrayTest[14457:413975] 任务一400</span><br><span class="line">2019-07-31 17:25:28.132137+0800 ArrayTest[14457:413977] 任务三25</span><br><span class="line">2019-07-31 17:25:28.132620+0800 ArrayTest[14457:413986] 任务二30</span><br><span class="line">2019-07-31 17:25:28.132911+0800 ArrayTest[14457:413986] 任务二40</span><br><span class="line">2019-07-31 17:25:28.133144+0800 ArrayTest[14457:413986] -------异步barrier的任务0-------</span><br><span class="line">2019-07-31 17:25:28.133334+0800 ArrayTest[14457:413986] -------异步barrier的任务5-------</span><br><span class="line">2019-07-31 17:25:28.133543+0800 ArrayTest[14457:413986] -------异步barrier的任务10-------</span><br><span class="line">2019-07-31 17:25:28.133761+0800 ArrayTest[14457:413986] -------异步barrier的任务15-------</span><br><span class="line">2019-07-31 17:25:28.133959+0800 ArrayTest[14457:413986] -------异步barrier的任务20-------</span><br><span class="line">2019-07-31 17:25:28.134183+0800 ArrayTest[14457:413986] -------异步barrier的任务25-------</span><br><span class="line">2019-07-31 17:25:28.140504+0800 ArrayTest[14457:413986] -------异步barrier的任务30-------</span><br><span class="line">2019-07-31 17:25:28.140658+0800 ArrayTest[14457:413986] -------异步barrier的任务35-------</span><br><span class="line">2019-07-31 17:25:28.140785+0800 ArrayTest[14457:413986] 任务四0</span><br><span class="line">2019-07-31 17:25:28.140788+0800 ArrayTest[14457:413977] 任务六0</span><br><span class="line">2019-07-31 17:25:28.140883+0800 ArrayTest[14457:413986] 任务四1</span><br><span class="line">2019-07-31 17:25:28.140892+0800 ArrayTest[14457:413977] 任务六1</span><br><span class="line">2019-07-31 17:25:28.140961+0800 ArrayTest[14457:413986] 任务四2</span><br><span class="line">2019-07-31 17:25:28.140987+0800 ArrayTest[14457:413977] 任务六2</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="实现线程安全的数组-（使用dispatch-barrier函数）"><a href="#实现线程安全的数组-（使用dispatch-barrier函数）" class="headerlink" title="实现线程安全的数组 （使用dispatch_barrier函数）"></a>实现线程安全的数组 （使用dispatch_barrier函数）</h4><p>通过上面的知识点可以知道，一个用nonatomic修饰的数组成员变量，它的线程访问是不受限制的，当然我们也已经知道用atomic修饰也并不合适，因为线程访问得到的值依然不够准确。<br>那要实现线程安全的数组，该怎么办呢？使用dispatch_barrier函数可以解决。</p>
+<blockquote>
+<p>将数组的写（插入、修改、删除）操作放进队列中dispatch_barrier函数中，这样当进行写的操作时，会先等待前面的读的任务完成后再执行写操作;而且后面的读任务也要等待dispatch_barrier中的写操作执行完成后才会被执行。</p>
+</blockquote>
+<h5 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h5><p>创建一个类给它添加一个可变数组的成员变量，给这个类添加访问数组成员变量的所有方法。不多说，看代码：<br>.h文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">#import &lt;Foundation/Foundation.h&gt;</span><br><span class="line"></span><br><span class="line">NS_ASSUME_NONNULL_BEGIN</span><br><span class="line"></span><br><span class="line">@interface ZHMutableArray : NSObject</span><br><span class="line"></span><br><span class="line">// 读取数组</span><br><span class="line">- (NSMutableArray *)array;</span><br><span class="line">//判断是否包含对象</span><br><span class="line">- (BOOL)containsObject:(id)anObject;</span><br><span class="line">//集合元素数量</span><br><span class="line">- (NSUInteger)count;</span><br><span class="line">//获取元素</span><br><span class="line">- (id)objectAtIndex:(NSUInteger)index;</span><br><span class="line">//枚举元素</span><br><span class="line">- (NSEnumerator *)objectEnumerator;</span><br><span class="line">//插入</span><br><span class="line">- (void)insertObject:(id)anObject atIndex:(NSUInteger)index;</span><br><span class="line">//添加</span><br><span class="line">- (void)addObject:(id)anObject;</span><br><span class="line">//移除</span><br><span class="line">- (void)removeObjectAtIndex:(NSUInteger)index;</span><br><span class="line">//移除</span><br><span class="line">- (void)removeObject:(id)anObject;</span><br><span class="line">//移除</span><br><span class="line">- (void)removeLastObject;</span><br><span class="line">//替换</span><br><span class="line">- (void)replaceObjectAtIndex:(NSUInteger)index withObject:(id)anObject;</span><br><span class="line">//获取索引</span><br><span class="line">- (NSUInteger)indexOfObject:(id)anObject;</span><br><span class="line"></span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+
+<p>.m文件</p>
+<blockquote>
+<p>凡涉及更改数组中元素的操作，使用异步栅栏块；读取数据使用 同步+并行队列</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br></pre></td><td class="code"><pre><span class="line">#import &quot;ZHMutableArray.h&quot;</span><br><span class="line"></span><br><span class="line">@interface ZHMutableArray()</span><br><span class="line"></span><br><span class="line">@property (nonatomic,strong)dispatch_queue_t concurrentQueue;</span><br><span class="line">@property (nonatomic,strong)NSMutableArray *arr;</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@implementation ZHMutableArray</span><br><span class="line"></span><br><span class="line">-(instancetype)init&#123;</span><br><span class="line">    self = [super init];</span><br><span class="line">    if (self) &#123;</span><br><span class="line">        NSString *identifier = [NSString stringWithFormat:@&quot;&lt;ZHMutableArray&gt;%p&quot;,self];</span><br><span class="line">        self.concurrentQueue = dispatch_queue_create([identifier UTF8String], DISPATCH_QUEUE_CONCURRENT);</span><br><span class="line">        self.arr = [NSMutableArray array];</span><br><span class="line">    &#125;</span><br><span class="line">    return self;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (NSMutableArray *)array</span><br><span class="line">&#123;</span><br><span class="line">    __block NSMutableArray *safeArray;</span><br><span class="line">    dispatch_sync(_concurrentQueue, ^&#123;</span><br><span class="line">        safeArray = self.arr;</span><br><span class="line">    &#125;);</span><br><span class="line">    return safeArray;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (BOOL)containsObject:(id)anObject</span><br><span class="line">&#123;</span><br><span class="line">    __block BOOL isExist = NO;</span><br><span class="line">    dispatch_sync(_concurrentQueue, ^&#123;</span><br><span class="line">        isExist = [self.arr containsObject:anObject];</span><br><span class="line">    &#125;);</span><br><span class="line">    return isExist;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (NSUInteger)count</span><br><span class="line">&#123;</span><br><span class="line">    __block NSUInteger count;</span><br><span class="line">    dispatch_sync(_concurrentQueue, ^&#123;</span><br><span class="line">        count = self.arr.count;</span><br><span class="line">    &#125;);</span><br><span class="line">    return count;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (id)objectAtIndex:(NSUInteger)index</span><br><span class="line">&#123;</span><br><span class="line">    __block id obj;</span><br><span class="line">    dispatch_sync(_concurrentQueue, ^&#123;</span><br><span class="line">        if (index &lt; [self.arr count]) &#123;</span><br><span class="line">            obj = self.arr[index];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    return obj;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (NSEnumerator *)objectEnumerator</span><br><span class="line">&#123;</span><br><span class="line">    __block NSEnumerator *enu;</span><br><span class="line">    dispatch_sync(_concurrentQueue, ^&#123;</span><br><span class="line">        enu = [self.arr objectEnumerator];</span><br><span class="line">    &#125;);</span><br><span class="line">    return enu;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)insertObject:(id)anObject atIndex:(NSUInteger)index</span><br><span class="line">&#123;</span><br><span class="line">    dispatch_barrier_async(_concurrentQueue, ^&#123;</span><br><span class="line">        if (anObject &amp;&amp; index &lt; [self.arr count]) &#123;</span><br><span class="line">            [self.arr insertObject:anObject atIndex:index];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)addObject:(id)anObject</span><br><span class="line">&#123;</span><br><span class="line">    dispatch_barrier_async(_concurrentQueue, ^&#123;</span><br><span class="line">        if(anObject)&#123;</span><br><span class="line">            [self.arr addObject:anObject];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)removeObjectAtIndex:(NSUInteger)index</span><br><span class="line">&#123;</span><br><span class="line">    dispatch_barrier_async(_concurrentQueue, ^&#123;</span><br><span class="line">        </span><br><span class="line">        if (index &lt; [self.arr count]) &#123;</span><br><span class="line">            [self.arr removeObjectAtIndex:index];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)removeObject:(id)anObject</span><br><span class="line">&#123;</span><br><span class="line">    dispatch_barrier_async(_concurrentQueue, ^&#123;</span><br><span class="line">        [self.arr removeObject:anObject];//外边自己判断合法性</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)removeLastObject</span><br><span class="line">&#123;</span><br><span class="line">    dispatch_barrier_async(_concurrentQueue, ^&#123;</span><br><span class="line">        [self.arr removeLastObject];</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)replaceObjectAtIndex:(NSUInteger)index withObject:(id)anObject</span><br><span class="line">&#123;</span><br><span class="line">    dispatch_barrier_async(_concurrentQueue, ^&#123;</span><br><span class="line">        if (anObject &amp;&amp; index &lt; [self.arr count]) &#123;</span><br><span class="line">            [self.arr replaceObjectAtIndex:index withObject:anObject];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (NSUInteger)indexOfObject:(id)anObject</span><br><span class="line">&#123;</span><br><span class="line">    __block NSUInteger index = NSNotFound;</span><br><span class="line">    dispatch_sync(_concurrentQueue, ^&#123;</span><br><span class="line">        for (int i = 0; i &lt; [self.arr count]; i ++) &#123;</span><br><span class="line">            if ([self.arr objectAtIndex:i] == anObject) &#123;</span><br><span class="line">                index = i;</span><br><span class="line">                break;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    return index;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)dealloc</span><br><span class="line">&#123;</span><br><span class="line">    if (_concurrentQueue) &#123;</span><br><span class="line">        _concurrentQueue = NULL;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样一个线程安全的数组就创建完成。</p>
+<p>数据源保证线程安全的前提下，各项体验优化和bug处理工作也得以顺利进行。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/SAMIM/" rel="tag"># SAMIM</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/07/19/Online%E4%BC%98%E5%8C%96%E8%AE%B0%E5%BD%95%E5%8F%8A%E8%BF%91%E6%9C%9F%E9%9C%80%E8%A6%81%E4%BC%98%E5%8C%96%E7%82%B9/" rel="prev" title="Online优化记录及近期需要优化点">
+      <i class="fa fa-chevron-left"></i> Online优化记录及近期需要优化点
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/07/20/%E4%B8%BA%E4%BB%80%E4%B9%88%E8%AF%B4%E5%9F%BA%E4%BA%8ETCP%E7%9A%84%E7%A7%BB%E5%8A%A8%E7%AB%AFIM%E4%BB%8D%E7%84%B6%E9%9C%80%E8%A6%81%E5%BF%83%E8%B7%B3%E4%BF%9D%E6%B4%BB%EF%BC%9F/" rel="next" title="为什么说基于TCP的移动端IM仍然需要心跳保活？ ">
+      为什么说基于TCP的移动端IM仍然需要心跳保活？  <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Online%E8%81%8A%E5%A4%A9%E5%8D%A1%E9%A1%BF%E5%B4%A9%E6%BA%83%E5%8E%9F%E5%9B%A0%E5%92%8C%E8%81%8A%E5%A4%A9%E6%95%B0%E6%8D%AE%E6%BA%90%E7%9A%84%E4%BC%98%E5%8C%96"><span class="nav-number">1.</span> <span class="nav-text">Online聊天卡顿崩溃原因和聊天数据源的优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%8E%E4%B9%88%E5%88%A4%E6%96%AD%E4%B8%BB%E7%BA%BF%E7%A8%8B%E6%98%AF%E4%B8%8D%E6%98%AF%E5%8F%91%E7%94%9F%E4%BA%86%E5%8D%A1%E9%A1%BF%EF%BC%9F"><span class="nav-number">1.0.1.</span> <span class="nav-text">怎么判断主线程是不是发生了卡顿？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%88%91%E4%BB%AC%E5%85%88%E6%80%9D%E8%80%83%E4%B8%80%E4%B8%8B%EF%BC%8C%E7%95%8C%E9%9D%A2%E5%8D%A1%E9%A1%BF%E6%98%AF%E7%94%B1%E5%93%AA%E4%BA%9B%E5%8E%9F%E5%9B%A0%E5%AF%BC%E8%87%B4%E7%9A%84%EF%BC%9F"><span class="nav-number">1.0.2.</span> <span class="nav-text">我们先思考一下，界面卡顿是由哪些原因导致的？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E8%BF%91Online%E6%9B%B4%E6%96%B0%E7%9A%84%E6%98%AF%E5%85%B3%E4%BA%8E%E8%81%8A%E5%A4%A9%E9%A1%B5%E9%9D%A2%E7%9A%84%E6%95%B0%E6%8D%AE%E6%BA%90%E4%BC%98%E5%8C%96"><span class="nav-number">1.0.3.</span> <span class="nav-text">最近Online更新的是关于聊天页面的数据源优化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BC%80%E6%BA%90%E5%B7%A5%E5%85%B7YYThreadSafeArray%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">1.0.3.1.</span> <span class="nav-text">开源工具YYThreadSafeArray的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%97%AE%E9%A2%981%EF%BC%9A%E8%B0%83%E7%94%A8%E6%9E%9A%E4%B8%BE%E6%96%B9%E6%B3%95%E5%AF%BC%E8%87%B4%E6%AD%BB%E9%94%81"><span class="nav-number">1.0.3.1.1.</span> <span class="nav-text">问题1：调用枚举方法导致死锁</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%97%AE%E9%A2%982%EF%BC%9Afor-in%E5%BE%AA%E7%8E%AF%E7%9A%84%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8"><span class="nav-number">1.0.3.1.2.</span> <span class="nav-text">问题2：for-in循环的线程不安全</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%82%A3%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84NSMutabeArray%EF%BC%8C%E4%BB%A5%E4%BF%9D%E8%AF%81%E5%A4%9A%E4%B8%AA%E7%BA%BF%E7%A8%8B%E5%AF%B9%E6%95%B0%E7%BB%84%E6%93%8D%E4%BD%9C%EF%BC%88%E9%81%8D%E5%8E%86%EF%BC%8C%E6%8F%92%E5%85%A5%EF%BC%8C%E5%88%A0%E9%99%A4%EF%BC%89%E7%9A%84%E5%AE%89%E5%85%A8%EF%BC%9F%EF%BC%88%E5%AF%B9%E5%BA%94Online%E8%81%8A%E5%A4%A9%E4%B8%AD%E5%90%84%E7%BA%BF%E7%A8%8B%E6%8E%A5%E5%8F%97%E6%B6%88%E6%81%AF%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF%E6%9B%B4%E6%96%B0UI%E5%9C%BA%E6%99%AF%EF%BC%89"><span class="nav-number">1.0.3.2.</span> <span class="nav-text">那如何实现一个线程安全的NSMutabeArray，以保证多个线程对数组操作（遍历，插入，删除）的安全？（对应Online聊天中各线程接受消息发送消息更新UI场景）</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-nonatomic-%E5%92%8Catomic"><span class="nav-number">1.0.3.2.1.</span> <span class="nav-text">1.nonatomic 和atomic</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-dispatch-barrier-async-%E5%92%8Cdispatch-barrier-sync"><span class="nav-number">1.0.3.2.2.</span> <span class="nav-text">2.dispatch_barrier_async 和dispatch_barrier_sync</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84%E6%95%B0%E7%BB%84-%EF%BC%88%E4%BD%BF%E7%94%A8dispatch-barrier%E5%87%BD%E6%95%B0%EF%BC%89"><span class="nav-number">1.0.3.3.</span> <span class="nav-text">实现线程安全的数组 （使用dispatch_barrier函数）</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81"><span class="nav-number">1.0.3.3.1.</span> <span class="nav-text">代码</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ZacharyIcoderKong</p>
+  <div class="site-description" itemprop="description">一切有为法，如梦幻泡影，如露亦如电，应作如是观。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">25</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ZacharyIcoderKong</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

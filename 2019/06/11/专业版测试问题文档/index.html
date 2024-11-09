@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"appservice.club","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="专业版测试日期:20190611  测试人员:孔德志 测试出的问题安卓bug 1.先点击注册协议 再完善信息，完善所有信息后，注册按钮依然不能点击，需要取消再同意后才能点击注册。 2.三台设备，用同一账号，一台设备登录，另外两台同时再登录，可能出现，都登不进去，也可能都能登录进去。  体验 1.安卓昵称长度是10位字符，iOS是8位字符。 2.密码没有提示长度。iOS密码没有长度限制，安卓6-15">
+<meta property="og:type" content="article">
+<meta property="og:title" content="专业版测试问题文档">
+<meta property="og:url" content="http://appservice.club/2019/06/11/%E4%B8%93%E4%B8%9A%E7%89%88%E6%B5%8B%E8%AF%95%E9%97%AE%E9%A2%98%E6%96%87%E6%A1%A3/index.html">
+<meta property="og:site_name" content="梦幻泡影">
+<meta property="og:description" content="专业版测试日期:20190611  测试人员:孔德志 测试出的问题安卓bug 1.先点击注册协议 再完善信息，完善所有信息后，注册按钮依然不能点击，需要取消再同意后才能点击注册。 2.三台设备，用同一账号，一台设备登录，另外两台同时再登录，可能出现，都登不进去，也可能都能登录进去。  体验 1.安卓昵称长度是10位字符，iOS是8位字符。 2.密码没有提示长度。iOS密码没有长度限制，安卓6-15">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-06-11T00:57:09.000Z">
+<meta property="article:modified_time" content="2019-06-26T09:20:35.000Z">
+<meta property="article:author" content="ZacharyIcoderKong">
+<meta property="article:tag" content="有慧测试">
+<meta property="article:tag" content="SAMIM专业版">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://appservice.club/2019/06/11/%E4%B8%93%E4%B8%9A%E7%89%88%E6%B5%8B%E8%AF%95%E9%97%AE%E9%A2%98%E6%96%87%E6%A1%A3/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>专业版测试问题文档 | 梦幻泡影</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">梦幻泡影</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">孔思哲的博客空间</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://appservice.club/2019/06/11/%E4%B8%93%E4%B8%9A%E7%89%88%E6%B5%8B%E8%AF%95%E9%97%AE%E9%A2%98%E6%96%87%E6%A1%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ZacharyIcoderKong">
+      <meta itemprop="description" content="一切有为法，如梦幻泡影，如露亦如电，应作如是观。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="梦幻泡影">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          专业版测试问题文档
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-06-11 08:57:09" itemprop="dateCreated datePublished" datetime="2019-06-11T08:57:09+08:00">2019-06-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-06-26 17:20:35" itemprop="dateModified" datetime="2019-06-26T17:20:35+08:00">2019-06-26</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%9C%89%E6%85%A7%E6%B5%8B%E8%AF%95/" itemprop="url" rel="index"><span itemprop="name">有慧测试</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="专业版测试"><a href="#专业版测试" class="headerlink" title="专业版测试"></a>专业版测试</h1><p><strong>日期:20190611  测试人员:孔德志</strong></p>
+<h1 id="测试出的问题"><a href="#测试出的问题" class="headerlink" title="测试出的问题"></a>测试出的问题</h1><h2 id="安卓"><a href="#安卓" class="headerlink" title="安卓"></a>安卓</h2><h3 id="bug"><a href="#bug" class="headerlink" title="bug"></a>bug</h3><ul>
+<li>1.先点击注册协议 再完善信息，完善所有信息后，注册按钮依然不能点击，需要取消再同意后才能点击注册。</li>
+<li>2.三台设备，用同一账号，一台设备登录，另外两台同时再登录，可能出现，都登不进去，也可能都能登录进去。</li>
+</ul>
+<h3 id="体验"><a href="#体验" class="headerlink" title="体验"></a>体验</h3><ul>
+<li>1.安卓昵称长度是10位字符，iOS是8位字符。</li>
+<li>2.密码没有提示长度。iOS密码没有长度限制，安卓6-15位限制。</li>
+<li>3.提示文字 在其他<em>“安卓”</em>设备登录</li>
+</ul>
+<span id="more"></span> 
+
+<h2 id="iOS"><a href="#iOS" class="headerlink" title="iOS"></a>iOS</h2><h3 id="bug-1"><a href="#bug-1" class="headerlink" title="bug"></a>bug</h3><ul>
+<li>1.iOS注册输入手机号后获取验证码，然后重新修改输入的手机号，获取验证码依然在计时，退出返回再进来注册页面也是在计时。(修改）</li>
+<li>2.登录的IM号等显示删除。（修改）</li>
+<li>3.微博第三方登录，设置-&gt;账户安全-&gt;授权失败时，绑定开关也会打开。（修改）<br>4.通过手机号搜索SAMIM成员信息，iOS搜索不到时没有给出搜索不到的提示，没有任何提示文字。(修改）<br>5.iOS ，添加手机联系人，邀请发送短信邀请人不正确。 （修改）<br>6.iOS搜索自己的好友，只能通过昵称不能通过手机号。(修改）<br>7.群聊天播放语音消息退出页面后还继续播放问题。（修改）</li>
+</ul>
+<h3 id="体验-1"><a href="#体验-1" class="headerlink" title="体验"></a>体验</h3><ul>
+<li><p>1.通过手机号搜索SAMIM成员信息，iOS搜索不到时没有给出搜索不到的提示，没有任何提示文字。(修改）</p>
+</li>
+<li><p>2.iOS和网页版同时登录，别人添加你为好友，iOS版在添加好友通知的详细资料页面，网页版点击同意，详细资料界面状态更改了变成已同意，但是返回后的通知列表还是显示同意按钮， 没有变成已同意状态。</p>
+</li>
+<li><p>3.iOS添加安卓为好友，安卓收到加好友的通知，通知列表不能直接点击同意，需要进入详细资料界面点击同意，iOS可以直接点击同意按钮，也可以进入详细资料页面点击同意按钮。</p>
+</li>
+<li><p>4.iOS添加安卓为好友，安卓收到加好友的通知，点击同意后， iOS删除好友，安卓通知列表还有之前加好友的通知，已同意按钮状态变为同意按钮状态。 相反的操作，安卓添加iOS好友，删除好友后，iOS的通知列表没有之前加好友的通知了。</p>
+</li>
+<li><p>5.网页版和移动端同时登陆，被加好友网页版不能及时刷新，需要手动刷新， 但是网页版被删除好友可以及时刷新。</p>
+</li>
+<li><p>6.iOS ，添加手机联系人，邀请按钮状态不正确。 （修改）</p>
+</li>
+<li><p>7.iOS和安卓，添加手机联系人页面 现在没有搜索功能（手机联系人多的情况下，需要自己慢慢找）。</p>
+</li>
+<li><p>8.iOS搜索自己的好友，只能通过昵称不能通过手机号。(修改）</p>
+</li>
+<li><p>9.iOS把安卓拉黑，安卓还可以给iOS发信息，iOS收不到，但是安卓会显示发送的消息显示未读消息， 相反，安卓把iOS拉黑，iOS发送安卓的消息显示被对方拒收了。</p>
+</li>
+<li><p>10.iOS标签添加，第一次添加添加成员选择多个，完成后，返回再进来，只显示一个成员。再次编辑添加多个成员之后，返回再进来就是正常的。</p>
+</li>
+<li><p>11.标签添加，选择成员，安卓有搜索功能，iOS没有。</p>
+</li>
+<li><p>12.发送名片，点击显示详细资料，iOS的陌生人不显示标签选项，安卓显示标签选项点击提示“非好友不可设置”</p>
+</li>
+<li><p>13.语音消息iOS限制90秒，安卓限制60秒。</p>
+</li>
+<li><p>14.iOS语音播放一条语音后，滑动消息然后再滑动回来到这条消息，语音播放的动画不显示了。</p>
+</li>
+<li><p>15.安卓选择相册小视频无限制时长，iOS限制10秒。</p>
+</li>
+<li><p>16.安卓消息列表小视频消息显示为 【小视屏】。</p>
+</li>
+</ul>
+<h2 id="20190617"><a href="#20190617" class="headerlink" title="20190617"></a>20190617</h2><ul>
+<li><p>AA收款人数，iOS输入50以上人数会提示 ”最多可向50人发起收款“，安卓可以输入50人以上的可以，但是分摊金额不足0.01元，提示”每人最低收取0.01元“</p>
+</li>
+<li><p>iOS五种收藏类型，语音，文字，图片，视频，地理位置。安卓地理位置的消息收藏功能。</p>
+</li>
+<li><p>安卓阅后即焚，先显示上一张阅后即焚点开看的图片，再显示这次点击的图片</p>
+</li>
+<li><p>群聊发送拼手气红包，安卓红包个数输入100 总金额0.01，点击发送红包没有判断每个红包最低金额，点击发送，提示发送不成功请稍后再试。iOS会提示”单个红包金额不能小于0.01元“</p>
+</li>
+<li><p>显示的bug，体验的不影响功能: 群聊发普通红包，iOS先发所有成员可抢的，输入红包个数和单个金额，再点击 选择改为指定人领取的，下方显示的总金额不正确。</p>
+</li>
+</ul>
+<p>15552273792    93.08<br>15500000001    1.56<br>15500000002    8.66</p>
+<ul>
+<li>安卓的口令红包详情 有的显示 已领取 多少 个， 共 多少 元，剩余 多少 元。显示的金额是错误的。<br>*安卓</li>
+</ul>
+<h2 id="iOS口令红包需要修改-为直接点击。"><a href="#iOS口令红包需要修改-为直接点击。" class="headerlink" title="iOS口令红包需要修改 为直接点击。"></a>iOS口令红包需要修改 为直接点击。</h2><ul>
+<li><p>iOS 阅后即焚消息不可在多选中选中转发，安卓可以在多选里选中转发。</p>
+</li>
+<li><p>聊天详情  安卓点击+号创建群组后，跳转到群组聊天界面，iOS则不跳转。<br>安卓点击头像显示大图，iOS点击头像跳转到个人详情界面</p>
+</li>
+<li><p>安卓 群聊 投诉，跳转显示的和个人投诉的一样（需要修改）， iOS的投诉是群投诉页面。</p>
+</li>
+<li><p>群主消息置顶关闭后，安卓群成员的置顶消息未消失。</p>
+</li>
+<li></li>
+</ul>
+<p>iOS登录的账号是 15511110002  安卓登录的是15522220001</p>
+<p>iOS给安卓发送离线消息   安卓接受离线消息正常。<br>安卓给iOS发送离线消息   iOS接受不正常<br><em>原因在于同时登陆了手机端和网页端</em></p>
+<h2 id="畅聊"><a href="#畅聊" class="headerlink" title="畅聊"></a>畅聊</h2><p>3、账号有时候会自动掉线，安卓和网页版同时在线，网页版突然退出到登录页面，安卓也退出了，然后安卓再次登录，提示其他设备登录<br>4、会员提示收不到信息 ，手机端本来在群里的，然后退出软件，再重新进入软件后就会收不到网页版消息了，有在群里的时候也会出现消息没收到的情况，安卓和苹果都有<br>8、网页版跟手机版的消息不同步，有时候手机端发消息网页版收不到，网页版发消息手机端收不到<br>10、安卓手机有时候读取不到历史消息。<br>Cathy_Looking for love  08:58:46<br>21、安卓的有的用户会一直显示在登陆中</p>
+<h2 id="网亿密聊需修改："><a href="#网亿密聊需修改：" class="headerlink" title="网亿密聊需修改："></a>网亿密聊需修改：</h2><ul>
+<li>6、苹果版本操作群里禁言解禁后，有个别的会员还是无法解禁，需多操作几次才可以的。需修改  (没有重现）</li>
+<li>8、安卓和苹果手机不能设置管理  需修改</li>
+<li>10、安卓手机邀请人进群，本来都进群了，还是显示不在群里。需修改</li>
+<li>12、苹果手机，没有同意的也显示已经同意（苹果手机加对方好友，没同意，也显示已加好友，添加人手机有时不显示，电脑显示，不能同意）需修改</li>
+<li>18、出现找回密码失败 需修改</li>
+<li>19、如果一天没登入软件，一登入进去信息无限刷屏，直接手机发热 需修改</li>
+<li>20、自己能看到自己发的，但是出去进来就刷没了，别人看不到，电脑端发的（自己发的只能自己看到，可能信息没有完全发出去） 需修改</li>
+<li>22、没有新消息，tab上却有数字提醒</li>
+<li>23、把群里的人踢了，那个人还能继续在群里发消息，其他人还能收的到他发的消息，在已经被踢了的情况下还能发生，群禁言对他也没用</li>
+</ul>
+<p>安卓和网页同时登陆一个账号，<br>安卓扫码加别的号码的人为好友，别人同意后，安卓删除不掉该好友。<br>别人扫这个</p>
+<h2 id="畅聊-1"><a href="#畅聊-1" class="headerlink" title="畅聊"></a>畅聊</h2><p>1.安卓点击进入个人会话获取离线消息显示空白。<br>2.更改个人头像，群聊天详情中的 成员头像未更改。</p>
+<p>、安卓手机获取离线消息会迟钝。 <em>（获取个人离线消息第一次进聊天界面显示空白）</em><br>4.全体禁言 同步的网页版和安卓。网页版可以禁言。手机禁不了还可以在群里发消息。<br>禁言、同步的安卓和网页版，被禁言后，安卓手机被禁言，网页版没有被禁，还可以发消息。 <em>（iOS和网页版同时登陆，安卓把iOS禁言，网页版禁言了，iOS端没有被禁言，安卓和网页版同时登陆，iOS把安卓禁言了， 网页版禁言了，安卓端也被禁言了）</em><br>5、群里信息发多了。网页版接收迟钝。接收一半就卡死。<br>6、群聊 IOS把安卓登陆的账号从群里踢掉后，IOS不再显示，安卓群列表九宫格还是显示被踢的好友在群里。点进群之后就是空白，返回后群列表就弹掉。 <em>（重现）</em><br>7.IOS版加同步的安卓和网页版为好友，网页版同意后安卓版不同步，还需在同意、安卓版同意后。网页版同步。<br>8、同步的网页版和安卓版 网页版给好友发信息。同步的安卓手机不能直接收到信息  要返回消息界面在从进，才能收到网页版发的信息、<br>9.IOS踢掉群里同步的安卓和网页版账号。网页版直接踢掉，可安卓手机群列表还是有这个群，点进去这个群后软件会出现停止运行。 <em>（重现 和第6条重复）</em><br>10、安卓手机发信息测回后 测回的文字弹回打字框里，<em>（重现）</em><br>11、安卓版加同步的网页版和安卓版账号进群。安卓收到提醒，网页版不同步，收不到。<br>12、拉好友进群后。里面有三个好友，安卓和网页版九宫格却显示二个。群名称显示3个。点群头像进入安卓版手机只有2个人。IOS版九宫格显示2个人进去群资料却显示三个人<br>13、同步的网页版和安卓版账号，  安卓退群后。网页版没有同步退群，网页版列表还有这个群组。网页版还可以发信息、多刷新几次网页版就没有这个群了。<br>14、信息发大表情多了 有一部分显示已读，一部分显示未读。<br>15.  设置管理员退出后在登录就不是管理员状态。（安卓。IOS）<br>16、安卓手机邀请好友进群。出现停止运行 闪退。<br>17、安卓手机邀请IOS版账号进群，IOS版手机收不到邀请信息。安卓版显示发送邀请成功，</p>
+<p>我登录上账户后  消息列表出现离线消息，我点进去一个99+的 什么也没有空白 也没出现加载离线消息的框  等了将近一分钟还是没动静   然后我返回列表点击第二个99+的  进去也是一样   再点击一些小的后回来再看  第一个还是没有消息   第二个消息显示加载了出来  再等一会  第一个消息加载出来了   延迟太大   </p>
+<p>上面的是我点开的加入的客户的群组  刚点了我们测试的群组 显示未读99+  进去就三条消息   下拉也没冻结不动  就和只有三条消息一样 </p>
+<p>1、（停留消息列表大量接收时）私聊收到大量离线消息，进入聊天后出来离线加载，加载到现在还在加载，不知道是不是消息太多的原因；因为一直加载，一直加载都没加载出来，其他操作不了<br>2、（退出登录接收大量消息，点击登录）进入其中一个群后先闪现满屏的消息一秒后变成就显示最后一条；如果消息少的话就是闪现3条信息后最后显示一条<br>3、（退出登录接收大量消息，点击登录）进入其中一个群，进去后就出来加载离线的缓冲，加载几秒后就没了，然后手动下拉消息列表无动静，多下拉几次就又出现了加载离线的，这回数据出来了，继续下拉也有新数据了</p>
+<h2 id="网亿密聊需修改：-1"><a href="#网亿密聊需修改：-1" class="headerlink" title="网亿密聊需修改："></a>网亿密聊需修改：</h2><p>6、苹果版本操作群里禁言解禁后，有个别的会员还是无法解禁，需多操作几次才可以的。需修改<br>8、安卓和苹果手机不能设置管理  需修改<br>10、安卓手机邀请人进群，本来都进群了，还是显示不在群里。需修改<br>12、苹果手机，没有同意的也显示已经同意（苹果手机加对方好友，没同意，也显示已加好友，添加人手机有时不显示，电脑显示，不能同意）需修改<br>18、出现找回密码失败 需修改<br>19、如果一天没登入软件，一登入进去信息无限刷屏，直接手机发热 需修改<br>20、自己能看到自己发的，但是出去进来就刷没了，别人看不到，电脑端发的（自己发的只能自己看到，可能信息没有完全发出去） 需修改<br>22、没有新消息，tab上却有数字提醒<br>23、把群里的人踢了，那个人还能继续在群里发消息，其他人还能收的到他发的消息，在已经被踢了的情况下还能发生，群禁言对他也没用<br>24、手机端同一张图片，两个手机显示不一样，ios出现的多，安卓的少</p>
+<h2 id="侧事故太短板"><a href="#侧事故太短板" class="headerlink" title="侧事故太短板"></a>侧事故太短板</h2><p>加好友，删好友</p>
+<p>别人邀请进群，自己拉人进群，其他人进群，搜索进群（群主设置验证）</p>
+<p>主动退群，被踢出群，群内删除成员，退群后再次进群</p>
+<ul>
+<li>群主，管理员，群成员 三种身份</li>
+</ul>
+<p>禁言，撤回</p>
+<p>转让群，解散群</p>
+<p>更换头像，名称</p>
+<p>网页版与手机版消息同步</p>
+<p>安卓<br>1.消息列表一个群有未读消息数字提醒，点进去后显示空白，再返回消息列表再点击去聊天页面才显示。<br>2.进去群聊先显示加载数据，加载完数据，先显示表情，再下拉刷新显示最后发的数字。（我们测试是先发送大量的表情，最后发了十几条数字的信息）</p>
+<p>ios</p>
+<ul>
+<li>发送转账，发送方显示 出现重复的两个转账</li>
+</ul>
+<p>离线消息，登录上后，消息列表显示数字提醒，但点击进去没有消息，显示空白。返回再进去也是空白。<br>在线消息，vivo 三星（小的）没有收到消息，退出登录后，有消息提醒了，点击进去后显示空白。</p>
+<p>ios 阅后即焚 看完后，退出再进来聊天界面，有的阅后即焚消息还是显示未读，还可以看。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%9C%89%E6%85%A7%E6%B5%8B%E8%AF%95/" rel="tag"># 有慧测试</a>
+              <a href="/tags/SAMIM%E4%B8%93%E4%B8%9A%E7%89%88/" rel="tag"># SAMIM专业版</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/06/10/sanmi/" rel="prev" title="sanmi">
+      <i class="fa fa-chevron-left"></i> sanmi
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/06/20/screen%E4%BD%BF%E7%94%A8/" rel="next" title="screen使用">
+      screen使用 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%93%E4%B8%9A%E7%89%88%E6%B5%8B%E8%AF%95"><span class="nav-number">1.</span> <span class="nav-text">专业版测试</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E5%87%BA%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">2.</span> <span class="nav-text">测试出的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E5%8D%93"><span class="nav-number">2.1.</span> <span class="nav-text">安卓</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#bug"><span class="nav-number">2.1.1.</span> <span class="nav-text">bug</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%93%E9%AA%8C"><span class="nav-number">2.1.2.</span> <span class="nav-text">体验</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#iOS"><span class="nav-number">2.2.</span> <span class="nav-text">iOS</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#bug-1"><span class="nav-number">2.2.1.</span> <span class="nav-text">bug</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%93%E9%AA%8C-1"><span class="nav-number">2.2.2.</span> <span class="nav-text">体验</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#20190617"><span class="nav-number">2.3.</span> <span class="nav-text">20190617</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#iOS%E5%8F%A3%E4%BB%A4%E7%BA%A2%E5%8C%85%E9%9C%80%E8%A6%81%E4%BF%AE%E6%94%B9-%E4%B8%BA%E7%9B%B4%E6%8E%A5%E7%82%B9%E5%87%BB%E3%80%82"><span class="nav-number">2.4.</span> <span class="nav-text">iOS口令红包需要修改 为直接点击。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%95%85%E8%81%8A"><span class="nav-number">2.5.</span> <span class="nav-text">畅聊</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BD%91%E4%BA%BF%E5%AF%86%E8%81%8A%E9%9C%80%E4%BF%AE%E6%94%B9%EF%BC%9A"><span class="nav-number">2.6.</span> <span class="nav-text">网亿密聊需修改：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%95%85%E8%81%8A-1"><span class="nav-number">2.7.</span> <span class="nav-text">畅聊</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BD%91%E4%BA%BF%E5%AF%86%E8%81%8A%E9%9C%80%E4%BF%AE%E6%94%B9%EF%BC%9A-1"><span class="nav-number">2.8.</span> <span class="nav-text">网亿密聊需修改：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BE%A7%E4%BA%8B%E6%95%85%E5%A4%AA%E7%9F%AD%E6%9D%BF"><span class="nav-number">2.9.</span> <span class="nav-text">侧事故太短板</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ZacharyIcoderKong</p>
+  <div class="site-description" itemprop="description">一切有为法，如梦幻泡影，如露亦如电，应作如是观。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">25</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ZacharyIcoderKong</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

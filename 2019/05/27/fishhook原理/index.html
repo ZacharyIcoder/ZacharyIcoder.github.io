@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"appservice.club","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="iOS逆向工程 - fishhook原理 fishhook是Facebook提供的一个动态修改链接mach-O文件的工具。利用MachO文件加载原理，通过修改懒加载和非懒加载两个表的指针达到C函数HOOK的目的。 前提在分析fishhook原理前，我们先来想两个问题：1. Mach-O文件是被谁加载的？ 我们知道，在程序启动的时候 Mach-O 文件会被 DYLD （动态加载器）加载进内存。加载完">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS逆向工程 - fishhook原理">
+<meta property="og:url" content="http://appservice.club/2019/05/27/fishhook%E5%8E%9F%E7%90%86/index.html">
+<meta property="og:site_name" content="梦幻泡影">
+<meta property="og:description" content="iOS逆向工程 - fishhook原理 fishhook是Facebook提供的一个动态修改链接mach-O文件的工具。利用MachO文件加载原理，通过修改懒加载和非懒加载两个表的指针达到C函数HOOK的目的。 前提在分析fishhook原理前，我们先来想两个问题：1. Mach-O文件是被谁加载的？ 我们知道，在程序启动的时候 Mach-O 文件会被 DYLD （动态加载器）加载进内存。加载完">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://appservice.club/2019/05/27/fishhook%E5%8E%9F%E7%90%86/15589634376767/15589642646217.jpg">
+<meta property="og:image" content="http://appservice.club/2019/05/27/fishhook%E5%8E%9F%E7%90%86/15589634376767/15589643086593.jpg">
+<meta property="og:image" content="http://appservice.club/2019/05/27/fishhook%E5%8E%9F%E7%90%86/15589634376767/15589643298067.jpg">
+<meta property="og:image" content="http://appservice.club/2019/05/27/fishhook%E5%8E%9F%E7%90%86/15589634376767/15589643450451.jpg">
+<meta property="og:image" content="http://appservice.club/2019/05/27/fishhook%E5%8E%9F%E7%90%86/15589634376767/15589644003253.jpg">
+<meta property="og:image" content="http://appservice.club/2019/05/27/fishhook%E5%8E%9F%E7%90%86/15589634376767/15589644170701.jpg">
+<meta property="og:image" content="http://appservice.club/2019/05/27/fishhook%E5%8E%9F%E7%90%86/15589634376767/15589644297502.jpg">
+<meta property="og:image" content="http://appservice.club/2019/05/27/fishhook%E5%8E%9F%E7%90%86/15589634376767/15589644783166.jpg">
+<meta property="og:image" content="http://appservice.club/2019/05/27/fishhook%E5%8E%9F%E7%90%86/15589634376767/15589644926526.jpg">
+<meta property="og:image" content="http://appservice.club/2019/05/27/fishhook%E5%8E%9F%E7%90%86/15589634376767/15589645076581.jpg">
+<meta property="og:image" content="http://appservice.club/2019/05/27/fishhook%E5%8E%9F%E7%90%86/15589634376767/15589645198490.jpg">
+<meta property="og:image" content="http://appservice.club/2019/05/27/fishhook%E5%8E%9F%E7%90%86/15589634376767/15589645325952.jpg">
+<meta property="og:image" content="http://appservice.club/2019/05/27/fishhook%E5%8E%9F%E7%90%86/15589634376767/15589645683287.jpg">
+<meta property="article:published_time" content="2019-05-27T13:44:21.000Z">
+<meta property="article:modified_time" content="2019-05-29T07:26:32.000Z">
+<meta property="article:author" content="ZacharyIcoderKong">
+<meta property="article:tag" content="fishhook">
+<meta property="article:tag" content="逆向">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://appservice.club/2019/05/27/fishhook%E5%8E%9F%E7%90%86/15589634376767/15589642646217.jpg">
+
+<link rel="canonical" href="http://appservice.club/2019/05/27/fishhook%E5%8E%9F%E7%90%86/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>iOS逆向工程 - fishhook原理 | 梦幻泡影</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">梦幻泡影</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">孔思哲的博客空间</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://appservice.club/2019/05/27/fishhook%E5%8E%9F%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ZacharyIcoderKong">
+      <meta itemprop="description" content="一切有为法，如梦幻泡影，如露亦如电，应作如是观。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="梦幻泡影">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          iOS逆向工程 - fishhook原理
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-05-27 21:44:21" itemprop="dateCreated datePublished" datetime="2019-05-27T21:44:21+08:00">2019-05-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-05-29 15:26:32" itemprop="dateModified" datetime="2019-05-29T15:26:32+08:00">2019-05-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/iOS/" itemprop="url" rel="index"><span itemprop="name">iOS</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="iOS逆向工程-fishhook原理"><a href="#iOS逆向工程-fishhook原理" class="headerlink" title="iOS逆向工程 - fishhook原理"></a>iOS逆向工程 - fishhook原理</h1><p> fishhook是Facebook提供的一个动态修改链接mach-O文件的工具。利用MachO文件加载原理，通过修改懒加载和非懒加载两个表的指针达到C函数HOOK的目的。</p>
+<h2 id="前提"><a href="#前提" class="headerlink" title="前提"></a>前提</h2><p>在分析fishhook原理前，我们先来想两个问题：<br><strong>1. Mach-O文件是被谁加载的？</strong><br> 我们知道，在程序启动的时候 Mach-O 文件会被 DYLD （动态加载器）加载进内存。加载完 Mach-O 后，DYLD接着会去加载 Mach-O 所依赖的动态库。<br><strong>2. 何为ASLR技术？</strong><br>地址空间布局随机化。它会让 Mach-O 文件加载的时候是随机地址。有了这个技术，Mach-O 文件每次加载进内存的时候地址都是不一样的。主要是为了防止逆向技术。<br>Mach-O 文件里只有我们自己写的函数，系统的动态库的函数是不在 Mach-O 文件里的。也就是说每次启动从 Mach-O 文件到系统动态库函数的偏移地址都是变化的。</p>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><h3 id="一、那么我们如何在-Mach-O-文件里找到系统的函数地址呢？或者说-Mach-O-文件是如何链接外部函数的呢？"><a href="#一、那么我们如何在-Mach-O-文件里找到系统的函数地址呢？或者说-Mach-O-文件是如何链接外部函数的呢？" class="headerlink" title="一、那么我们如何在 Mach-O 文件里找到系统的函数地址呢？或者说 Mach-O 文件是如何链接外部函数的呢？"></a>一、那么我们如何在 Mach-O 文件里找到系统的函数地址呢？或者说 Mach-O 文件是如何链接外部函数的呢？</h3><p>我们程序的底层都是汇编，汇编代码都是写死的内存地址。我们该怎么找呢？而且系统的动态库在内存里面的地址是不固定的，每次启动程序的时候地址都是随机的。<br>苹果为了能在 Mach-O 文件中访问外部函数，采用了一个技术，叫做PIC（位置代码独立）技术。<br>当你的应用程序想要调用 Mach-O 文件外部的函数的时候，或者说如果 Mach-O 内部需要调用系统的库函数时，Mach-O 文件会：</p>
+<p>先在 Mach-O 文件的 _DATA 段中建立一个指针（8字节的数据，放的全是0），这个指针变量指向外部函数。<br>DYLD 会动态的进行绑定！将 Mach-O 中的 _DATA 段中的指针，指向外部函数。</p>
+<p>所以说，C的底层也有动态的表现。C在内部函数的时候是静态的，在编译后，函数的内存地址就确定了。但是，外部的函数是不能确定的，也就是说C的底层也有动态的。fishhook 之所以能 hook C函数，是利用了 Mach-O 文件的 PIC 技术特点。也就造就了静态语言C也有动态的部分，通过 DYLD 进行动态绑定的时候做了手脚。</p>
+<p><strong>我们经常说符号，其实 _DATA 段中建立的指针就是符号。fishhook的原理其实就是，将指向系统方法（外部函数）的符号重新进行绑定指向内部的函数。这样就把系统方法与自己定义的方法进行了交换。这也就是为什么C的内部函数修改不了，自定义的函数修改不了，只能修改 Mach-O 外部的函数。</strong></p>
+<p>接下来我们以 NSLog 为例，看 fishhook 是如何通过修改懒加载和非懒加载两个表的指针达到C函数HOOK的目的。（NSLog 是在懒加载表里）<br><em>注：对于非懒加载符号表，DYLD会立刻马上去链接动态库<br>   对于懒加载符号表，DYLD会在执行代码的时候去动态的链接动态库</em><br> <span id="more"></span> </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">- (void)viewDidLoad &#123;</span><br><span class="line">    [super viewDidLoad];</span><br><span class="line">    // Do any additional setup after loading the view, typically from a nib.</span><br><span class="line">    //这里必须要先加载一次NSLog，如果不写NSLog，符号表里面根本就不会出现NSLog的地址</span><br><span class="line">    NSLog(@&quot;123&quot;); </span><br><span class="line"></span><br><span class="line">    //定义rebinding结构体</span><br><span class="line">    struct rebinding nslogBind;</span><br><span class="line">    //函数的名称</span><br><span class="line">    nslogBind.name = &quot;NSLog&quot;;</span><br><span class="line">    //新的函数地址</span><br><span class="line">    nslogBind.replacement = myMethod;</span><br><span class="line">    //保存原始函数地址变量的指针</span><br><span class="line">    nslogBind.replaced = (void *)&amp;old_nslog;</span><br><span class="line">    </span><br><span class="line">    //定义数组</span><br><span class="line">    struct rebinding rebs[] = &#123;nslogBind&#125;;</span><br><span class="line">    </span><br><span class="line">    /**</span><br><span class="line">     arg1: 存放rebinding结构体的数组</span><br><span class="line">     arg2: 数组的长度</span><br><span class="line">     */</span><br><span class="line">    rebind_symbols(rebs, 1);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//函数指针，用来保存原始的函数地址</span><br><span class="line">static void (*old_nslog)(NSString *format, ...);</span><br><span class="line"></span><br><span class="line">//新的NSLog</span><br><span class="line">void myMethod(NSString *format, ...) &#123;</span><br><span class="line">    //再调用原来的</span><br><span class="line">    old_nslog(@&quot;勾上了！&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)touchesBegan:(NSSet&lt;UITouch *&gt; *)touches withEvent:(UIEvent *)event &#123;</span><br><span class="line">    NSLog(@&quot;点击屏幕&quot;);</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+
+
+<p>首先，系统的 NSLog 是在 rebind_symbols(rebs, 1); 方法里替换的，我们可以在这个方法上打个断点。我们可以先看一下，这个函数执行之前，NSLog 在懒加载符号表中的地址是多少，然后在执行之后，它有没有变成我们自己的符号表的地址。</p>
+<img src="/2019/05/27/fishhook%E5%8E%9F%E7%90%86/15589634376767/15589642646217.jpg" class="">
+
+
+<p>那么，我们如何找到 NSLog 的符号表呢？公式如下：<br><strong>NSLog 懒加载符号表在内存中的地址 &#x3D; Mach-O 的偏移地址 + NSLog 懒加载符号表在 Mach-O 的偏移地址</strong><br>查看符号表在 Mach-O 的偏移地址</p>
+<img src="/2019/05/27/fishhook%E5%8E%9F%E7%90%86/15589634376767/15589643086593.jpg" class="">
+<p>符号表在 Mach-O 的偏移地址.png</p>
+<p>查看Mach-O 的偏移地址</p>
+<img src="/2019/05/27/fishhook%E5%8E%9F%E7%90%86/15589634376767/15589643298067.jpg" class="">
+<center>符号表在 Mach-O 的偏移地址.png</center>
+
+<p>查看符号表绑定的地址，这个地址其实就是指向外部函数的指针的地址，也就是动态缓存区里面 NSLog 的真实函数地址。这一步是找到了 NSLog 的符号表（Symbols）。</p>
+<img src="/2019/05/27/fishhook%E5%8E%9F%E7%90%86/15589634376767/15589643450451.jpg" class="">
+<center>符号表绑定的地址.png</center>
+
+<p>这个真实的函数地址是什么时候保存进去的呢？并不是 Mach-O 文件加载进内存的时候保存的。由于 NSLog 在懒加载符号表里面，所有它是在整个 Mach-O 文件启动之后，代码第一次运行 NSLog 时，由 DYLD 绑定该 NSLog 符号指向真实的 NSLog 的地址。<br>这个时候，我们需要通过反汇编看一下地址的值</p>
+<img src="/2019/05/27/fishhook%E5%8E%9F%E7%90%86/15589634376767/15589644003253.jpg" class="">
+<center>NSLog.png</center>
+
+<p>可以看到，这个时候 Mach-O 文件的 _DATA 段中建立的指针已经指向了外部函数。<br>紧接着单步执行，执行完 rebind_symbols(rebs, 1); 函数<br>这个时候我们再看一下符号表绑定的地址，我们发现地址已经发生了变化</p>
+<img src="/2019/05/27/fishhook%E5%8E%9F%E7%90%86/15589634376767/15589644170701.jpg" class="">
+<center>image.png</center>
+
+<p>再次通过反汇编看一下地址的值</p>
+<img src="/2019/05/27/fishhook%E5%8E%9F%E7%90%86/15589634376767/15589644297502.jpg" class="">
+<center>image.png</center>
+
+<p>我们发现 Mach-O 文件的 _DATA 段中建立的指针已经指向了我们自己定义的内部函数。</p>
+<h2 id="二、fishhook-是如何通过字符串来找到我们的函数的呢？"><a href="#二、fishhook-是如何通过字符串来找到我们的函数的呢？" class="headerlink" title="二、fishhook 是如何通过字符串来找到我们的函数的呢？"></a>二、fishhook 是如何通过字符串来找到我们的函数的呢？</h2><pre><code>//定义rebinding结构体
+struct rebinding nslogBind;
+//函数的名称
+nslogBind.name = &quot;NSLog&quot;; //如何通过字符串来找到函数的？
+//新的函数地址
+nslogBind.replacement = myMethod;
+//保存原始函数地址变量的指针
+nslogBind.replaced = (void *)&amp;old_nslog;
+</code></pre>
+<p>我们可以想到的是，Mach-O 文件里面肯定有一个与字符串相关的东西。</p>
+<img src="/2019/05/27/fishhook%E5%8E%9F%E7%90%86/15589634376767/15589644783166.jpg" class="">
+<center>image.png</center>
+
+<p>首先，我们从懒加载符号表（Lazy Symbol Pointers）开始入手。懒加载符号表里面第一个符号是 NSLog 的指针。这个懒加载符号表有一个与之一一对应的符号表（Indirect Symbols）。</p>
+<img src="/2019/05/27/fishhook%E5%8E%9F%E7%90%86/15589634376767/15589644926526.jpg" class="">
+<center>image.png</center>
+
+<p>上图的 Data 值，是一个真正的符号表的下标。这个符号表是对应着字条串的。比如：NSLog 的 Data 值为0x7A，换成十进制就是122。也就是说 NSLog 这个符号在我们的字符符号表里面的 index 值为122。接着就需要到符号表（Symbols）里面找第122个。这个时候还没到字符串。</p>
+<img src="/2019/05/27/fishhook%E5%8E%9F%E7%90%86/15589634376767/15589645076581.jpg" class="">
+<center>image.png</center>
+
+<p>这个时候，NSLog 在真正的字符串里面是在哪个地方呢？注意，上图有一个偏移0x9C，就是在字符串表（String Table）里面的一个index。也就是说这个 NSLog 在 String Table 里面的偏移地址是0x9C。</p>
+<img src="/2019/05/27/fishhook%E5%8E%9F%E7%90%86/15589634376767/15589645198490.jpg" class="">
+<center>image.png</center>
+
+<p>如上图，String Table 是从0x0000CF04开始的，所以开始地址0xCF04 + 偏移地址0x9C &#x3D; 0xCFA0，就是字符串 NSLog 的位置。</p>
+<img src="/2019/05/27/fishhook%E5%8E%9F%E7%90%86/15589634376767/15589645325952.jpg" class="">
+<center>image.png</center>
+
+<p>_ 是函数的开始，. 是分隔符 。5F是从 _开始，往后依次 _NSLog<br>接下来，附上 <a href="https://github.com/facebook/fishhook">fishhook</a> 官方文档的在懒加载和非懒加载符号表里查找一个给定入口的名字的过程。</p>
+<img src="/2019/05/27/fishhook%E5%8E%9F%E7%90%86/15589634376767/15589645683287.jpg" class="">
+<center>image.png</center>
+
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/fishhook/" rel="tag"># fishhook</a>
+              <a href="/tags/%E9%80%86%E5%90%91/" rel="tag"># 逆向</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/05/26/%E5%BE%AE%E4%BF%A1%E7%BA%A2%E5%8C%85%E7%B3%BB%E7%BB%9F%E6%98%AF%E5%A6%82%E4%BD%95%E5%BA%94%E5%AF%B9%E9%AB%98%E5%B9%B6%E5%8F%91%E7%9A%84/" rel="prev" title="微信红包系统是如何应对高并发的">
+      <i class="fa fa-chevron-left"></i> 微信红包系统是如何应对高并发的
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/05/29/hello-world/" rel="next" title="Hello World">
+      Hello World <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#iOS%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B-fishhook%E5%8E%9F%E7%90%86"><span class="nav-number">1.</span> <span class="nav-text">iOS逆向工程 - fishhook原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E6%8F%90"><span class="nav-number">1.1.</span> <span class="nav-text">前提</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98"><span class="nav-number">1.2.</span> <span class="nav-text">问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E9%82%A3%E4%B9%88%E6%88%91%E4%BB%AC%E5%A6%82%E4%BD%95%E5%9C%A8-Mach-O-%E6%96%87%E4%BB%B6%E9%87%8C%E6%89%BE%E5%88%B0%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%87%BD%E6%95%B0%E5%9C%B0%E5%9D%80%E5%91%A2%EF%BC%9F%E6%88%96%E8%80%85%E8%AF%B4-Mach-O-%E6%96%87%E4%BB%B6%E6%98%AF%E5%A6%82%E4%BD%95%E9%93%BE%E6%8E%A5%E5%A4%96%E9%83%A8%E5%87%BD%E6%95%B0%E7%9A%84%E5%91%A2%EF%BC%9F"><span class="nav-number">1.2.1.</span> <span class="nav-text">一、那么我们如何在 Mach-O 文件里找到系统的函数地址呢？或者说 Mach-O 文件是如何链接外部函数的呢？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81fishhook-%E6%98%AF%E5%A6%82%E4%BD%95%E9%80%9A%E8%BF%87%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%9D%A5%E6%89%BE%E5%88%B0%E6%88%91%E4%BB%AC%E7%9A%84%E5%87%BD%E6%95%B0%E7%9A%84%E5%91%A2%EF%BC%9F"><span class="nav-number">1.3.</span> <span class="nav-text">二、fishhook 是如何通过字符串来找到我们的函数的呢？</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ZacharyIcoderKong</p>
+  <div class="site-description" itemprop="description">一切有为法，如梦幻泡影，如露亦如电，应作如是观。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">25</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ZacharyIcoderKong</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

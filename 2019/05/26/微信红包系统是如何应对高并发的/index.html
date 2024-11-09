@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"appservice.club","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="社交软件红包技术解密(四)：微信红包系统是如何应对高并发的本文来自微信团队工程师方乐明的技术分享，原文地址：infoq.cn&#x2F;article&#x2F;2017hongbao-weixin，感谢原作者的分享。 点此进入原文。 一、引言每年节假日，微信红包的收发数量都会暴涨，尤以除夕为最。如此大规模、高峰值的业务需要，背后需要怎样的技术支撑？百亿级别的红包规模，如何保证并发性能与资金安全？">
+<meta property="og:type" content="article">
+<meta property="og:title" content="微信红包系统是如何应对高并发的">
+<meta property="og:url" content="http://appservice.club/2019/05/26/%E5%BE%AE%E4%BF%A1%E7%BA%A2%E5%8C%85%E7%B3%BB%E7%BB%9F%E6%98%AF%E5%A6%82%E4%BD%95%E5%BA%94%E5%AF%B9%E9%AB%98%E5%B9%B6%E5%8F%91%E7%9A%84/index.html">
+<meta property="og:site_name" content="梦幻泡影">
+<meta property="og:description" content="社交软件红包技术解密(四)：微信红包系统是如何应对高并发的本文来自微信团队工程师方乐明的技术分享，原文地址：infoq.cn&#x2F;article&#x2F;2017hongbao-weixin，感谢原作者的分享。 点此进入原文。 一、引言每年节假日，微信红包的收发数量都会暴涨，尤以除夕为最。如此大规模、高峰值的业务需要，背后需要怎样的技术支撑？百亿级别的红包规模，如何保证并发性能与资金安全？">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://appservice.club/2019/05/26/%E5%BE%AE%E4%BF%A1%E7%BA%A2%E5%8C%85%E7%B3%BB%E7%BB%9F%E6%98%AF%E5%A6%82%E4%BD%95%E5%BA%94%E5%AF%B9%E9%AB%98%E5%B9%B6%E5%8F%91%E7%9A%84/15588323447069/15588335587948.jpg">
+<meta property="og:image" content="http://appservice.club/2019/05/26/%E5%BE%AE%E4%BF%A1%E7%BA%A2%E5%8C%85%E7%B3%BB%E7%BB%9F%E6%98%AF%E5%A6%82%E4%BD%95%E5%BA%94%E5%AF%B9%E9%AB%98%E5%B9%B6%E5%8F%91%E7%9A%84/15588323447069/15588338017360.jpg">
+<meta property="og:image" content="http://appservice.club/2019/05/26/%E5%BE%AE%E4%BF%A1%E7%BA%A2%E5%8C%85%E7%B3%BB%E7%BB%9F%E6%98%AF%E5%A6%82%E4%BD%95%E5%BA%94%E5%AF%B9%E9%AB%98%E5%B9%B6%E5%8F%91%E7%9A%84/15588323447069/15588341324142.jpg">
+<meta property="og:image" content="http://appservice.club/2019/05/26/%E5%BE%AE%E4%BF%A1%E7%BA%A2%E5%8C%85%E7%B3%BB%E7%BB%9F%E6%98%AF%E5%A6%82%E4%BD%95%E5%BA%94%E5%AF%B9%E9%AB%98%E5%B9%B6%E5%8F%91%E7%9A%84/15588323447069/15588341659387.jpg">
+<meta property="og:image" content="http://appservice.club/2019/05/26/%E5%BE%AE%E4%BF%A1%E7%BA%A2%E5%8C%85%E7%B3%BB%E7%BB%9F%E6%98%AF%E5%A6%82%E4%BD%95%E5%BA%94%E5%AF%B9%E9%AB%98%E5%B9%B6%E5%8F%91%E7%9A%84/15588323447069/15588341852755.jpg">
+<meta property="article:published_time" content="2019-05-26T02:28:21.000Z">
+<meta property="article:modified_time" content="2019-05-29T07:26:12.000Z">
+<meta property="article:author" content="ZacharyIcoderKong">
+<meta property="article:tag" content="IM">
+<meta property="article:tag" content="社交">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://appservice.club/2019/05/26/%E5%BE%AE%E4%BF%A1%E7%BA%A2%E5%8C%85%E7%B3%BB%E7%BB%9F%E6%98%AF%E5%A6%82%E4%BD%95%E5%BA%94%E5%AF%B9%E9%AB%98%E5%B9%B6%E5%8F%91%E7%9A%84/15588323447069/15588335587948.jpg">
+
+<link rel="canonical" href="http://appservice.club/2019/05/26/%E5%BE%AE%E4%BF%A1%E7%BA%A2%E5%8C%85%E7%B3%BB%E7%BB%9F%E6%98%AF%E5%A6%82%E4%BD%95%E5%BA%94%E5%AF%B9%E9%AB%98%E5%B9%B6%E5%8F%91%E7%9A%84/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>微信红包系统是如何应对高并发的 | 梦幻泡影</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">梦幻泡影</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">孔思哲的博客空间</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://appservice.club/2019/05/26/%E5%BE%AE%E4%BF%A1%E7%BA%A2%E5%8C%85%E7%B3%BB%E7%BB%9F%E6%98%AF%E5%A6%82%E4%BD%95%E5%BA%94%E5%AF%B9%E9%AB%98%E5%B9%B6%E5%8F%91%E7%9A%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ZacharyIcoderKong">
+      <meta itemprop="description" content="一切有为法，如梦幻泡影，如露亦如电，应作如是观。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="梦幻泡影">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          微信红包系统是如何应对高并发的
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-05-26 10:28:21" itemprop="dateCreated datePublished" datetime="2019-05-26T10:28:21+08:00">2019-05-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-05-29 15:26:12" itemprop="dateModified" datetime="2019-05-29T15:26:12+08:00">2019-05-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/IM/" itemprop="url" rel="index"><span itemprop="name">IM</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="社交软件红包技术解密-四-：微信红包系统是如何应对高并发的"><a href="#社交软件红包技术解密-四-：微信红包系统是如何应对高并发的" class="headerlink" title="社交软件红包技术解密(四)：微信红包系统是如何应对高并发的"></a>社交软件红包技术解密(四)：微信红包系统是如何应对高并发的</h1><p>本文来自微信团队工程师方乐明的技术分享，原文地址：infoq.cn&#x2F;article&#x2F;2017hongbao-weixin，感谢原作者的分享。 <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2650995437&idx=1&sn=fefff4bff3e183d656a2d242e4c0a382">点此进入原文</a>。</p>
+<h2 id="一、引言"><a href="#一、引言" class="headerlink" title="一、引言"></a>一、引言</h2><p>每年节假日，微信红包的收发数量都会暴涨，尤以除夕为最。如此大规模、高峰值的业务需要，背后需要怎样的技术支撑？百亿级别的红包规模，如何保证并发性能与资金安全？</p>
+<p>本文将为读者介绍微信百亿级别红包背后的高并发设计实践，内容包括微信红包系统的技术难点、解决高并发问题通常使用的方案，以及微信红包系统的所采用高并发解决方案。</p>
+<h2 id="二、分享者"><a href="#二、分享者" class="headerlink" title="二、分享者"></a>二、分享者</h2><p>方乐明：现任微信支付应用产品系统负责人，主要从事微信红包、微信转账、微信群收款等支付应用产品的系统设计、可用性提升、高性能解决方案设计等，曾连续多年负责春节微信红包系统的性能优化与稳定性提升，取得良好的效果。</p>
+<h2 id="三、微信红包的两大业务特点"><a href="#三、微信红包的两大业务特点" class="headerlink" title="三、微信红包的两大业务特点"></a>三、微信红包的两大业务特点</h2><p>微信红包（尤其是发在微信群里的红包，即群红包），业务形态上很类似网上的普通商品“秒杀”活动。<br> <span id="more"></span> </p>
+<h3 id="就像下面这样："><a href="#就像下面这样：" class="headerlink" title="就像下面这样："></a>就像下面这样：</h3><ul>
+<li>1）用户在微信群里发一个红包，等同于是普通商品“秒杀”活动的商品上架；</li>
+<li>2）微信群里的所有用户抢红包的动作，等同于“秒杀”活动中的查询库存；</li>
+<li>3）用户抢到红包后拆红包的动作，则对应“秒杀”活动中用户的“秒杀”动作。</li>
+</ul>
+<p>不过除了上面的相同点之外，微信红包在业务形态上与普通商品“秒杀”活动相比，还具备自身的特点。<br>首先：微信红包业务比普通商品“秒杀”有更海量的并发要求。</p>
+<p>微信红包用户在微信群里发一个红包，等同于在网上发布一次商品“秒杀”活动。假设同一时间有 10 万个群里的用户同时在发红包，那就相当于同一时间有 10 万个“秒杀”活动发布出去。10 万个微信群里的用户同时抢红包，将产生海量的并发请求。</p>
+<p>其次：微信红包业务要求更严格的安全级别。</p>
+<p>微信红包业务本质上是资金交易。微信红包是微信支付的一个商户，提供资金流转服务。</p>
+<p>用户发红包时，相当于在微信红包这个商户上使用微信支付购买一笔“钱”，并且收货地址是微信群。当用户支付成功后，红包“发货”到微信群里，群里的用户拆开红包后，微信红包提供了将“钱”转入折红包用户微信零钱的服务。</p>
+<p>资金交易业务比普通商品“秒杀”活动有更高的安全级别要求。普通的商品“秒杀”商品由商户提供，库存是商户预设的，“秒杀”时可以允许存在“超卖”（即实际被抢的商品数量比计划的库存多）、“少卖”（即实际被抢的商户数量比计划的库存少）的情况。但是对于微信红包，用户发 100 元的红包绝对不可以被拆出 101 元；用户发 100 元只被领取 99 元时，剩下的 1 元在 24 小时过期后要精确地退还给发红包用户，不能多也不能少。</p>
+<p>以上是微信红包业务模型上的两大特点。</p>
+<h2 id="四、-微信红包系统的技术难点"><a href="#四、-微信红包系统的技术难点" class="headerlink" title="四、 微信红包系统的技术难点"></a>四、 微信红包系统的技术难点</h2><p>在介绍微信红包系统的技术难点之前，先介绍下简单的、典型的商品“秒杀”系统的架构设计，如下图所示。</p>
+<img src="/2019/05/26/%E5%BE%AE%E4%BF%A1%E7%BA%A2%E5%8C%85%E7%B3%BB%E7%BB%9F%E6%98%AF%E5%A6%82%E4%BD%95%E5%BA%94%E5%AF%B9%E9%AB%98%E5%B9%B6%E5%8F%91%E7%9A%84/15588323447069/15588335587948.jpg" class="">
+
+<h3 id="该系统由接入层、逻辑服务层、存储层与缓存构成："><a href="#该系统由接入层、逻辑服务层、存储层与缓存构成：" class="headerlink" title="该系统由接入层、逻辑服务层、存储层与缓存构成："></a>该系统由接入层、逻辑服务层、存储层与缓存构成：</h3><ul>
+<li>1）Proxy 处理请求接入；</li>
+<li>2）Server 承载主要的业务逻辑；</li>
+<li>3）Cache 用于缓存库存数量；</li>
+<li>4）DB 则用于数据持久化。<br>一个“秒杀”活动，对应 DB 中的一条库存记录。当用户进行商品“秒杀”时，系统的主要逻辑在于 DB 中库存的操作上。</li>
+</ul>
+<h3 id="一般来说，对-DB-的操作流程有以下三步："><a href="#一般来说，对-DB-的操作流程有以下三步：" class="headerlink" title="一般来说，对 DB 的操作流程有以下三步："></a>一般来说，对 DB 的操作流程有以下三步：</h3><ul>
+<li>1）锁库存；</li>
+<li>2）插入“秒杀”记录；</li>
+<li>3）更新库存。<br>其中，锁库存是为了避免并发请求时出现“超卖”情况。同时要求这三步操作需要在一个事务中完成（所谓的事务，是指作为单个逻辑工作单元执行的一系列操作，要么完全地执行，要么完全地不执行）。</li>
+</ul>
+<p>“秒杀”系统的设计难点就在这个事务操作上。商品库存在 DB 中记为一行，大量用户同时“秒杀”同一商品时，第一个到达 DB 的请求锁住了这行库存记录。在第一个事务完成提交之前这个锁一直被第一个请求占用，后面的所有请求需要排队等待。同时参与“秒杀”的用户越多，并发进 DB 的请求越多，请求排队越严重。因此，并发请求抢锁，是典型的商品“秒杀”系统的设计难点。</p>
+<p>微信红包业务相比普通商品“秒杀”活动，具有海量并发、高安全级别要求的特点。</p>
+<h3 id="在微信红包系统的设计上，除了并发请求抢锁之外，还有以下两个突出难点："><a href="#在微信红包系统的设计上，除了并发请求抢锁之外，还有以下两个突出难点：" class="headerlink" title="在微信红包系统的设计上，除了并发请求抢锁之外，还有以下两个突出难点："></a>在微信红包系统的设计上，除了并发请求抢锁之外，还有以下两个突出难点：</h3><ul>
+<li>首先，事务级操作量级大：<br>上文介绍微信红包业务特点时提到，普遍情况下同时会有数以万计的微信群在发红包。这个业务特点映射到微信红包系统设计上，就是有数以万计的“并发请求抢锁”同时在进行。这使得 DB 的压力比普通单个商品“库存”被锁要大很多倍；</li>
+<li>其次，事务性要求严格：<br>微信红包系统本质上是一个资金交易系统，相比普通商品“秒杀”系统有更高的事务级别要求。</li>
+</ul>
+<h2 id="五、解决高并发问题通常使用的方案"><a href="#五、解决高并发问题通常使用的方案" class="headerlink" title="五、解决高并发问题通常使用的方案"></a>五、解决高并发问题通常使用的方案</h2><p>普通商品“秒杀”活动系统，解决高并发问题的方案，大体有以下几种。</p>
+<h3 id="5-1-方案一：使用内存操作替代实时的-DB-事务操作"><a href="#5-1-方案一：使用内存操作替代实时的-DB-事务操作" class="headerlink" title="5.1 方案一：使用内存操作替代实时的 DB 事务操作"></a>5.1 方案一：使用内存操作替代实时的 DB 事务操作</h3><p>如图 2 所示，将“实时扣库存”的行为上移到内存 Cache 中操作，内存 Cache 操作成功直接给 Server 返回成功，然后异步落 DB 持久化。</p>
+<img src="/2019/05/26/%E5%BE%AE%E4%BF%A1%E7%BA%A2%E5%8C%85%E7%B3%BB%E7%BB%9F%E6%98%AF%E5%A6%82%E4%BD%95%E5%BA%94%E5%AF%B9%E9%AB%98%E5%B9%B6%E5%8F%91%E7%9A%84/15588323447069/15588338017360.jpg" class="">
+
+<p>这个方案的优点是用内存操作替代磁盘操作，提高了并发性能。</p>
+<p>但是缺点也很明显，在内存操作成功但DB持久化失败，或者内存Cache故障的情况下，DB持久化会丢数据，不适合微信红包这种资金交易系统。</p>
+<h3 id="5-2-方案二，使用乐观锁替代悲观锁。"><a href="#5-2-方案二，使用乐观锁替代悲观锁。" class="headerlink" title="5.2 方案二，使用乐观锁替代悲观锁。"></a>5.2 方案二，使用乐观锁替代悲观锁。</h3><p>所谓悲观锁，是关系数据库管理系统里的一种并发控制的方法。它可以阻止一个事务以影响其他用户的方式来修改数据。如果一个事务执行的操作对某行数据应用了锁，那只有当这个事务把锁释放，其他事务才能够执行与该锁冲突的操作。对应于上文分析中的“并发请求抢锁”行为。</p>
+<p>所谓乐观锁，它假设多用户并发的事务在处理时不会彼此互相影响，各事务能够在不产生锁的情况下处理各自影响的那部分数据。在提交数据更新之前，每个事务会先检查在该事务读取数据后，有没有其他事务又修改了该数据。如果其他事务有更新的话，正在提交的事务会进行回滚。</p>
+<p>商品“秒杀”系统中，乐观锁的具体应用方法，是在DB的“库存”记录中维护一个版本号。在更新“库存”的操作进行前，先去DB获取当前版本号。在更新库存的事务提交时，检查该版本号是否已被其他事务修改。如果版本没被修改，则提交事务，且版本号加1；如果版本号已经被其他事务修改，则回滚事务，并给上层报错。</p>
+<p>这个方案解决了“并发请求抢锁”的问题，可以提高DB的并发处理能力。</p>
+<p>但是如果应用于微信红包系统，则会存在下面三个问题：</p>
+<ul>
+<li><p>1.如果拆红包采用乐观锁，那么在并发抢到相同版本号的拆红包请求中，只有一个能拆红包成功，其他的请求将事务回滚并返回失败，给用户报错，用户体验完全不可接受。</p>
+</li>
+<li><p>2.如果采用乐观锁，将会导致第一时间同时拆红包的用户有一部分直接返回失败，反而那些“手慢”的用户，有可能因为并发减小后拆红包成功，这会带来用户体验上的负面影响。</p>
+</li>
+<li><p>3.如果采用乐观锁的方式，会带来大数量的无效更新请求、事务回滚，给DB造成不必要的额外压力。<br>基于以上原因，微信红包系统不能采用乐观锁的方式解决并发抢锁问题。</p>
+</li>
+</ul>
+<h2 id="六、微信红包系统的高并发解决方案"><a href="#六、微信红包系统的高并发解决方案" class="headerlink" title="六、微信红包系统的高并发解决方案"></a>六、微信红包系统的高并发解决方案</h2><p>综合上面的分析，微信红包系统针对相应的技术难点，采用了下面几个方案，解决高并发问题。</p>
+<h3 id="1-系统垂直SET化，分而治之。"><a href="#1-系统垂直SET化，分而治之。" class="headerlink" title="1.系统垂直SET化，分而治之。"></a>1.系统垂直SET化，分而治之。</h3><p>微信红包用户发一个红包时，微信红包系统生成一个ID作为这个红包的唯一标识。接下来这个红包的所有发红包、抢红包、拆红包、查询红包详情等操作，都根据这个ID关联。</p>
+<p>红包系统根据这个红包ID，按一定的规则（如按ID尾号取模等），垂直上下切分。切分后，一个垂直链条上的逻辑Server服务器、DB统称为一个SET。</p>
+<p>各个SET之间相互独立，互相解耦。并且同一个红包ID的所有请求，包括发红包、抢红包、拆红包、查详情详情等，垂直stick到同一个SET内处理，高度内聚。通过这样的方式，系统将所有红包请求这个巨大的洪流分散为多股小流，互不影响，分而治之，如下图所示。</p>
+<img src="/2019/05/26/%E5%BE%AE%E4%BF%A1%E7%BA%A2%E5%8C%85%E7%B3%BB%E7%BB%9F%E6%98%AF%E5%A6%82%E4%BD%95%E5%BA%94%E5%AF%B9%E9%AB%98%E5%B9%B6%E5%8F%91%E7%9A%84/15588323447069/15588341324142.jpg" class="">
+
+<p>这个方案解决了同时存在海量事务级操作的问题，将海量化为小量。</p>
+<h3 id="2-逻辑Server层将请求排队，解决DB并发问题。"><a href="#2-逻辑Server层将请求排队，解决DB并发问题。" class="headerlink" title="2.逻辑Server层将请求排队，解决DB并发问题。"></a>2.逻辑Server层将请求排队，解决DB并发问题。</h3><p>红包系统是资金交易系统，DB操作的事务性无法避免，所以会存在“并发抢锁”问题。但是如果到达DB的事务操作（也即拆红包行为）不是并发的，而是串行的，就不会存在“并发抢锁”的问题了。</p>
+<p>按这个思路，为了使拆红包的事务操作串行地进入DB，只需要将请求在Server层以FIFO（先进先出）的方式排队，就可以达到这个效果。从而问题就集中到Server的FIFO队列设计上。</p>
+<p>微信红包系统设计了分布式的、轻巧的、灵活的FIFO队列方案。其具体实现如下：</p>
+<p>首先，将同一个红包ID的所有请求stick到同一台Server。</p>
+<p>上面SET化方案已经介绍，同个红包ID的所有请求，按红包ID stick到同个SET中。不过在同个SET中，会存在多台Server服务器同时连接同一台DB（基于容灾、性能考虑，需要多台Server互备、均衡压力）。</p>
+<p>为了使同一个红包ID的所有请求，stick到同一台Server服务器上，在SET化的设计之外，微信红包系统添加了一层基于红包ID hash值的分流，如下图所示。</p>
+<img src="/2019/05/26/%E5%BE%AE%E4%BF%A1%E7%BA%A2%E5%8C%85%E7%B3%BB%E7%BB%9F%E6%98%AF%E5%A6%82%E4%BD%95%E5%BA%94%E5%AF%B9%E9%AB%98%E5%B9%B6%E5%8F%91%E7%9A%84/15588323447069/15588341659387.jpg" class="">
+
+<p>其次，设计单机请求排队方案。</p>
+<p>将stick到同一台Server上的所有请求在被接收进程接收后，按红包ID进行排队。然后串行地进入worker进程（执行业务逻辑）进行处理，从而达到排队的效果，如下图所示。</p>
+<img src="/2019/05/26/%E5%BE%AE%E4%BF%A1%E7%BA%A2%E5%8C%85%E7%B3%BB%E7%BB%9F%E6%98%AF%E5%A6%82%E4%BD%95%E5%BA%94%E5%AF%B9%E9%AB%98%E5%B9%B6%E5%8F%91%E7%9A%84/15588323447069/15588341852755.jpg" class="">
+
+<p>最后，增加memcached控制并发。</p>
+<p>为了防止Server中的请求队列过载导致队列被降级，从而所有请求拥进DB，系统增加了与Server服务器同机部署的memcached，用于控制拆同一个红包的请求并发数。</p>
+<p>具体来说，利用memcached的CAS原子累增操作，控制同时进入DB执行拆红包事务的请求数，超过预先设定数值则直接拒绝服务。用于DB负载升高时的降级体验。</p>
+<p>通过以上三个措施，系统有效地控制了DB的“并发抢锁”情况。</p>
+<h3 id="3-双维度库表设计，保障系统性能稳定"><a href="#3-双维度库表设计，保障系统性能稳定" class="headerlink" title="3.双维度库表设计，保障系统性能稳定"></a>3.双维度库表设计，保障系统性能稳定</h3><p>红包系统的分库表规则，初期是根据红包ID的hash值分为多库多表。随着红包数据量逐渐增大，单表数据量也逐渐增加。而DB的性能与单表数据量有一定相关性。当单表数据量达到一定程度时，DB性能会有大幅度下降，影响系统性能稳定性。采用冷热分离，将历史冷数据与当前热数据分开存储，可以解决这个问题。</p>
+<p>处理微信红包数据的冷热分离时，系统在以红包ID维度分库表的基础上，增加了以循环天分表的维度，形成了双维度分库表的特色。</p>
+<p>具体来说，就是分库表规则像db_xx.t_y_dd设计，其中，xx&#x2F;y是红包ID的hash值后三位，dd的取值范围在01~31，代表一个月天数最多31天。</p>
+<p>通过这种双维度分库表方式，解决了DB单表数据量膨胀导致性能下降的问题，保障了系统性能的稳定性。同时，在热冷分离的问题上，又使得数据搬迁变得简单而优雅。</p>
+<p>综上所述，微信红包系统在解决高并发问题上的设计，主要采用了SET化分治、请求排队、双维度分库表等方案，使得单组DB的并发性能提升了8倍左右，取得了很好的效果。</p>
+<h2 id="七、最后总结"><a href="#七、最后总结" class="headerlink" title="七、最后总结"></a>七、最后总结</h2><p>微信红包系统是一个高并发的资金交易系统，最大的技术挑战是保障并发性能与资金安全。这种全新的技术挑战，传统的“秒杀”系统设计方案已不能完全解决。在分析了业界“秒杀”系统解决方案的基础上，微信红包采用了SET化、请求排队串行化、双维度分库表等设计，形成了独特的高并发、资金安全系统解决方案，并在平时节假日、2015和2016春节实践中充分证明了可行性，取得了显著的效果。在刚刚过去的2017鸡年除夕夜，微信红包收发峰值达到76万每秒，收发微信红包142亿个，微信红包系统的表现稳定，实现了除夕夜系统零故障。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/IM/" rel="tag"># IM</a>
+              <a href="/tags/%E7%A4%BE%E4%BA%A4/" rel="tag"># 社交</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2019/05/27/fishhook%E5%8E%9F%E7%90%86/" rel="next" title="iOS逆向工程 - fishhook原理">
+      iOS逆向工程 - fishhook原理 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%A4%BE%E4%BA%A4%E8%BD%AF%E4%BB%B6%E7%BA%A2%E5%8C%85%E6%8A%80%E6%9C%AF%E8%A7%A3%E5%AF%86-%E5%9B%9B-%EF%BC%9A%E5%BE%AE%E4%BF%A1%E7%BA%A2%E5%8C%85%E7%B3%BB%E7%BB%9F%E6%98%AF%E5%A6%82%E4%BD%95%E5%BA%94%E5%AF%B9%E9%AB%98%E5%B9%B6%E5%8F%91%E7%9A%84"><span class="nav-number">1.</span> <span class="nav-text">社交软件红包技术解密(四)：微信红包系统是如何应对高并发的</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%BC%95%E8%A8%80"><span class="nav-number">1.1.</span> <span class="nav-text">一、引言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E5%88%86%E4%BA%AB%E8%80%85"><span class="nav-number">1.2.</span> <span class="nav-text">二、分享者</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E5%BE%AE%E4%BF%A1%E7%BA%A2%E5%8C%85%E7%9A%84%E4%B8%A4%E5%A4%A7%E4%B8%9A%E5%8A%A1%E7%89%B9%E7%82%B9"><span class="nav-number">1.3.</span> <span class="nav-text">三、微信红包的两大业务特点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%B1%E5%83%8F%E4%B8%8B%E9%9D%A2%E8%BF%99%E6%A0%B7%EF%BC%9A"><span class="nav-number">1.3.1.</span> <span class="nav-text">就像下面这样：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81-%E5%BE%AE%E4%BF%A1%E7%BA%A2%E5%8C%85%E7%B3%BB%E7%BB%9F%E7%9A%84%E6%8A%80%E6%9C%AF%E9%9A%BE%E7%82%B9"><span class="nav-number">1.4.</span> <span class="nav-text">四、 微信红包系统的技术难点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%A5%E7%B3%BB%E7%BB%9F%E7%94%B1%E6%8E%A5%E5%85%A5%E5%B1%82%E3%80%81%E9%80%BB%E8%BE%91%E6%9C%8D%E5%8A%A1%E5%B1%82%E3%80%81%E5%AD%98%E5%82%A8%E5%B1%82%E4%B8%8E%E7%BC%93%E5%AD%98%E6%9E%84%E6%88%90%EF%BC%9A"><span class="nav-number">1.4.1.</span> <span class="nav-text">该系统由接入层、逻辑服务层、存储层与缓存构成：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E8%88%AC%E6%9D%A5%E8%AF%B4%EF%BC%8C%E5%AF%B9-DB-%E7%9A%84%E6%93%8D%E4%BD%9C%E6%B5%81%E7%A8%8B%E6%9C%89%E4%BB%A5%E4%B8%8B%E4%B8%89%E6%AD%A5%EF%BC%9A"><span class="nav-number">1.4.2.</span> <span class="nav-text">一般来说，对 DB 的操作流程有以下三步：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E5%BE%AE%E4%BF%A1%E7%BA%A2%E5%8C%85%E7%B3%BB%E7%BB%9F%E7%9A%84%E8%AE%BE%E8%AE%A1%E4%B8%8A%EF%BC%8C%E9%99%A4%E4%BA%86%E5%B9%B6%E5%8F%91%E8%AF%B7%E6%B1%82%E6%8A%A2%E9%94%81%E4%B9%8B%E5%A4%96%EF%BC%8C%E8%BF%98%E6%9C%89%E4%BB%A5%E4%B8%8B%E4%B8%A4%E4%B8%AA%E7%AA%81%E5%87%BA%E9%9A%BE%E7%82%B9%EF%BC%9A"><span class="nav-number">1.4.3.</span> <span class="nav-text">在微信红包系统的设计上，除了并发请求抢锁之外，还有以下两个突出难点：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E8%A7%A3%E5%86%B3%E9%AB%98%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98%E9%80%9A%E5%B8%B8%E4%BD%BF%E7%94%A8%E7%9A%84%E6%96%B9%E6%A1%88"><span class="nav-number">1.5.</span> <span class="nav-text">五、解决高并发问题通常使用的方案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-%E6%96%B9%E6%A1%88%E4%B8%80%EF%BC%9A%E4%BD%BF%E7%94%A8%E5%86%85%E5%AD%98%E6%93%8D%E4%BD%9C%E6%9B%BF%E4%BB%A3%E5%AE%9E%E6%97%B6%E7%9A%84-DB-%E4%BA%8B%E5%8A%A1%E6%93%8D%E4%BD%9C"><span class="nav-number">1.5.1.</span> <span class="nav-text">5.1 方案一：使用内存操作替代实时的 DB 事务操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-%E6%96%B9%E6%A1%88%E4%BA%8C%EF%BC%8C%E4%BD%BF%E7%94%A8%E4%B9%90%E8%A7%82%E9%94%81%E6%9B%BF%E4%BB%A3%E6%82%B2%E8%A7%82%E9%94%81%E3%80%82"><span class="nav-number">1.5.2.</span> <span class="nav-text">5.2 方案二，使用乐观锁替代悲观锁。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E5%BE%AE%E4%BF%A1%E7%BA%A2%E5%8C%85%E7%B3%BB%E7%BB%9F%E7%9A%84%E9%AB%98%E5%B9%B6%E5%8F%91%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="nav-number">1.6.</span> <span class="nav-text">六、微信红包系统的高并发解决方案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E7%B3%BB%E7%BB%9F%E5%9E%82%E7%9B%B4SET%E5%8C%96%EF%BC%8C%E5%88%86%E8%80%8C%E6%B2%BB%E4%B9%8B%E3%80%82"><span class="nav-number">1.6.1.</span> <span class="nav-text">1.系统垂直SET化，分而治之。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E9%80%BB%E8%BE%91Server%E5%B1%82%E5%B0%86%E8%AF%B7%E6%B1%82%E6%8E%92%E9%98%9F%EF%BC%8C%E8%A7%A3%E5%86%B3DB%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98%E3%80%82"><span class="nav-number">1.6.2.</span> <span class="nav-text">2.逻辑Server层将请求排队，解决DB并发问题。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%8F%8C%E7%BB%B4%E5%BA%A6%E5%BA%93%E8%A1%A8%E8%AE%BE%E8%AE%A1%EF%BC%8C%E4%BF%9D%E9%9A%9C%E7%B3%BB%E7%BB%9F%E6%80%A7%E8%83%BD%E7%A8%B3%E5%AE%9A"><span class="nav-number">1.6.3.</span> <span class="nav-text">3.双维度库表设计，保障系统性能稳定</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E6%9C%80%E5%90%8E%E6%80%BB%E7%BB%93"><span class="nav-number">1.7.</span> <span class="nav-text">七、最后总结</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ZacharyIcoderKong</p>
+  <div class="site-description" itemprop="description">一切有为法，如梦幻泡影，如露亦如电，应作如是观。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">25</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ZacharyIcoderKong</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

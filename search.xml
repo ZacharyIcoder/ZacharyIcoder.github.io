@@ -1,0 +1,914 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>IOS 将图片转化裁剪为圆形头像</title>
+    <url>/2019/06/04/IOS-%E5%B0%86%E5%9B%BE%E7%89%87%E8%BD%AC%E5%8C%96%E8%A3%81%E5%89%AA%E4%B8%BA%E5%9C%86%E5%BD%A2%E5%A4%B4%E5%83%8F/</url>
+    <content><![CDATA[<p>将图片转化裁剪为圆形的头像</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-(UIImage*) imageToHeadView:(UIImage*)image withParam:(CGFloat)inset&#123;</span><br><span class="line">  </span><br><span class="line">  //先获取大小</span><br><span class="line">  CGFloat lengthW = CGImageGetWidth(image.CGImage);</span><br><span class="line">  CGFloat lengthH = CGImageGetHeight(image.CGImage);</span><br><span class="line">  CGFloat cutSzie;</span><br><span class="line">  //判断长宽比,获得最大正方形裁剪值</span><br><span class="line">  if(lengthW&gt;= lengthH)&#123;</span><br><span class="line">      cutSzie = lengthH;</span><br><span class="line">  &#125;</span><br><span class="line">  else cutSzie = lengthW;</span><br><span class="line">  //执行裁剪(为正方形)</span><br><span class="line">  CGImageRef sourceImageRef = [image CGImage]; //将UIImage转换成CGImageRef</span><br><span class="line">  CGRect rect = CGRectMake(lengthW/2-cutSzie/2, lengthH/2 - cutSzie/2, cutSzie, cutSzie);  //构建裁剪区</span><br><span class="line">  CGImageRef newImageRef = CGImageCreateWithImageInRect(sourceImageRef, rect);    //按照给定的矩形区域进行剪裁</span><br><span class="line">  UIImage *newImage = [UIImage imageWithCGImage:newImageRef];                     //将CGImageRef转换成UIImage</span><br><span class="line">  //取圆形</span><br><span class="line">  UIGraphicsBeginImageContextWithOptions(newImage.size, NO, 0);</span><br><span class="line">  CGContextRef context = UIGraphicsGetCurrentContext();</span><br><span class="line">  CGContextSetFillColorWithColor(context, [UIColor clearColor].CGColor);</span><br><span class="line">  CGContextFillPath(context);</span><br><span class="line">  CGContextSetLineWidth(context, .5);</span><br><span class="line">  CGContextSetStrokeColorWithColor(context, [UIColor clearColor].CGColor);</span><br><span class="line">  CGRect newrect = CGRectMake(inset, inset, newImage.size.width - inset * 2.0f, newImage.size.height - inset * 2.0f);</span><br><span class="line">  CGContextAddEllipseInRect(context, newrect);</span><br><span class="line">  CGContextClip(context);</span><br><span class="line">  </span><br><span class="line">  [newImage drawInRect:newrect];</span><br><span class="line">  CGContextAddEllipseInRect(context, newrect);</span><br><span class="line">  CGContextStrokePath(context);</span><br><span class="line">  UIImage *circleImg = UIGraphicsGetImageFromCurrentImageContext();</span><br><span class="line">  UIGraphicsEndImageContext();</span><br><span class="line">  return circleImg;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>调用:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">UIImage *img = [UIImage imageNamed:@&quot;edit_background1.jpg&quot;];</span><br><span class="line">img = [self imageToHeadView:img withParam:0];      //封装的方法,从中间裁剪为圆形,后面参数为偏移量</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>iOS</category>
+      </categories>
+      <tags>
+        <tag>iOS</tag>
+        <tag>图片裁剪</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>HiChat-iOS文档</title>
+    <url>/2019/06/26/HiChat-iOS%E6%96%87%E6%A1%A3/</url>
+    <content><![CDATA[<h1 id="HiChat-iOS文档"><a href="#HiChat-iOS文档" class="headerlink" title="HiChat-iOS文档"></a>HiChat-iOS文档</h1><h2 id="请求加好友消息"><a href="#请求加好友消息" class="headerlink" title="请求加好友消息"></a>请求加好友消息</h2><p>收到的消息 </p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">data:(</span><br><span class="line">        &#123;</span><br><span class="line">        &quot;_id&quot; = 5d1336c21d2f518fbdc2c8df;</span><br><span class="line">        &quot;from_user&quot; = 3800;</span><br><span class="line">        &quot;msg_id&quot; = &quot;62a8ed70-1c75-41b9-c65b-9a1bd0fe4393&quot;;</span><br><span class="line">        &quot;msg_type&quot; = 101;</span><br><span class="line">        sendtime = 1561540290751;</span><br><span class="line">        text = &quot;3800\U8bf7\U6c42\U6dfb\U52a0\U60a8\U4e3a\U597d\U53cb&quot;;</span><br><span class="line">        timestamp = 1561540290751;</span><br><span class="line">        &quot;to_user&quot; = kong;</span><br><span class="line">        type = 0;</span><br><span class="line">        &#125;</span><br><span class="line">    )   </span><br></pre></td></tr></table></figure>
+
+
+<hr>
+]]></content>
+      <categories>
+        <category>iOS</category>
+        <category>HiChat&gt;</category>
+      </categories>
+      <tags>
+        <tag>iOS</tag>
+        <tag>HiChat</tag>
+        <tag>文档说明</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>NAT(Network Address Translation)</title>
+    <url>/2020/07/18/NAT-Network-Address-Translation/</url>
+    <content><![CDATA[<h1 id="NAT（Network-Address-Translation）"><a href="#NAT（Network-Address-Translation）" class="headerlink" title="NAT（Network Address Translation）"></a>NAT（Network Address Translation）</h1><p>   NAT（Network Address Translation，网络地址转换）是1994年提出的。当在专用网内部的一些主机本来已经分配到了本地IP地址（即仅在本专用网内使用的专用地址），但现在又想和因特网上的主机通信（并不需要加密）时，可使用NAT方法。<br>   这种方法需要在专用网连接到因特网的路由器上安装NAT软件。装有NAT软件的路由器叫做NAT路由器，它至少有一个有效的外部全球IP地址。这样，所有使用本地地址的主机在和外界通信时，都要在NAT路由器上将其本地地址转换成全球IP地址，才能和因特网连接。</p>
+<h2 id="1-NAT功能"><a href="#1-NAT功能" class="headerlink" title="1.NAT功能"></a>1.NAT功能</h2><p>   NAT不仅能解决了lP地址不足的问题，而且还能够有效地避免来自网络外部的攻击，隐藏并保护网络内部的计算机。<br>    1.宽带分享：这是 NAT 主机的最大功能。<br>    2.安全防护：NAT 之内的 PC 联机到 Internet 上面时，他所显示的 IP 是 NAT 主机的公共 IP，所以 Client 端的 PC 当然就具有一定程度的安全了，外界在进行 portscan（端口扫描） 的时候，就侦测不到源Client 端的 PC 。</p>
+<h2 id="２-NAT实现方式"><a href="#２-NAT实现方式" class="headerlink" title="２. NAT实现方式"></a>２. NAT实现方式</h2><p>   NAT的实现方式有三种，即静态转换Static Nat、动态转换Dynamic Nat和端口多路复用OverLoad。<br>   静态 转换是指将内部网络的私有IP地址转换为公有IP地址，IP地址对是一对一的，是一成不变的，某个私有IP地址只转换为某个公有IP地址。借助于静态转换，可以实现外部网络对内部网络中某些特定设备（如服务器）的访问。<br>   动态转换是指将内部网络的私有IP地址转换为公用IP地址时，IP地址是不确定的，是随机的，所有被授权访问上Internet的私有IP地址可随机转换为任何指定的合法IP地址。也就是说，只要指定哪些内部地址可以进行转换，以及用哪些合法地址作为外部地址时，就可以进行动态转换。动态转换可以使用多个合法外部地址集。当ISP提供的合法IP地址略少于网络内部的计算机数量时。可以采用动态转换的方式。<br>   端口多路复用（ Port address Translation,PAT)是指改变外出数据包的源端口并进行端口转换，即端口地址转换（PAT，Port Address Translation).采用端口多路复用方式。内部网络的所有主机均可共享一个合法外部IP地址实现对Internet的访问，从而可以最大限度地节约IP地址资源。同时，又可隐藏网络内部的所有主机，有效避免来自internet的攻击。因此，目前网络中应用最多的就是端口多路复用方式。</p>
+]]></content>
+      <categories>
+        <category>计算机网络</category>
+      </categories>
+      <tags>
+        <tag>计算机网络</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Online优化记录及近期需要优化点</title>
+    <url>/2020/07/19/Online%E4%BC%98%E5%8C%96%E8%AE%B0%E5%BD%95%E5%8F%8A%E8%BF%91%E6%9C%9F%E9%9C%80%E8%A6%81%E4%BC%98%E5%8C%96%E7%82%B9/</url>
+    <content><![CDATA[<h1 id="Online近期优化记录及还需优化点"><a href="#Online近期优化记录及还需优化点" class="headerlink" title="Online近期优化记录及还需优化点"></a>Online近期优化记录及还需优化点</h1><h2 id="Online近期添加的新功能"><a href="#Online近期添加的新功能" class="headerlink" title="Online近期添加的新功能"></a>Online近期添加的新功能</h2><ol>
+<li>会员中心的钻石会员和VIP会员功能。</li>
+<li>聊天中发送iCloud文件功能。</li>
+<li>类似QQ侧滑菜单和单聊和群聊中消息列表侧边栏功能。</li>
+</ol>
+<h2 id="Online近期优化记录"><a href="#Online近期优化记录" class="headerlink" title="Online近期优化记录"></a>Online近期优化记录</h2><ol>
+<li>聊天查看大图时黑屏问题修复。</li>
+<li>替换navigationBar隐藏的方法。</li>
+<li>修改界面返回时偶尔卡住的问题。</li>
+<li>音频通话开始后显示视频通话界面才有的翻转摄像头按钮问题修改，个人视频通话接通后自己的默认视图改为小视图，对方的视图默认是大视图。</li>
+<li>杀死程序时发送的消息添加容错处理。</li>
+<li>保存资料后消息列表小红点消失问题修改。</li>
+<li>朋友圈发表评论删除消息等去掉文字提示和网络加载框优化体验。</li>
+<li>朋友圈加入文字链接点击（网址和电话号码）功能，和长按朋友圈文字复制功能。</li>
+<li>进入后台保活策略修改（改为播放无声音乐方式），进入后台断开socket改为定时器发送socket心跳，保证用户的在线状态。</li>
+<li>朋友圈显示字体显示优化，刷新列表显示体验优化。</li>
+<li>加载提示框加载时屏幕不可点击体验优化,网络请求超时时间统一设置为30秒。</li>
+<li>Online官方公众号聊天页面的头像显示修改为默认app图标。</li>
+<li>聊天中的数据源由不安全的数组改为安全数组。</li>
+<li>图片发送的进度显示优化。</li>
+</ol>
+<h2 id="准备优化点"><a href="#准备优化点" class="headerlink" title="准备优化点"></a>准备优化点</h2><ol>
+<li>用户登录过后，过段时间又重新打开app时直接进入到主界面体验优化。现在的逻辑是先走登录接口，拿到后台返回的数据后直接存储显示。这样的导致的一个体验问题是，当用户网络不好时，重新打开app会显示启动页，上面显示登录接口的加载框。直到登录接口返回数据，最多30秒的时间不能进入到app。<br>优化思路，把现在临时的个人数据存储改为文件数据存储，重新登录后先拿到存储的数据进行展示，再异步请求更新数据，用户重新打开app后无缝进入app主界面优化用户体验。</li>
+</ol>
+]]></content>
+      <categories>
+        <category>SAMIM</category>
+      </categories>
+      <tags>
+        <tag>SAMIM</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Cocoapods 遇到You don&#39;t have write permissions for the /usr/bin directory.</title>
+    <url>/2019/05/31/cocoapods-problem/</url>
+    <content><![CDATA[<h1 id="Cocoapods-遇到You-don’t-have-write-permissions-for-the-usr-bin-directory"><a href="#Cocoapods-遇到You-don’t-have-write-permissions-for-the-usr-bin-directory" class="headerlink" title="Cocoapods 遇到You don’t have write permissions for the &#x2F;usr&#x2F;bin directory."></a>Cocoapods 遇到You don’t have write permissions for the &#x2F;usr&#x2F;bin directory.</h1><p>安装cocoapods时候</p>
+<p>命令 sudo gem install cocopods</p>
+<p>提示</p>
+<p>tiantaodeMacBook-Pro:~ tiantao$ sudo gem install cocoapods</p>
+<p>ERROR: While executing gem … (Gem::FilePermissionError)</p>
+<p>You don’t have write permissions for the &#x2F;usr&#x2F;bin directory.</p>
+<p>解决方案 有人说 前面加sudo 明明已经加了 是无写入到&#x2F;usr&#x2F;bin directory 权限</p>
+<p>执行此命令即可</p>
+<h1 id="sudo-gem-install-cocoapods-n-usr-local-bin"><a href="#sudo-gem-install-cocoapods-n-usr-local-bin" class="headerlink" title="sudo gem install cocoapods -n &#x2F;usr&#x2F;local&#x2F;bin"></a>sudo gem install cocoapods -n &#x2F;usr&#x2F;local&#x2F;bin</h1>]]></content>
+      <categories>
+        <category>Cocoapods</category>
+      </categories>
+      <tags>
+        <tag>permissions</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Online聊天卡顿崩溃原因和聊天数据源的优化</title>
+    <url>/2020/07/20/Online%E8%81%8A%E5%A4%A9%E5%8D%A1%E9%A1%BF%E5%B4%A9%E6%BA%83%E5%8E%9F%E5%9B%A0%E5%92%8C%E8%81%8A%E5%A4%A9%E6%95%B0%E6%8D%AE%E6%BA%90%E7%9A%84%E4%BC%98%E5%8C%96/</url>
+    <content><![CDATA[<h1 id="Online聊天卡顿崩溃原因和聊天数据源的优化"><a href="#Online聊天卡顿崩溃原因和聊天数据源的优化" class="headerlink" title="Online聊天卡顿崩溃原因和聊天数据源的优化"></a>Online聊天卡顿崩溃原因和聊天数据源的优化</h1><p>测试反馈的问题有一些是界面卡顿，测试的问题不易重现和追查困难。</p>
+<h3 id="怎么判断主线程是不是发生了卡顿？"><a href="#怎么判断主线程是不是发生了卡顿？" class="headerlink" title="怎么判断主线程是不是发生了卡顿？"></a>怎么判断主线程是不是发生了卡顿？</h3><p>一般来说，用户感受得到的卡顿大概有三个特征：</p>
+<ol>
+<li>FPS 降低</li>
+<li>CPU 占用率很高</li>
+<li>主线程 Runloop 执行了很久</li>
+</ol>
+<h3 id="我们先思考一下，界面卡顿是由哪些原因导致的？"><a href="#我们先思考一下，界面卡顿是由哪些原因导致的？" class="headerlink" title="我们先思考一下，界面卡顿是由哪些原因导致的？"></a>我们先思考一下，界面卡顿是由哪些原因导致的？</h3><span id="more"></span> 
+
+<ol>
+<li>死锁：主线程拿到锁 A，需要获得锁 B，而同时某个子线程拿了锁 B，需要锁 A，这样相互等待就死锁了。</li>
+<li>抢锁：主线程需要访问 DB，而此时某个子线程往 DB 插入大量数据。通常抢锁的体验是偶尔卡一阵子，过会就恢复了。</li>
+<li>主线程大量 IO：主线程为了方便直接写入大量数据，会导致界面卡顿。</li>
+<li>主线程大量计算：算法不合理，导致主线程某个函数占用大量 CPU。</li>
+<li>大量的 UI 绘制：复杂的 UI、图文混排等，带来大量的 UI 绘制。</li>
+</ol>
+<ul>
+<li>关于UI绘制的优化之前就已完善，在展示数据源之前就已把要展示的数据源都先计算好布局，等UI展示时直接用计算好的布局直接展示，不需要在UI展示刷新时重复计算UI布局数据。</li>
+<li>关于消息列表的大量数据更新（用户接收大量消息和发送消息需要更新数据库，会产生抢锁和写入读取及更新大量数据的问题）已用计时器定时按需刷新UI来缓解同时更新大量数据时，更新的全量数据同时刷新UI带来的界面刷新压力。</li>
+</ul>
+<h3 id="最近Online更新的是关于聊天页面的数据源优化"><a href="#最近Online更新的是关于聊天页面的数据源优化" class="headerlink" title="最近Online更新的是关于聊天页面的数据源优化"></a>最近Online更新的是关于聊天页面的数据源优化</h3><p>聊天页面最基础的便是聊天当中的数据源（聊天信息）了，iOS可变数据源的容器通常都是可变数组，但可变数组 NSMutableArray 不是线程安全的，这就带来一个问题，主线程我们多次操作 都没有问题，但是多线程下短时间内有大量的读写操作的时候是否会引起数据的错乱？只要简单测试下 答案就会不言而喻，NSMutableArray在多线程下操作很容易引起数组越界从而导致crash。</p>
+<h4 id="开源工具YYThreadSafeArray的问题"><a href="#开源工具YYThreadSafeArray的问题" class="headerlink" title="开源工具YYThreadSafeArray的问题"></a>开源工具YYThreadSafeArray的问题</h4><p>先来看开源界常用的开源工具类YYKit中的YYThreadSafeArray，旨在提供线程安全的数组，其原理是继承NSMutableArray的，并且对其中必要的方法加锁来保证线程安全。但是YYThreadSafeArray依然有一些多线程方面的问题。</p>
+<p>诚如YYThreadSafeArray 注释的那样 Fast enumerate(for..in) and enumerator is not thread safe （快速for..in枚举和枚举器不是线程安全的）</p>
+<img src="/2020/07/20/Online%E8%81%8A%E5%A4%A9%E5%8D%A1%E9%A1%BF%E5%B4%A9%E6%BA%83%E5%8E%9F%E5%9B%A0%E5%92%8C%E8%81%8A%E5%A4%A9%E6%95%B0%E6%8D%AE%E6%BA%90%E7%9A%84%E4%BC%98%E5%8C%96/onlineyouhua0.png" class="">
+
+
+<h5 id="问题1：调用枚举方法导致死锁"><a href="#问题1：调用枚举方法导致死锁" class="headerlink" title="问题1：调用枚举方法导致死锁"></a>问题1：调用枚举方法导致死锁</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Fast enumerate(for..in) and enumerator is not thread safe,</span><br><span class="line"> use enumerate using block instead. When enumerate or sort with block/callback,</span><br><span class="line"> do *NOT* send message to the array inside the block/callback.</span><br></pre></td></tr></table></figure>
+
+<p>如下调用方式导致死锁</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">YYThreadSafeArray *array = [[YYThreadSafeArray alloc] initWithObjects:@&quot;hello world&quot;, nil];</span><br><span class="line">[array enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) &#123;</span><br><span class="line">    [array count];</span><br><span class="line">&#125;];</span><br></pre></td></tr></table></figure>
+
+<img src="/2020/07/20/Online%E8%81%8A%E5%A4%A9%E5%8D%A1%E9%A1%BF%E5%B4%A9%E6%BA%83%E5%8E%9F%E5%9B%A0%E5%92%8C%E8%81%8A%E5%A4%A9%E6%95%B0%E6%8D%AE%E6%BA%90%E7%9A%84%E4%BC%98%E5%8C%96/onlineyouhua1.png" class="">
+
+<p>原因分析：YYThreadSafeArray使用加锁的方式保证线程安全。加的锁是信号量：dispatch_semaphore。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#define LOCK(...) dispatch_semaphore_wait(_lock, DISPATCH_TIME_FOREVER); \</span><br><span class="line">__VA_ARGS__; \</span><br><span class="line">dispatch_semaphore_signal(_lock);</span><br></pre></td></tr></table></figure>
+
+<p>dispatch_semaphore并不是可重入的。因此，遇到重入的情况，就会发生死锁问题。举的例子只是其中一个死锁场景。</p>
+<p>YY选择使用dispatch_semaphore的原因，可能是判断dispatch_semaphore的执行效率较高。可以参考YY对各种锁的效率测评：<a href="https://blog.ibireme.com/2016/01/16/spinlock_is_unsafe_in_ios/">https://blog.ibireme.com/2016/01/16/spinlock_is_unsafe_in_ios&#x2F;</a></p>
+<p>修复方法：<br>使用pthread_mutex替代dispatch_semaphore。pthread_mutex有参数可以设置为可重入。在YY测试的执行效率上，可重入的pthread_mutex是可重入锁中效率较高的一个。</p>
+<h5 id="问题2：for-in循环的线程不安全"><a href="#问题2：for-in循环的线程不安全" class="headerlink" title="问题2：for-in循环的线程不安全"></a>问题2：for-in循环的线程不安全</h5><p>YYThreadSafeArray在只用for-in循环时，是无法保证线程安全的。</p>
+<p>调用方式：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">YYThreadSafeArray *threadSafeArray = [[YYThreadSafeArray alloc] init];</span><br><span class="line">for (int i = 0; i &lt; 1000000; i++) &#123;</span><br><span class="line">    [threadSafeArray addObject:@(i)];</span><br><span class="line">&#125;</span><br><span class="line">dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^&#123;</span><br><span class="line">    for (int i = 0; i &lt; 100000; i++) &#123;</span><br><span class="line">        [threadSafeArray removeLastObject];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line">for (id obj in threadSafeArray) &#123;</span><br><span class="line">    (void)obj;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>此时大概率会抛出异常：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">*** Terminating app due to uncaught exception &#x27;NSGenericException&#x27;, reason: &#x27;*** Collection &lt;YYThreadSafeArray: 0x60000165aa20&gt; was mutated while being enumerated.&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>原因分析：<br>在执行for-in循环时，会调用NSArray的如下方法</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">- (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state</span><br><span class="line">                                  objects:(id __unsafe_unretained[])stackbuf</span><br><span class="line">                                    count:(NSUInteger)len;</span><br></pre></td></tr></table></figure>
+
+<p>for-in循环之所以有更高的效率，是因为在循环时，它并非每次都访问NSArray数组，而是直接将一段NSArray数组，当作一个C数组来访问，直接便利这个C数组。对于NSArray来说，state.itemsPtr字段将返回这个C数组的指针。</p>
+<p>但在这个方法中加锁，锁住的只是寻找这个C数组的过程，并不能锁住整个for-in循环过程。所以，当多线程进入时，会抛出was mutated while being enumerated异常。</p>
+<p>修复方法：<br>这个问题没有想到优雅的修复方法。有2种不怎么优雅的方式可选：</p>
+<ol>
+<li>让调用方用enumerateObjectsUsingBlock这种遍历方法替代for-in循环，但在效率上肯定有折损；</li>
+<li>将YYThreadSafeArray种的锁暴露出去，让业务方在for-in循环时自行加锁。</li>
+</ol>
+<p>但这两种方法都依赖于调用方以一个特定的姿势来调用。如果调用姿势无法保证，YYThreadSafeArray也无法保证线程安全了。</p>
+<h4 id="那如何实现一个线程安全的NSMutabeArray，以保证多个线程对数组操作（遍历，插入，删除）的安全？（对应Online聊天中各线程接受消息发送消息更新UI场景）"><a href="#那如何实现一个线程安全的NSMutabeArray，以保证多个线程对数组操作（遍历，插入，删除）的安全？（对应Online聊天中各线程接受消息发送消息更新UI场景）" class="headerlink" title="那如何实现一个线程安全的NSMutabeArray，以保证多个线程对数组操作（遍历，插入，删除）的安全？（对应Online聊天中各线程接受消息发送消息更新UI场景）"></a>那如何实现一个线程安全的NSMutabeArray，以保证多个线程对数组操作（遍历，插入，删除）的安全？（对应Online聊天中各线程接受消息发送消息更新UI场景）</h4><p>在实际开发中，有多个类可能在不同线程中同时操作消息数组，除了插入删除外，还有遍历，并且线程A在遍历时，线程B可能直接把数组给清空了，直接crash。 还有资源竞争造成的死锁。</p>
+<p>要解决这个线程安全的问题，需要明白两个知识点</p>
+<h5 id="1-nonatomic-和atomic"><a href="#1-nonatomic-和atomic" class="headerlink" title="1.nonatomic 和atomic"></a>1.nonatomic 和atomic</h5><p>这两个关键字是用来修饰成员变量的。前者是非原子操作即线程可以随便访问成员变量，后者是原子操作即线程访问按照一定的规则进行。</p>
+<p>nonatomic:</p>
+<p>如果只存在单个线程访问成员变量，用它修饰是非常不错的，因为没有对访问进行线程加锁，效率非常高。但是正因为没有加锁，所以可能同时进行读写，导致不可预期的错误。</p>
+<p>atomic:</p>
+<p>用atomic修饰成员变量，会给成员变量的getter 和 setter方法加锁，使访问每次只能进行一个，避免多个线程同时操作成员变量，所以适用于多线程访问成员变量的场景。<br>虽然atomic修饰的成员变量在多线程去访问时不会出现错误，但结果不一定准确：</p>
+<blockquote>
+<p>比如说有一个成员变量name,当a线程去getter name的值，同时有b线程和c线程对name 进行setter值，那么name的值就不确定了，可能是b线程操作之前的值，也有可能是b线程操作之后的值，也有可能是c线程操作之后的值。</p>
+</blockquote>
+<h5 id="2-dispatch-barrier-async-和dispatch-barrier-sync"><a href="#2-dispatch-barrier-async-和dispatch-barrier-sync" class="headerlink" title="2.dispatch_barrier_async 和dispatch_barrier_sync"></a>2.dispatch_barrier_async 和dispatch_barrier_sync</h5><p>这是GDC里面的两个栅栏方法，需要配合队列使用。其作用是拦住前面添加到队列的任务，让这些任务执行完成，然后再执行栅栏里的任务，两个方法的区别是：</p>
+<ol>
+<li>dispatch_barrier_async不阻塞主线程；</li>
+<li>dispatch_barrier_sync阻塞主线程，非得等到栅栏里的任务执行完成程序才能执行主线程的任务。</li>
+<li>另外一点需要明确的是，栅栏函数只对主队列和自身所在队列有影响，其他队列不受影响。</li>
+</ol>
+<p>如果在队列中的栅栏之后再添加任务，则此任务要等到栅栏里的任务完成后才会执行。</p>
+<p>看一段代码就一目了然了</p>
+<p>先使用 dispatch_barrier_sync</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">dispatch_queue_t concurrent_queue = dispatch_queue_create(&quot;concurrent&quot;, DISPATCH_QUEUE_CONCURRENT);</span><br><span class="line">    dispatch_async(concurrent_queue, ^&#123;</span><br><span class="line">        for (int i = 0; i &lt; 500; i++) &#123;</span><br><span class="line">            if (i % 100 == 0) &#123;</span><br><span class="line">                NSLog(@&quot;任务一%d&quot;,i);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    </span><br><span class="line">    dispatch_async(concurrent_queue, ^&#123;</span><br><span class="line">        for (int i = 0; i &lt; 50; i++) &#123;</span><br><span class="line">            if (i % 10 == 0) &#123;</span><br><span class="line">                NSLog(@&quot;任务二%d&quot;,i);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    </span><br><span class="line">    dispatch_async(concurrent_queue, ^&#123;</span><br><span class="line">        for (int i = 0; i &lt; 30; i++) &#123;</span><br><span class="line">            if (i % 5 == 0) &#123;</span><br><span class="line">                NSLog(@&quot;任务三%d&quot;,i);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    </span><br><span class="line">    // 这里使用同步栅栏函数</span><br><span class="line">    dispatch_barrier_sync(concurrent_queue, ^&#123;</span><br><span class="line">        for (int i = 0; i &lt; 40; i++) &#123;</span><br><span class="line">            if (i % 5 == 0) &#123;</span><br><span class="line">                NSLog(@&quot;-------同步barrier的任务%d-------&quot;,i);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    </span><br><span class="line">    NSLog(@&quot;外面的任务&quot;);</span><br><span class="line">    </span><br><span class="line">    dispatch_async(concurrent_queue, ^&#123;</span><br><span class="line">        for (int i = 0; i &lt; 3; i++) &#123;</span><br><span class="line">            NSLog(@&quot;任务四%d&quot;,i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    </span><br><span class="line">    dispatch_async(concurrent_queue, ^&#123;</span><br><span class="line">        for (int i = 0; i &lt; 3; i++) &#123;</span><br><span class="line">            NSLog(@&quot;任务六%d&quot;,i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure>
+
+<p>打印结果如下</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">2019-07-31 17:22:17.599644+0800 ArrayTest[14396:408598] 任务一0</span><br><span class="line">2019-07-31 17:22:17.599644+0800 ArrayTest[14396:408597] 任务三0</span><br><span class="line">2019-07-31 17:22:17.599644+0800 ArrayTest[14396:408596] 任务二0</span><br><span class="line">2019-07-31 17:22:17.599823+0800 ArrayTest[14396:408598] 任务一100</span><br><span class="line">2019-07-31 17:22:17.599823+0800 ArrayTest[14396:408597] 任务三5</span><br><span class="line">2019-07-31 17:22:17.599824+0800 ArrayTest[14396:408596] 任务二10</span><br><span class="line">2019-07-31 17:22:17.599931+0800 ArrayTest[14396:408597] 任务三10</span><br><span class="line">2019-07-31 17:22:17.599949+0800 ArrayTest[14396:408598] 任务一200</span><br><span class="line">2019-07-31 17:22:17.599932+0800 ArrayTest[14396:408596] 任务二20</span><br><span class="line">2019-07-31 17:22:17.600011+0800 ArrayTest[14396:408597] 任务三15</span><br><span class="line">2019-07-31 17:22:17.600252+0800 ArrayTest[14396:408598] 任务一300</span><br><span class="line">2019-07-31 17:22:17.600424+0800 ArrayTest[14396:408597] 任务三20</span><br><span class="line">2019-07-31 17:22:17.600626+0800 ArrayTest[14396:408598] 任务一400</span><br><span class="line">2019-07-31 17:22:17.600784+0800 ArrayTest[14396:408597] 任务三25</span><br><span class="line">2019-07-31 17:22:17.601275+0800 ArrayTest[14396:408596] 任务二30</span><br><span class="line">2019-07-31 17:22:17.601423+0800 ArrayTest[14396:408596] 任务二40</span><br><span class="line">2019-07-31 17:22:17.601702+0800 ArrayTest[14396:408489] -------同步barrier的任务0-------</span><br><span class="line">2019-07-31 17:22:17.601942+0800 ArrayTest[14396:408489] -------同步barrier的任务5-------</span><br><span class="line">2019-07-31 17:22:17.602155+0800 ArrayTest[14396:408489] -------同步barrier的任务10-------</span><br><span class="line">2019-07-31 17:22:17.602368+0800 ArrayTest[14396:408489] -------同步barrier的任务15-------</span><br><span class="line">2019-07-31 17:22:17.602592+0800 ArrayTest[14396:408489] -------同步barrier的任务20-------</span><br><span class="line">2019-07-31 17:22:17.602798+0800 ArrayTest[14396:408489] -------同步barrier的任务25-------</span><br><span class="line">2019-07-31 17:22:17.603012+0800 ArrayTest[14396:408489] -------同步barrier的任务30-------</span><br><span class="line">2019-07-31 17:22:17.616610+0800 ArrayTest[14396:408489] -------同步barrier的任务35-------</span><br><span class="line">2019-07-31 17:22:17.616736+0800 ArrayTest[14396:408489] 外面的任务</span><br><span class="line">2019-07-31 17:22:17.616874+0800 ArrayTest[14396:408598] 任务六0</span><br><span class="line">2019-07-31 17:22:17.616899+0800 ArrayTest[14396:408597] 任务四0</span><br><span class="line">2019-07-31 17:22:17.617111+0800 ArrayTest[14396:408598] 任务六1</span><br><span class="line">2019-07-31 17:22:17.617199+0800 ArrayTest[14396:408597] 任务四1</span><br><span class="line">2019-07-31 17:22:17.617345+0800 ArrayTest[14396:408598] 任务六2</span><br><span class="line">2019-07-31 17:22:17.617427+0800 ArrayTest[14396:408597] 任务四2</span><br></pre></td></tr></table></figure>
+
+<p>再使用dispatch_barrier_async</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// 这里使用异步栅栏函数</span><br><span class="line">dispatch_barrier_async(concurrent_queue, ^&#123;</span><br><span class="line">    for (int i = 0; i &lt; 40; i++) &#123;</span><br><span class="line">        if (i % 5 == 0) &#123;</span><br><span class="line">            NSLog(@&quot;-------异步barrier的任务%d-------&quot;,i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>打印结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">2019-07-31 17:25:28.130839+0800 ArrayTest[14457:413975] 任务一0</span><br><span class="line">2019-07-31 17:25:28.130846+0800 ArrayTest[14457:413977] 任务三0</span><br><span class="line">2019-07-31 17:25:28.130839+0800 ArrayTest[14457:413986] 任务二0</span><br><span class="line">2019-07-31 17:25:28.131042+0800 ArrayTest[14457:413977] 任务三5</span><br><span class="line">2019-07-31 17:25:28.131067+0800 ArrayTest[14457:413986] 任务二10</span><br><span class="line">2019-07-31 17:25:28.131043+0800 ArrayTest[14457:413975] 任务一100</span><br><span class="line">2019-07-31 17:25:28.131130+0800 ArrayTest[14457:413977] 任务三10</span><br><span class="line">2019-07-31 17:25:28.131157+0800 ArrayTest[14457:413975] 任务一200</span><br><span class="line">2019-07-31 17:25:28.131172+0800 ArrayTest[14457:413986] 任务二20</span><br><span class="line">2019-07-31 17:25:28.131238+0800 ArrayTest[14457:413977] 任务三15</span><br><span class="line">2019-07-31 17:25:28.130880+0800 ArrayTest[14457:413837] 外面的任务</span><br><span class="line">2019-07-31 17:25:28.131664+0800 ArrayTest[14457:413975] 任务一300</span><br><span class="line">2019-07-31 17:25:28.131828+0800 ArrayTest[14457:413977] 任务三20</span><br><span class="line">2019-07-31 17:25:28.131980+0800 ArrayTest[14457:413975] 任务一400</span><br><span class="line">2019-07-31 17:25:28.132137+0800 ArrayTest[14457:413977] 任务三25</span><br><span class="line">2019-07-31 17:25:28.132620+0800 ArrayTest[14457:413986] 任务二30</span><br><span class="line">2019-07-31 17:25:28.132911+0800 ArrayTest[14457:413986] 任务二40</span><br><span class="line">2019-07-31 17:25:28.133144+0800 ArrayTest[14457:413986] -------异步barrier的任务0-------</span><br><span class="line">2019-07-31 17:25:28.133334+0800 ArrayTest[14457:413986] -------异步barrier的任务5-------</span><br><span class="line">2019-07-31 17:25:28.133543+0800 ArrayTest[14457:413986] -------异步barrier的任务10-------</span><br><span class="line">2019-07-31 17:25:28.133761+0800 ArrayTest[14457:413986] -------异步barrier的任务15-------</span><br><span class="line">2019-07-31 17:25:28.133959+0800 ArrayTest[14457:413986] -------异步barrier的任务20-------</span><br><span class="line">2019-07-31 17:25:28.134183+0800 ArrayTest[14457:413986] -------异步barrier的任务25-------</span><br><span class="line">2019-07-31 17:25:28.140504+0800 ArrayTest[14457:413986] -------异步barrier的任务30-------</span><br><span class="line">2019-07-31 17:25:28.140658+0800 ArrayTest[14457:413986] -------异步barrier的任务35-------</span><br><span class="line">2019-07-31 17:25:28.140785+0800 ArrayTest[14457:413986] 任务四0</span><br><span class="line">2019-07-31 17:25:28.140788+0800 ArrayTest[14457:413977] 任务六0</span><br><span class="line">2019-07-31 17:25:28.140883+0800 ArrayTest[14457:413986] 任务四1</span><br><span class="line">2019-07-31 17:25:28.140892+0800 ArrayTest[14457:413977] 任务六1</span><br><span class="line">2019-07-31 17:25:28.140961+0800 ArrayTest[14457:413986] 任务四2</span><br><span class="line">2019-07-31 17:25:28.140987+0800 ArrayTest[14457:413977] 任务六2</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="实现线程安全的数组-（使用dispatch-barrier函数）"><a href="#实现线程安全的数组-（使用dispatch-barrier函数）" class="headerlink" title="实现线程安全的数组 （使用dispatch_barrier函数）"></a>实现线程安全的数组 （使用dispatch_barrier函数）</h4><p>通过上面的知识点可以知道，一个用nonatomic修饰的数组成员变量，它的线程访问是不受限制的，当然我们也已经知道用atomic修饰也并不合适，因为线程访问得到的值依然不够准确。<br>那要实现线程安全的数组，该怎么办呢？使用dispatch_barrier函数可以解决。</p>
+<blockquote>
+<p>将数组的写（插入、修改、删除）操作放进队列中dispatch_barrier函数中，这样当进行写的操作时，会先等待前面的读的任务完成后再执行写操作;而且后面的读任务也要等待dispatch_barrier中的写操作执行完成后才会被执行。</p>
+</blockquote>
+<h5 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h5><p>创建一个类给它添加一个可变数组的成员变量，给这个类添加访问数组成员变量的所有方法。不多说，看代码：<br>.h文件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#import &lt;Foundation/Foundation.h&gt;</span><br><span class="line"></span><br><span class="line">NS_ASSUME_NONNULL_BEGIN</span><br><span class="line"></span><br><span class="line">@interface ZHMutableArray : NSObject</span><br><span class="line"></span><br><span class="line">// 读取数组</span><br><span class="line">- (NSMutableArray *)array;</span><br><span class="line">//判断是否包含对象</span><br><span class="line">- (BOOL)containsObject:(id)anObject;</span><br><span class="line">//集合元素数量</span><br><span class="line">- (NSUInteger)count;</span><br><span class="line">//获取元素</span><br><span class="line">- (id)objectAtIndex:(NSUInteger)index;</span><br><span class="line">//枚举元素</span><br><span class="line">- (NSEnumerator *)objectEnumerator;</span><br><span class="line">//插入</span><br><span class="line">- (void)insertObject:(id)anObject atIndex:(NSUInteger)index;</span><br><span class="line">//添加</span><br><span class="line">- (void)addObject:(id)anObject;</span><br><span class="line">//移除</span><br><span class="line">- (void)removeObjectAtIndex:(NSUInteger)index;</span><br><span class="line">//移除</span><br><span class="line">- (void)removeObject:(id)anObject;</span><br><span class="line">//移除</span><br><span class="line">- (void)removeLastObject;</span><br><span class="line">//替换</span><br><span class="line">- (void)replaceObjectAtIndex:(NSUInteger)index withObject:(id)anObject;</span><br><span class="line">//获取索引</span><br><span class="line">- (NSUInteger)indexOfObject:(id)anObject;</span><br><span class="line"></span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+
+<p>.m文件</p>
+<blockquote>
+<p>凡涉及更改数组中元素的操作，使用异步栅栏块；读取数据使用 同步+并行队列</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#import &quot;ZHMutableArray.h&quot;</span><br><span class="line"></span><br><span class="line">@interface ZHMutableArray()</span><br><span class="line"></span><br><span class="line">@property (nonatomic,strong)dispatch_queue_t concurrentQueue;</span><br><span class="line">@property (nonatomic,strong)NSMutableArray *arr;</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@implementation ZHMutableArray</span><br><span class="line"></span><br><span class="line">-(instancetype)init&#123;</span><br><span class="line">    self = [super init];</span><br><span class="line">    if (self) &#123;</span><br><span class="line">        NSString *identifier = [NSString stringWithFormat:@&quot;&lt;ZHMutableArray&gt;%p&quot;,self];</span><br><span class="line">        self.concurrentQueue = dispatch_queue_create([identifier UTF8String], DISPATCH_QUEUE_CONCURRENT);</span><br><span class="line">        self.arr = [NSMutableArray array];</span><br><span class="line">    &#125;</span><br><span class="line">    return self;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (NSMutableArray *)array</span><br><span class="line">&#123;</span><br><span class="line">    __block NSMutableArray *safeArray;</span><br><span class="line">    dispatch_sync(_concurrentQueue, ^&#123;</span><br><span class="line">        safeArray = self.arr;</span><br><span class="line">    &#125;);</span><br><span class="line">    return safeArray;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (BOOL)containsObject:(id)anObject</span><br><span class="line">&#123;</span><br><span class="line">    __block BOOL isExist = NO;</span><br><span class="line">    dispatch_sync(_concurrentQueue, ^&#123;</span><br><span class="line">        isExist = [self.arr containsObject:anObject];</span><br><span class="line">    &#125;);</span><br><span class="line">    return isExist;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (NSUInteger)count</span><br><span class="line">&#123;</span><br><span class="line">    __block NSUInteger count;</span><br><span class="line">    dispatch_sync(_concurrentQueue, ^&#123;</span><br><span class="line">        count = self.arr.count;</span><br><span class="line">    &#125;);</span><br><span class="line">    return count;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (id)objectAtIndex:(NSUInteger)index</span><br><span class="line">&#123;</span><br><span class="line">    __block id obj;</span><br><span class="line">    dispatch_sync(_concurrentQueue, ^&#123;</span><br><span class="line">        if (index &lt; [self.arr count]) &#123;</span><br><span class="line">            obj = self.arr[index];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    return obj;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (NSEnumerator *)objectEnumerator</span><br><span class="line">&#123;</span><br><span class="line">    __block NSEnumerator *enu;</span><br><span class="line">    dispatch_sync(_concurrentQueue, ^&#123;</span><br><span class="line">        enu = [self.arr objectEnumerator];</span><br><span class="line">    &#125;);</span><br><span class="line">    return enu;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)insertObject:(id)anObject atIndex:(NSUInteger)index</span><br><span class="line">&#123;</span><br><span class="line">    dispatch_barrier_async(_concurrentQueue, ^&#123;</span><br><span class="line">        if (anObject &amp;&amp; index &lt; [self.arr count]) &#123;</span><br><span class="line">            [self.arr insertObject:anObject atIndex:index];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)addObject:(id)anObject</span><br><span class="line">&#123;</span><br><span class="line">    dispatch_barrier_async(_concurrentQueue, ^&#123;</span><br><span class="line">        if(anObject)&#123;</span><br><span class="line">            [self.arr addObject:anObject];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)removeObjectAtIndex:(NSUInteger)index</span><br><span class="line">&#123;</span><br><span class="line">    dispatch_barrier_async(_concurrentQueue, ^&#123;</span><br><span class="line">        </span><br><span class="line">        if (index &lt; [self.arr count]) &#123;</span><br><span class="line">            [self.arr removeObjectAtIndex:index];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)removeObject:(id)anObject</span><br><span class="line">&#123;</span><br><span class="line">    dispatch_barrier_async(_concurrentQueue, ^&#123;</span><br><span class="line">        [self.arr removeObject:anObject];//外边自己判断合法性</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)removeLastObject</span><br><span class="line">&#123;</span><br><span class="line">    dispatch_barrier_async(_concurrentQueue, ^&#123;</span><br><span class="line">        [self.arr removeLastObject];</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)replaceObjectAtIndex:(NSUInteger)index withObject:(id)anObject</span><br><span class="line">&#123;</span><br><span class="line">    dispatch_barrier_async(_concurrentQueue, ^&#123;</span><br><span class="line">        if (anObject &amp;&amp; index &lt; [self.arr count]) &#123;</span><br><span class="line">            [self.arr replaceObjectAtIndex:index withObject:anObject];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (NSUInteger)indexOfObject:(id)anObject</span><br><span class="line">&#123;</span><br><span class="line">    __block NSUInteger index = NSNotFound;</span><br><span class="line">    dispatch_sync(_concurrentQueue, ^&#123;</span><br><span class="line">        for (int i = 0; i &lt; [self.arr count]; i ++) &#123;</span><br><span class="line">            if ([self.arr objectAtIndex:i] == anObject) &#123;</span><br><span class="line">                index = i;</span><br><span class="line">                break;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    return index;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)dealloc</span><br><span class="line">&#123;</span><br><span class="line">    if (_concurrentQueue) &#123;</span><br><span class="line">        _concurrentQueue = NULL;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样一个线程安全的数组就创建完成。</p>
+<p>数据源保证线程安全的前提下，各项体验优化和bug处理工作也得以顺利进行。</p>
+]]></content>
+      <categories>
+        <category>SAMIM</category>
+      </categories>
+      <tags>
+        <tag>SAMIM</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>iOS逆向工程 - fishhook原理</title>
+    <url>/2019/05/27/fishhook%E5%8E%9F%E7%90%86/</url>
+    <content><![CDATA[<h1 id="iOS逆向工程-fishhook原理"><a href="#iOS逆向工程-fishhook原理" class="headerlink" title="iOS逆向工程 - fishhook原理"></a>iOS逆向工程 - fishhook原理</h1><p> fishhook是Facebook提供的一个动态修改链接mach-O文件的工具。利用MachO文件加载原理，通过修改懒加载和非懒加载两个表的指针达到C函数HOOK的目的。</p>
+<h2 id="前提"><a href="#前提" class="headerlink" title="前提"></a>前提</h2><p>在分析fishhook原理前，我们先来想两个问题：<br><strong>1. Mach-O文件是被谁加载的？</strong><br> 我们知道，在程序启动的时候 Mach-O 文件会被 DYLD （动态加载器）加载进内存。加载完 Mach-O 后，DYLD接着会去加载 Mach-O 所依赖的动态库。<br><strong>2. 何为ASLR技术？</strong><br>地址空间布局随机化。它会让 Mach-O 文件加载的时候是随机地址。有了这个技术，Mach-O 文件每次加载进内存的时候地址都是不一样的。主要是为了防止逆向技术。<br>Mach-O 文件里只有我们自己写的函数，系统的动态库的函数是不在 Mach-O 文件里的。也就是说每次启动从 Mach-O 文件到系统动态库函数的偏移地址都是变化的。</p>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><h3 id="一、那么我们如何在-Mach-O-文件里找到系统的函数地址呢？或者说-Mach-O-文件是如何链接外部函数的呢？"><a href="#一、那么我们如何在-Mach-O-文件里找到系统的函数地址呢？或者说-Mach-O-文件是如何链接外部函数的呢？" class="headerlink" title="一、那么我们如何在 Mach-O 文件里找到系统的函数地址呢？或者说 Mach-O 文件是如何链接外部函数的呢？"></a>一、那么我们如何在 Mach-O 文件里找到系统的函数地址呢？或者说 Mach-O 文件是如何链接外部函数的呢？</h3><p>我们程序的底层都是汇编，汇编代码都是写死的内存地址。我们该怎么找呢？而且系统的动态库在内存里面的地址是不固定的，每次启动程序的时候地址都是随机的。<br>苹果为了能在 Mach-O 文件中访问外部函数，采用了一个技术，叫做PIC（位置代码独立）技术。<br>当你的应用程序想要调用 Mach-O 文件外部的函数的时候，或者说如果 Mach-O 内部需要调用系统的库函数时，Mach-O 文件会：</p>
+<p>先在 Mach-O 文件的 _DATA 段中建立一个指针（8字节的数据，放的全是0），这个指针变量指向外部函数。<br>DYLD 会动态的进行绑定！将 Mach-O 中的 _DATA 段中的指针，指向外部函数。</p>
+<p>所以说，C的底层也有动态的表现。C在内部函数的时候是静态的，在编译后，函数的内存地址就确定了。但是，外部的函数是不能确定的，也就是说C的底层也有动态的。fishhook 之所以能 hook C函数，是利用了 Mach-O 文件的 PIC 技术特点。也就造就了静态语言C也有动态的部分，通过 DYLD 进行动态绑定的时候做了手脚。</p>
+<p><strong>我们经常说符号，其实 _DATA 段中建立的指针就是符号。fishhook的原理其实就是，将指向系统方法（外部函数）的符号重新进行绑定指向内部的函数。这样就把系统方法与自己定义的方法进行了交换。这也就是为什么C的内部函数修改不了，自定义的函数修改不了，只能修改 Mach-O 外部的函数。</strong></p>
+<p>接下来我们以 NSLog 为例，看 fishhook 是如何通过修改懒加载和非懒加载两个表的指针达到C函数HOOK的目的。（NSLog 是在懒加载表里）<br><em>注：对于非懒加载符号表，DYLD会立刻马上去链接动态库<br>   对于懒加载符号表，DYLD会在执行代码的时候去动态的链接动态库</em><br> <span id="more"></span> </p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">- (void)viewDidLoad &#123;</span><br><span class="line">    [super viewDidLoad];</span><br><span class="line">    // Do any additional setup after loading the view, typically from a nib.</span><br><span class="line">    //这里必须要先加载一次NSLog，如果不写NSLog，符号表里面根本就不会出现NSLog的地址</span><br><span class="line">    NSLog(@&quot;123&quot;); </span><br><span class="line"></span><br><span class="line">    //定义rebinding结构体</span><br><span class="line">    struct rebinding nslogBind;</span><br><span class="line">    //函数的名称</span><br><span class="line">    nslogBind.name = &quot;NSLog&quot;;</span><br><span class="line">    //新的函数地址</span><br><span class="line">    nslogBind.replacement = myMethod;</span><br><span class="line">    //保存原始函数地址变量的指针</span><br><span class="line">    nslogBind.replaced = (void *)&amp;old_nslog;</span><br><span class="line">    </span><br><span class="line">    //定义数组</span><br><span class="line">    struct rebinding rebs[] = &#123;nslogBind&#125;;</span><br><span class="line">    </span><br><span class="line">    /**</span><br><span class="line">     arg1: 存放rebinding结构体的数组</span><br><span class="line">     arg2: 数组的长度</span><br><span class="line">     */</span><br><span class="line">    rebind_symbols(rebs, 1);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//函数指针，用来保存原始的函数地址</span><br><span class="line">static void (*old_nslog)(NSString *format, ...);</span><br><span class="line"></span><br><span class="line">//新的NSLog</span><br><span class="line">void myMethod(NSString *format, ...) &#123;</span><br><span class="line">    //再调用原来的</span><br><span class="line">    old_nslog(@&quot;勾上了！&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)touchesBegan:(NSSet&lt;UITouch *&gt; *)touches withEvent:(UIEvent *)event &#123;</span><br><span class="line">    NSLog(@&quot;点击屏幕&quot;);</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+
+
+<p>首先，系统的 NSLog 是在 rebind_symbols(rebs, 1); 方法里替换的，我们可以在这个方法上打个断点。我们可以先看一下，这个函数执行之前，NSLog 在懒加载符号表中的地址是多少，然后在执行之后，它有没有变成我们自己的符号表的地址。</p>
+<img src="/2019/05/27/fishhook%E5%8E%9F%E7%90%86/15589634376767/15589642646217.jpg" class="">
+
+
+<p>那么，我们如何找到 NSLog 的符号表呢？公式如下：<br><strong>NSLog 懒加载符号表在内存中的地址 &#x3D; Mach-O 的偏移地址 + NSLog 懒加载符号表在 Mach-O 的偏移地址</strong><br>查看符号表在 Mach-O 的偏移地址</p>
+<img src="/2019/05/27/fishhook%E5%8E%9F%E7%90%86/15589634376767/15589643086593.jpg" class="">
+<p>符号表在 Mach-O 的偏移地址.png</p>
+<p>查看Mach-O 的偏移地址</p>
+<img src="/2019/05/27/fishhook%E5%8E%9F%E7%90%86/15589634376767/15589643298067.jpg" class="">
+<center>符号表在 Mach-O 的偏移地址.png</center>
+
+<p>查看符号表绑定的地址，这个地址其实就是指向外部函数的指针的地址，也就是动态缓存区里面 NSLog 的真实函数地址。这一步是找到了 NSLog 的符号表（Symbols）。</p>
+<img src="/2019/05/27/fishhook%E5%8E%9F%E7%90%86/15589634376767/15589643450451.jpg" class="">
+<center>符号表绑定的地址.png</center>
+
+<p>这个真实的函数地址是什么时候保存进去的呢？并不是 Mach-O 文件加载进内存的时候保存的。由于 NSLog 在懒加载符号表里面，所有它是在整个 Mach-O 文件启动之后，代码第一次运行 NSLog 时，由 DYLD 绑定该 NSLog 符号指向真实的 NSLog 的地址。<br>这个时候，我们需要通过反汇编看一下地址的值</p>
+<img src="/2019/05/27/fishhook%E5%8E%9F%E7%90%86/15589634376767/15589644003253.jpg" class="">
+<center>NSLog.png</center>
+
+<p>可以看到，这个时候 Mach-O 文件的 _DATA 段中建立的指针已经指向了外部函数。<br>紧接着单步执行，执行完 rebind_symbols(rebs, 1); 函数<br>这个时候我们再看一下符号表绑定的地址，我们发现地址已经发生了变化</p>
+<img src="/2019/05/27/fishhook%E5%8E%9F%E7%90%86/15589634376767/15589644170701.jpg" class="">
+<center>image.png</center>
+
+<p>再次通过反汇编看一下地址的值</p>
+<img src="/2019/05/27/fishhook%E5%8E%9F%E7%90%86/15589634376767/15589644297502.jpg" class="">
+<center>image.png</center>
+
+<p>我们发现 Mach-O 文件的 _DATA 段中建立的指针已经指向了我们自己定义的内部函数。</p>
+<h2 id="二、fishhook-是如何通过字符串来找到我们的函数的呢？"><a href="#二、fishhook-是如何通过字符串来找到我们的函数的呢？" class="headerlink" title="二、fishhook 是如何通过字符串来找到我们的函数的呢？"></a>二、fishhook 是如何通过字符串来找到我们的函数的呢？</h2><pre><code>//定义rebinding结构体
+struct rebinding nslogBind;
+//函数的名称
+nslogBind.name = &quot;NSLog&quot;; //如何通过字符串来找到函数的？
+//新的函数地址
+nslogBind.replacement = myMethod;
+//保存原始函数地址变量的指针
+nslogBind.replaced = (void *)&amp;old_nslog;
+</code></pre>
+<p>我们可以想到的是，Mach-O 文件里面肯定有一个与字符串相关的东西。</p>
+<img src="/2019/05/27/fishhook%E5%8E%9F%E7%90%86/15589634376767/15589644783166.jpg" class="">
+<center>image.png</center>
+
+<p>首先，我们从懒加载符号表（Lazy Symbol Pointers）开始入手。懒加载符号表里面第一个符号是 NSLog 的指针。这个懒加载符号表有一个与之一一对应的符号表（Indirect Symbols）。</p>
+<img src="/2019/05/27/fishhook%E5%8E%9F%E7%90%86/15589634376767/15589644926526.jpg" class="">
+<center>image.png</center>
+
+<p>上图的 Data 值，是一个真正的符号表的下标。这个符号表是对应着字条串的。比如：NSLog 的 Data 值为0x7A，换成十进制就是122。也就是说 NSLog 这个符号在我们的字符符号表里面的 index 值为122。接着就需要到符号表（Symbols）里面找第122个。这个时候还没到字符串。</p>
+<img src="/2019/05/27/fishhook%E5%8E%9F%E7%90%86/15589634376767/15589645076581.jpg" class="">
+<center>image.png</center>
+
+<p>这个时候，NSLog 在真正的字符串里面是在哪个地方呢？注意，上图有一个偏移0x9C，就是在字符串表（String Table）里面的一个index。也就是说这个 NSLog 在 String Table 里面的偏移地址是0x9C。</p>
+<img src="/2019/05/27/fishhook%E5%8E%9F%E7%90%86/15589634376767/15589645198490.jpg" class="">
+<center>image.png</center>
+
+<p>如上图，String Table 是从0x0000CF04开始的，所以开始地址0xCF04 + 偏移地址0x9C &#x3D; 0xCFA0，就是字符串 NSLog 的位置。</p>
+<img src="/2019/05/27/fishhook%E5%8E%9F%E7%90%86/15589634376767/15589645325952.jpg" class="">
+<center>image.png</center>
+
+<p>_ 是函数的开始，. 是分隔符 。5F是从 _开始，往后依次 _NSLog<br>接下来，附上 <a href="https://github.com/facebook/fishhook">fishhook</a> 官方文档的在懒加载和非懒加载符号表里查找一个给定入口的名字的过程。</p>
+<img src="/2019/05/27/fishhook%E5%8E%9F%E7%90%86/15589634376767/15589645683287.jpg" class="">
+<center>image.png</center>
+
+]]></content>
+      <categories>
+        <category>iOS</category>
+      </categories>
+      <tags>
+        <tag>fishhook</tag>
+        <tag>逆向</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2019/05/29/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+ <span id="more"></span> 
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/deployment.html">Deployment</a></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>iOS 制作自己的Framework（引入第三方库）</title>
+    <url>/2020/04/24/iOS-%E5%88%B6%E4%BD%9C%E8%87%AA%E5%B7%B1%E7%9A%84Framework%EF%BC%88%E5%BC%95%E5%85%A5%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93%EF%BC%89/</url>
+    <content><![CDATA[<p>iOS 制作自己的Framework（引入第三方库）</p>
+<p>一、创建工程并新建Framework Target</p>
+<p>新建一个工程，Target选择Cocoa Touch Framework。</p>
+<p>添加接口<br>在刚刚创建的Framework里面添加一些接口。</p>
+<p>设置<br>对Target进行一些设置。<br>3.1 选择Framework Target，在Build Settings里面搜索Mach -O type，改为Static Library；<br>3.2 选择Framework Target，在Build Settings里面搜索Link With Standard Libraries，改为No；<br>3.3 选择Framework Target，在Build Phases的Headers里面将需要暴露出来的头文件设置好。public是可以被引用的，用户可以看到的，例如用户在使用的时候import “xxxxxx.h”，project和private是不暴露出来的。</p>
+<p>Framework设置完成，进行下一步。<br>二、创建测试工程<br>Framework制作好了，我们需要一个Target测试一下吧。那么直接在刚刚创建的这个工程里面，新建一个Single View APP的Target就好了。</p>
+<p>三、引入第三方库<br>如果我们在制作Framework的时候，需要用到第三方库怎么办呢？网上有轮子，而且有专人维护，总比我们自己造的强。但是如果公司有条件的话，最好是不引入第三方库。<br>我们在引入第三方库的时候，使用cocoapods进行管理，假设我们的SDK需要AFNetworking这个库，按下面操作引入。</p>
+<p>com.sam.IMPro.SAMIM-Broadcast</p>
+<p>com.sam.IMPro.SAMIM-BroadcastSetupUI</p>
+]]></content>
+      <categories>
+        <category>iOS</category>
+      </categories>
+      <tags>
+        <tag>iOS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>iOS中几种延迟执行方法</title>
+    <url>/2019/06/26/iOS%E4%B8%AD%E5%87%A0%E7%A7%8D%E5%BB%B6%E8%BF%9F%E6%89%A7%E8%A1%8C%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<h1 id="iOS中几种延迟执行方法"><a href="#iOS中几种延迟执行方法" class="headerlink" title="iOS中几种延迟执行方法"></a>iOS中几种延迟执行方法</h1><p>开发中经常会有延迟执行的要求,这里简单介绍几种常用的方法:</p>
+<ul>
+<li><ol>
+<li>performSelector方法</li>
+</ol>
+</li>
+<li><ol start="2">
+<li>Timer 定时器</li>
+</ol>
+</li>
+<li><ol start="3">
+<li>Thread 线程的sleep</li>
+</ol>
+</li>
+<li><ol start="4">
+<li>GCD</li>
+</ol>
+</li>
+</ul>
+<h2 id="Method1-performSelector"><a href="#Method1-performSelector" class="headerlink" title="Method1:performSelector"></a>Method1:performSelector</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[self performSelector:@selector(delayMethod) withObject:nil/*可传任意类型参数*/ afterDelay:2.0];</span><br></pre></td></tr></table></figure>
+
+<p>注：此方法是一种非阻塞的执行方式，未找到取消执行的方法。</p>
+<h2 id="Method2-NSTimer定时器"><a href="#Method2-NSTimer定时器" class="headerlink" title="Method2:NSTimer定时器"></a>Method2:NSTimer定时器</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(delayMethod) userInfo:nil repeats:NO];</span><br></pre></td></tr></table></figure>
+
+<p>注：此方法是一种非阻塞的执行方式，取消执行方法：- (void)invalidate;即可。</p>
+<h2 id="Method3-NSThread线程的sleep"><a href="#Method3-NSThread线程的sleep" class="headerlink" title="Method3:NSThread线程的sleep"></a>Method3:NSThread线程的sleep</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[NSThread sleepForTimeInterval:2.0];</span><br></pre></td></tr></table></figure>
+<p>注：此方法是一种阻塞执行方式，建议放在子线程中执行，否则会卡住界面。但有时还是需要阻塞执行，如进入欢迎界面需要沉睡3秒才进入主界面时。<br>没有找到取消执行方式。</p>
+<h2 id="Method4-GCD"><a href="#Method4-GCD" class="headerlink" title="Method4:GCD"></a>Method4:GCD</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">__block ViewController/*主控制器*/ *weakSelf = self;</span><br><span class="line"></span><br><span class="line">dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0/*延迟执行时间*/ * NSEC_PER_SEC));</span><br><span class="line"></span><br><span class="line">dispatch_after(delayTime, dispatch_get_main_queue(), ^&#123;</span><br><span class="line">    [weakSelf delayMethod];</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>注：此方法可以在参数中选择执行的线程，是一种非阻塞执行方式。没有找到取消执行方式。</p>
+<span id="more"></span> 
+
+<p>代码如下:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#import &quot;ViewController.h&quot;</span><br><span class="line"></span><br><span class="line">@interface ViewController ()</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@implementation ViewController</span><br><span class="line"></span><br><span class="line">- (void)viewDidLoad &#123;</span><br><span class="line">    [super viewDidLoad];</span><br><span class="line">    NSLog(@&quot;---start---&quot;);</span><br><span class="line">    [self method1PerformSelector];</span><br><span class="line">//    [self method2NSTimer];</span><br><span class="line">//    [self method3Sleep];</span><br><span class="line">//    [self method4GCD];</span><br><span class="line">    NSLog(@&quot;---next method---&quot;);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">- (void)methodFiveAnimation&#123;</span><br><span class="line">    [UIView animateWithDuration:0 delay:2.0 options:UIViewAnimationOptionAllowUserInteraction animations:^&#123;</span><br><span class="line">    &#125; completion:^(BOOL finished) &#123;</span><br><span class="line">        [self delayMethod];</span><br><span class="line">    &#125;];</span><br><span class="line">&#125;</span><br><span class="line">- (void)method4GCD&#123;</span><br><span class="line">    __block ViewController *weakSelf = self;</span><br><span class="line">    dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC));</span><br><span class="line">    dispatch_after(delayTime, dispatch_get_main_queue(), ^&#123;</span><br><span class="line">        [weakSelf delayMethod];</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line">- (void)method3Sleep&#123;</span><br><span class="line">    [NSThread sleepForTimeInterval:2.0];</span><br><span class="line">&#125;</span><br><span class="line">- (void)method2NSTimer&#123;</span><br><span class="line">    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(delayMethod) userInfo:nil repeats:NO];</span><br><span class="line">&#125;</span><br><span class="line">- (void)method1PerformSelector&#123;</span><br><span class="line">    [self performSelector:@selector(delayMethod) withObject:nil afterDelay:2.0];</span><br><span class="line">&#125;</span><br><span class="line">- (void)delayMethod&#123;</span><br><span class="line">    NSLog(@&quot;delayMethod&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+
+
+]]></content>
+      <categories>
+        <category>iOS</category>
+      </categories>
+      <tags>
+        <tag>iOS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>iOS纯代码自定义View</title>
+    <url>/2019/06/05/iOS%E7%BA%AF%E4%BB%A3%E7%A0%81%E8%87%AA%E5%AE%9A%E4%B9%89View/</url>
+    <content><![CDATA[<h1 id="iOS纯代码自定义View"><a href="#iOS纯代码自定义View" class="headerlink" title="iOS纯代码自定义View"></a>iOS纯代码自定义View</h1><ul>
+<li>1.UIGestureRecognizerDelegate</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-(instancetype)init &#123;</span><br><span class="line">    self = [super init];</span><br><span class="line">    if (self) &#123;</span><br><span class="line">        [self setup];</span><br><span class="line">    &#125;</span><br><span class="line">    return self;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">-(void)setup &#123;</span><br><span class="line">    self.frame = CGRectMake(0, 0, SIMScreenWidth, SIMScreenHeight);</span><br><span class="line">    </span><br><span class="line">    UIColor *color                   = [UIColor blackColor];</span><br><span class="line">    self.backgroundColor             = [color colorWithAlphaComponent:0.6];</span><br><span class="line">    self.bgView.backgroundColor      = [UIColor clearColor];</span><br><span class="line"></span><br><span class="line">    [self        addSubview:self.bgView];</span><br><span class="line">    [self.bgView addSubview:self.bgImageView];</span><br><span class="line">    [self.bgImageView addSubview:self.topImageView];</span><br><span class="line">    [self.bgImageView addSubview:self.textView];</span><br><span class="line">    </span><br><span class="line">    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(cancleButtonClick)];</span><br><span class="line">    tap.delegate = self;</span><br><span class="line">    [self.bgView addGestureRecognizer:tap];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-(void)layoutSubviews &#123;</span><br><span class="line">    [super layoutSubviews];</span><br><span class="line">    _bgView.frame      = CGRectMake(0, 0, SIMScreenWidth, SIMScreenHeight);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">UIWindow *window = [UIApplication sharedApplication].keyWindow;</span><br><span class="line">   for (UIView * vc in [window subviews]) &#123;</span><br><span class="line">       if ([[vc class] isSubclassOfClass:[SIMFDDCommonTipsView class]]) &#123;</span><br><span class="line">           return;</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br><span class="line">   [window addSubview:self];</span><br><span class="line">   [window makeKeyAndVisible];</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">- (void)cancleButtonClick &#123;</span><br><span class="line">    UIWindow *window = [UIApplication sharedApplication].keyWindow;</span><br><span class="line">    for (UIView * vc in [window subviews]) &#123;</span><br><span class="line">        if ([[vc class] isSubclassOfClass:[SIMFDDCommonTipsView class]]) &#123;</span><br><span class="line">            [vc removeFromSuperview];</span><br><span class="line">            break;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch&#123;</span><br><span class="line">    if ([touch.view isDescendantOfView:self.bgImageView] || [touch.view isDescendantOfView:self.topImageView]) &#123;</span><br><span class="line">        return NO;</span><br><span class="line">    &#125;</span><br><span class="line">    return YES;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="总结一下当我们使用纯代码创建自定义"><a href="#总结一下当我们使用纯代码创建自定义" class="headerlink" title="总结一下当我们使用纯代码创建自定义"></a>总结一下当我们使用纯代码创建自定义</h1><p>UIVIew的时候步骤：<br>1、新建一个继承UIVIew的类；<br>2、在实现文件中添加子控件（weak声明）；<br>3、重写- (instancetype)initWithFrame:(CGRect)frame初始化子控件但不设置子控件frame;<br>4、重写- (void)layoutSubviews，设置子控件frame，记得一定要写[super layoutSubviews];<br>5、提供一个模型属性，在该模型的set方法中为子控件赋值；</p>
+]]></content>
+      <categories>
+        <category>iOS</category>
+      </categories>
+      <tags>
+        <tag>iOS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>mac上安装使用redis</title>
+    <url>/2019/06/05/mac%E4%B8%8A%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8redis/</url>
+    <content><![CDATA[<h1 id="使用homebrew安装redis"><a href="#使用homebrew安装redis" class="headerlink" title="使用homebrew安装redis"></a>使用homebrew安装redis</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ brew install redis</span><br></pre></td></tr></table></figure>
+
+<p>终端输出</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">==&gt; Downloading http://download.redis.io/releases/redis-3.2.3.tar.gz</span><br><span class="line">######################################################################## 100.0%</span><br><span class="line">==&gt; make install PREFIX=/usr/local/Cellar/redis/3.2.3 CC=clang</span><br><span class="line">==&gt; Caveats</span><br><span class="line">To have launchd start redis now and restart at login:</span><br><span class="line">  brew services start redis</span><br><span class="line">Or, if you don&#x27;t want/need a background service you can just run:</span><br><span class="line">  redis-server /usr/local/etc/redis.conf</span><br><span class="line">==&gt; Summary</span><br><span class="line">🍺  /usr/local/Cellar/redis/3.2.3: 10 files, 1.7M, built in 21 seconds</span><br></pre></td></tr></table></figure>
+
+<p>从以上日志输出可以看出，如果需要给redis服务端指定配置文件，<br><strong>启动命令应该是这样的:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ redis-server /usr/local/etc/redis.conf</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span> 
+<h1 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h1><p>安装完成后redis默认的配置文件redis.conf位于</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/usr/local/etc</span><br></pre></td></tr></table></figure>
+
+<p>同时，redis-sentinel.conf也在这里。</p>
+<p>使用cat命令查看redis.conf：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ cat /usr/local/etc/redis.conf</span><br></pre></td></tr></table></figure>
+<p>终端输出文件内容（删掉了大部分注释）：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">bind 127.0.0.1 ::1</span><br><span class="line">bind 127.0.0.1</span><br><span class="line">port 6379</span><br><span class="line">tcp-backlog 511</span><br><span class="line">timeout 0</span><br><span class="line">tcp-keepalive 300</span><br><span class="line"></span><br><span class="line">################################# GENERAL #####################################</span><br><span class="line"></span><br><span class="line"># By default Redis does not run as a daemon. Use &#x27;yes&#x27; if you need it.</span><br><span class="line"># Note that Redis will write a pid file in /usr/local/var/run/redis.pid when daemonized.</span><br><span class="line">daemonize no</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">supervised no</span><br><span class="line">pidfile /var/run/redis_6379.pid</span><br><span class="line">loglevel notice</span><br><span class="line">logfile &quot;&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># Set the number of databases. The default database is DB 0, you can select</span><br><span class="line"># a different one on a per-connection basis using SELECT &lt;dbid&gt; where</span><br><span class="line"># dbid is a number between 0 and &#x27;databases&#x27;-1</span><br><span class="line">databases 16</span><br><span class="line"></span><br><span class="line">################################ SNAPSHOTTING  ################################</span><br><span class="line"></span><br><span class="line">save 900 1</span><br><span class="line">save 300 10</span><br><span class="line">save 60 10000</span><br><span class="line">stop-writes-on-bgsave-error yes</span><br><span class="line">rdbcompression yes</span><br><span class="line">rdbchecksum yes</span><br><span class="line">dbfilename dump.rdb</span><br><span class="line"></span><br><span class="line"># The working directory.</span><br><span class="line">dir /usr/local/var/db/redis/</span><br><span class="line"></span><br><span class="line">################################# REPLICATION #################################</span><br><span class="line">slave-serve-stale-data yes</span><br><span class="line">slave-read-only yes</span><br><span class="line">repl-diskless-sync no</span><br><span class="line">repl-diskless-sync-delay 5</span><br><span class="line">repl-disable-tcp-nodelay no</span><br><span class="line">slave-priority 100</span><br><span class="line"></span><br><span class="line">################################## SECURITY ###################################</span><br><span class="line"></span><br><span class="line">################################### LIMITS ####################################</span><br><span class="line"></span><br><span class="line">############################## APPEND ONLY MODE ###############################</span><br><span class="line">appendonly no</span><br><span class="line">appendfilename &quot;appendonly.aof&quot; </span><br><span class="line">appendfsync everysec</span><br><span class="line">no-appendfsync-on-rewrite no</span><br><span class="line">auto-aof-rewrite-percentage 100</span><br><span class="line">auto-aof-rewrite-min-size 64mb</span><br><span class="line">aof-load-truncated yes</span><br><span class="line"></span><br><span class="line">################################ LUA SCRIPTING  ###############################</span><br><span class="line">lua-time-limit 5000</span><br><span class="line"></span><br><span class="line">################################ REDIS CLUSTER  ###############################</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">################################## SLOW LOG ##################################</span><br><span class="line"></span><br><span class="line">slowlog-max-len 128</span><br><span class="line"></span><br><span class="line">################################ LATENCY MONITOR ##############################</span><br><span class="line"></span><br><span class="line">latency-monitor-threshold 0</span><br><span class="line"></span><br><span class="line">############################# EVENT NOTIFICATION ##############################</span><br><span class="line"></span><br><span class="line">notify-keyspace-events &quot;&quot;</span><br><span class="line"></span><br><span class="line">############################### ADVANCED CONFIG ###############################</span><br><span class="line">hash-max-ziplist-entries 512</span><br><span class="line">hash-max-ziplist-value 64</span><br><span class="line">list-max-ziplist-size -2</span><br><span class="line">list-compress-depth 0</span><br><span class="line">set-max-intset-entries 512</span><br><span class="line">zset-max-ziplist-entries 128</span><br><span class="line">zset-max-ziplist-value 64</span><br><span class="line">hll-sparse-max-bytes 3000</span><br><span class="line">activerehashing yes</span><br><span class="line">client-output-buffer-limit normal 0 0 0</span><br><span class="line">client-output-buffer-limit slave 256mb 64mb 60</span><br><span class="line">client-output-buffer-limit pubsub 32mb 8mb 60</span><br><span class="line">hz 10</span><br><span class="line">aof-rewrite-incremental-fsync yes</span><br></pre></td></tr></table></figure>
+
+<p>官网上对于如何配置redis的描述:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Redis is able to start without a configuration file using a built-in default configuration, however this setup is only recommended for testing and development purposes.</span><br><span class="line">The proper way to configure Redis is by providing a Redis configuration file, usually called redis.conf.</span><br></pre></td></tr></table></figure>
+
+<p>根据以上内容,如果启动时不指定配置文件,redis会使用程序中内置的默认配置.但是只有在开发和测试阶段才考虑使用内置的默认配置，正式环境最好还是提供配置文件，并且一般命名为redis.conf</p>
+<h1 id="启动redis"><a href="#启动redis" class="headerlink" title="启动redis"></a>启动redis</h1><p>可以通过以下命令启动redis：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ redis-server /usr/local/etc/redis.conf</span><br></pre></td></tr></table></figure>
+<p>终端输出</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">8568:M 11 Sep 21:37:46.839 * Increased maximum number of open files to 10032 (it was originally set to 256).</span><br><span class="line">                _._                                                  </span><br><span class="line">           _.-``__ &#x27;&#x27;-._                                             </span><br><span class="line">      _.-``    `.  `_.  &#x27;&#x27;-._           Redis 3.2.3 (00000000/0) 64 bit</span><br><span class="line">  .-`` .-```.  ```\/    _.,_ &#x27;&#x27;-._                                   </span><br><span class="line"> (    &#x27;      ,       .-`  | `,    )     Running in standalone mode</span><br><span class="line"> |`-._`-...-` __...-.``-._|&#x27;` _.-&#x27;|     Port: 6379</span><br><span class="line"> |    `-._   `._    /     _.-&#x27;    |     PID: 8568</span><br><span class="line">  `-._    `-._  `-./  _.-&#x27;    _.-&#x27;                                   </span><br><span class="line"> |`-._`-._    `-.__.-&#x27;    _.-&#x27;_.-&#x27;|                                  </span><br><span class="line"> |    `-._`-._        _.-&#x27;_.-&#x27;    |           http://redis.io        </span><br><span class="line">  `-._    `-._`-.__.-&#x27;_.-&#x27;    _.-&#x27;                                   </span><br><span class="line"> |`-._`-._    `-.__.-&#x27;    _.-&#x27;_.-&#x27;|                                  </span><br><span class="line"> |    `-._`-._        _.-&#x27;_.-&#x27;    |                                  </span><br><span class="line">  `-._    `-._`-.__.-&#x27;_.-&#x27;    _.-&#x27;                                   </span><br><span class="line">      `-._    `-.__.-&#x27;    _.-&#x27;                                       </span><br><span class="line">          `-._        _.-&#x27;                                           </span><br><span class="line">              `-.__.-&#x27;                                               </span><br><span class="line"></span><br><span class="line">8568:M 11 Sep 21:37:46.844 # Server started, Redis version 3.2.3</span><br><span class="line">8568:M 11 Sep 21:37:46.845 * The server is now ready to accept connections on port 6379</span><br></pre></td></tr></table></figure>
+
+<p>可以看出redis服务器启动成功，并在监听6379端口的网络连接。<br>注意: 使用命令$ redis-server也可以启动,此时并不会加载任何配置文件,使用的是程序中内置(built-in)的默认配置.</p>
+<p>检测redis服务器是否启动<br>重新打开一个终端窗口，输入命令</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ redis-cli ping</span><br></pre></td></tr></table></figure>
+<p>该终端输出</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pong</span><br></pre></td></tr></table></figure>
+
+<p>说明服务器运作正常。</p>
+<h1 id="关闭redis"><a href="#关闭redis" class="headerlink" title="关闭redis"></a>关闭redis</h1><p>关闭redis有2种方法：</p>
+<ul>
+<li>方法1<br>在执行启动命令的终端窗口使用ctrl+c,此时第一个窗口输出</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">8773:M 11 Sep 21:46:26.581 # User requested shutdown...</span><br><span class="line">8773:M 11 Sep 21:46:26.581 * Saving the final RDB snapshot before exiting.</span><br><span class="line">8773:M 11 Sep 21:46:26.583 * DB saved on disk</span><br><span class="line">8773:M 11 Sep 21:46:26.583 * Removing the pid file.</span><br><span class="line">8773:M 11 Sep 21:46:26.583 # Redis is now ready to exit, bye bye...</span><br></pre></td></tr></table></figure>
+
+<p>然后在另外一个终端窗口执行$ redis-cli ping,输出</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Could not connect to Redis at 127.0.0.1:6379: Connection refused</span><br></pre></td></tr></table></figure>
+
+<p>说明确实已关闭</p>
+<ul>
+<li>方法2<br>在另外一个终端窗口执行$ redis-cli shutdown,此时第一个窗口输出</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">8773:M 11 Sep 21:46:26.581 # User requested shutdown...</span><br><span class="line">8773:M 11 Sep 21:46:26.581 * Saving the final RDB snapshot before exiting.</span><br><span class="line">8773:M 11 Sep 21:46:26.583 * DB saved on disk</span><br><span class="line">8773:M 11 Sep 21:46:26.583 * Removing the pid file.</span><br><span class="line">8773:M 11 Sep 21:46:26.583 # Redis is now ready to exit, bye bye...</span><br></pre></td></tr></table></figure>
+
+<p>然后在另外一个终端窗口执行$ redis-cli ping,输出</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Could not connect to Redis at 127.0.0.1:6379: Connection refused</span><br></pre></td></tr></table></figure>
+<p>说明确实已关闭</p>
+]]></content>
+      <categories>
+        <category>redis</category>
+      </categories>
+      <tags>
+        <tag>redis</tag>
+        <tag>mac</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>npm更新模块并同步到package.json中</title>
+    <url>/2020/04/25/npm%E6%9B%B4%E6%96%B0%E6%A8%A1%E5%9D%97%E5%B9%B6%E5%90%8C%E6%AD%A5%E5%88%B0package-json%E4%B8%AD/</url>
+    <content><![CDATA[<h1 id="npm更新模块并同步到package-json中"><a href="#npm更新模块并同步到package-json中" class="headerlink" title="npm更新模块并同步到package.json中"></a>npm更新模块并同步到package.json中</h1><p>使用原始npm<br>1.查看需要更新的版本</p>
+<p><code>npm outdated</code><br>该命令会列出所有需要更新的项目</p>
+<p>2.修改package.json中需要更新的包对应的版本号</p>
+<p><code>npm update</code><br>由于npm update只能按照package.json中指定的版本号进行更新,太繁琐复杂,接下来使用插件更新</p>
+<p>使用 <code>npm-check-updates</code><br>1.安装</p>
+<p><code>npm install -g npm-check-updates</code><br>2.查看需要更新的版本</p>
+<p><code>npm-check-updates</code><br>可以简写为ncu，该命令会列出需要更新的包。</p>
+<p>3.更新</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ncu -a</span><br></pre></td></tr></table></figure>
+
+<p>更新包的同时更新package.json文件</p>
+<span id="more"></span> 
+
+
+<hr>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">zikong@zikongdeiMac kongdezhi % npm install -g npm-check-updates</span><br><span class="line"></span><br><span class="line">/usr/local/bin/ncu -&gt; /usr/local/lib/node_modules/npm-check-updates/bin/ncu</span><br><span class="line">/usr/local/bin/npm-check-updates -&gt; /usr/local/lib/node_modules/npm-check-updates/bin/npm-check-updates</span><br><span class="line">+ npm-check-updates@4.1.2</span><br><span class="line">added 235 packages from 91 contributors in 36.495s</span><br><span class="line">zikong@zikongdeiMac kongdezhi % npm-check-updates</span><br><span class="line"></span><br><span class="line">Checking /Users/zikong/Documents/Myblog/kongdezhi/package.json</span><br><span class="line">[====================] 30/30 100%</span><br><span class="line"></span><br><span class="line"> gulp-imagemin             ^6.0.0  →   ^7.1.0 </span><br><span class="line"> hexo                      ^3.9.0  →   ^4.2.0 </span><br><span class="line"> hexo-blog-encrypt         ^2.2.7  →  ^3.0.12 </span><br><span class="line"> hexo-deployer-git         ^1.0.0  →   ^2.1.0 </span><br><span class="line"> hexo-generator-archive    ^0.1.5  →   ^1.0.0 </span><br><span class="line"> hexo-generator-category   ^0.1.3  →   ^1.0.0 </span><br><span class="line"> hexo-generator-index      ^0.2.1  →   ^1.0.0 </span><br><span class="line"> hexo-generator-searchdb   ^1.0.8  →   ^1.3.0 </span><br><span class="line"> hexo-generator-sitemap    ^1.2.0  →   ^2.0.0 </span><br><span class="line"> hexo-generator-tag        ^0.2.0  →   ^1.0.0 </span><br><span class="line"> hexo-renderer-ejs         ^0.3.1  →   ^1.0.0 </span><br><span class="line"> hexo-renderer-marked      ^1.0.1  →   ^2.0.0 </span><br><span class="line"> hexo-renderer-stylus      ^0.3.3  →   ^1.1.0 </span><br><span class="line"> hexo-server               ^0.3.3  →   ^1.0.0 </span><br><span class="line"> leancloud-storage        ^3.15.0  →   ^4.5.3 </span><br><span class="line"> valine                    ^1.3.9  →   ^1.4.9 </span><br><span class="line"> @babel/core               ^7.5.5  →   ^7.9.0 </span><br><span class="line"></span><br><span class="line">Run ncu -u to upgrade package.json</span><br><span class="line">zikong@zikongdeiMac kongdezhi % ncu -u</span><br><span class="line">Upgrading /Users/zikong/Documents/Myblog/kongdezhi/package.json</span><br><span class="line">[====================] 30/30 100%</span><br><span class="line"></span><br><span class="line"> gulp-imagemin             ^6.0.0  →   ^7.1.0 </span><br><span class="line"> hexo                      ^3.9.0  →   ^4.2.0 </span><br><span class="line"> hexo-blog-encrypt         ^2.2.7  →  ^3.0.12 </span><br><span class="line"> hexo-deployer-git         ^1.0.0  →   ^2.1.0 </span><br><span class="line"> hexo-generator-archive    ^0.1.5  →   ^1.0.0 </span><br><span class="line"> hexo-generator-category   ^0.1.3  →   ^1.0.0 </span><br><span class="line"> hexo-generator-index      ^0.2.1  →   ^1.0.0 </span><br><span class="line"> hexo-generator-searchdb   ^1.0.8  →   ^1.3.0 </span><br><span class="line"> hexo-generator-sitemap    ^1.2.0  →   ^2.0.0 </span><br><span class="line"> hexo-generator-tag        ^0.2.0  →   ^1.0.0 </span><br><span class="line"> hexo-renderer-ejs         ^0.3.1  →   ^1.0.0 </span><br><span class="line"> hexo-renderer-marked      ^1.0.1  →   ^2.0.0 </span><br><span class="line"> hexo-renderer-stylus      ^0.3.3  →   ^1.1.0 </span><br><span class="line"> hexo-server               ^0.3.3  →   ^1.0.0 </span><br><span class="line"> leancloud-storage        ^3.15.0  →   ^4.5.3 </span><br><span class="line"> valine                    ^1.3.9  →   ^1.4.9 </span><br><span class="line"> @babel/core               ^7.5.5  →   ^7.9.0 </span><br><span class="line"></span><br><span class="line">Run npm install to install new versions.</span><br><span class="line"></span><br><span class="line">zikong@zikongdeiMac kongdezhi % cnpm install</span><br><span class="line">⠹ [9/30] Installing hexo-generator-index@^1.0.0[hexo-asset-image@https://github.com/CodeFalling/hexo-asset-image] install hexo-asset-image from git git+https://github.com/CodeFalling/hexo-asset-image.git, may be very slow, please keep patience</span><br><span class="line">⠦ [17/30] Installing utils-merge@1.0.1[npminstall:runscript] hexo-blog-encrypt@3.0.12 › hexo-fs@1.0.2 › chokidar@2.1.8 › fsevents@^1.2.7 found binding.gyp file, auto run &quot;node-gyp rebuild&quot;, root: &quot;/Users/zikong/Documents/Myblog/kongdezhi/node_modules/_fsevents@1.2.12@fsevents&quot;</span><br><span class="line">⠴ [27/30] Installing @types/node@*  SOLINK_MODULE(target) Release/.node</span><br><span class="line">⠧ [28/30] Installing safe-buffer@~5.2.0  CXX(target) Release/obj.target/fse/fsevents.o</span><br><span class="line">⠏ [28/30] Installing delayed-stream@~1.0.0  SOLINK_MODULE(target) Release/fse.node</span><br><span class="line">✔ Installed 30 packages</span><br><span class="line">✔ Linked 722 latest versions</span><br><span class="line">[1/5] scripts.postinstall hexo-renderer-ejs@1.0.0 › ejs@^2.6.1 run &quot;node ./postinstall.js&quot;, root: &quot;/Users/zikong/Documents/Myblog/kongdezhi/node_modules/_ejs@2.7.4@ejs&quot;</span><br><span class="line">Thank you for installing EJS: built with the Jake JavaScript build tool (https://jakejs.com/)</span><br><span class="line"></span><br><span class="line">[1/5] scripts.postinstall hexo-renderer-ejs@1.0.0 › ejs@^2.6.1 finished in 124ms</span><br><span class="line">[2/5] scripts.postinstall gulp-imagemin@7.1.0 › imagemin-mozjpeg@8.0.0 › mozjpeg@^6.0.0 run &quot;node lib/install.js&quot;, root: &quot;/Users/zikong/Documents/Myblog/kongdezhi/node_modules/_mozjpeg@6.0.1@mozjpeg&quot;</span><br><span class="line">  ✔ mozjpeg pre-build test passed successfully</span><br><span class="line">[2/5] scripts.postinstall gulp-imagemin@7.1.0 › imagemin-mozjpeg@8.0.0 › mozjpeg@^6.0.0 finished in 2s</span><br><span class="line">[3/5] scripts.postinstall gulp-imagemin@7.1.0 › imagemin-gifsicle@7.0.0 › gifsicle@^5.0.0 run &quot;node lib/install.js&quot;, root: &quot;/Users/zikong/Documents/Myblog/kongdezhi/node_modules/_gifsicle@5.0.0@gifsicle&quot;</span><br><span class="line">  ✔ gifsicle pre-build test passed successfully</span><br><span class="line">[3/5] scripts.postinstall gulp-imagemin@7.1.0 › imagemin-gifsicle@7.0.0 › gifsicle@^5.0.0 finished in 1s</span><br><span class="line">[4/5] scripts.postinstall gulp-imagemin@7.1.0 › imagemin-optipng@7.1.0 › optipng-bin@^6.0.0 run &quot;node lib/install.js&quot;, root: &quot;/Users/zikong/Documents/Myblog/kongdezhi/node_modules/_optipng-bin@6.0.0@optipng-bin&quot;</span><br><span class="line">  ✔ optipng pre-build test passed successfully</span><br><span class="line">[4/5] scripts.postinstall gulp-imagemin@7.1.0 › imagemin-optipng@7.1.0 › optipng-bin@^6.0.0 finished in 2s</span><br><span class="line">[5/5] scripts.postinstall babel-preset-env@1.7.0 › babel-plugin-check-es2015-constants@6.22.0 › babel-runtime@6.26.0 › core-js@^2.4.0 run &quot;node -e \&quot;try&#123;require(&#x27;./postinstall&#x27;)&#125;catch(e)&#123;&#125;\&quot;&quot;, root: &quot;/Users/zikong/Documents/Myblog/kongdezhi/node_modules/_core-js@2.6.11@core-js&quot;</span><br><span class="line">Thank you for using core-js ( https://github.com/zloirock/core-js ) for polyfilling JavaScript standard library!</span><br><span class="line"></span><br><span class="line">The project needs your help! Please consider supporting of core-js on Open Collective or Patreon: </span><br><span class="line">&gt; https://opencollective.com/core-js </span><br><span class="line">&gt; https://www.patreon.com/zloirock </span><br><span class="line"></span><br><span class="line">Also, the author of core-js ( https://github.com/zloirock ) is looking for a good job -)</span><br><span class="line"></span><br><span class="line">[5/5] scripts.postinstall babel-preset-env@1.7.0 › babel-plugin-check-es2015-constants@6.22.0 › babel-runtime@6.26.0 › core-js@^2.4.0 finished in 58ms</span><br><span class="line">✔ Run 5 scripts</span><br><span class="line">deprecate hexo-blog-encrypt@3.0.12 › hexo-fs@1.0.2 › chokidar@^2.0.4 Chokidar 2 will break on node v14+. Upgrade to chokidar 3 with 15x less dependencies.</span><br><span class="line">deprecate hexo-blog-encrypt@3.0.12 › hexo-fs@1.0.2 › chokidar@2.1.8 › fsevents@^1.2.7 fsevents 1 will break on node v14+. Upgrade to fsevents 2 with massive improvements.</span><br><span class="line">deprecate babel-preset-env@1.7.0 › babel-plugin-check-es2015-constants@6.22.0 › babel-runtime@6.26.0 › core-js@^2.4.0 core-js@&lt;3 is no longer maintained and not recommended for usage due to the number of issues. Please, upgrade your dependencies to the actual version of core-js@3.</span><br><span class="line">Recently updated (since 2020-04-18): 12 packages (detail see file /Users/zikong/Documents/Myblog/kongdezhi/node_modules/.recently_updates.txt)</span><br><span class="line">  Today:</span><br><span class="line">    → babel-preset-env@1.7.0 › browserslist@3.2.8 › electron-to-chromium@^1.3.47(1.3.418) (12:02:35)</span><br><span class="line">✔ All packages installed (874 packages installed from npm registry, 1 packages installed from git, used 27s(network 22s), speed 746.06kB/s, json 740(1.46MB), tarball 14.46MB)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>NodeJS</category>
+      </categories>
+      <tags>
+        <tag>NodeJS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>pod 组件验证时报错</title>
+    <url>/2019/05/31/pod-%E7%BB%84%E4%BB%B6%E9%AA%8C%E8%AF%81%E6%97%B6%E6%8A%A5%E9%94%99/</url>
+    <content><![CDATA[<h1 id="pod-组件验证时报错，Could-not-find-a-ios-simulator，-Ensure-that-Xcode-Window-Devices-has-at-least-on"><a href="#pod-组件验证时报错，Could-not-find-a-ios-simulator，-Ensure-that-Xcode-Window-Devices-has-at-least-on" class="headerlink" title="pod 组件验证时报错，Could not find a ios simulator， Ensure that Xcode -&gt; Window -&gt; Devices has at least on"></a>pod 组件验证时报错，Could not find a <code>ios</code> simulator， Ensure that Xcode -&gt; Window -&gt; Devices has at least on</h1><p>执行 pod lib lint 时，报错：</p>
+<p>ERROR | [iOS] unknown: Encountered an unknown error (Could not find a <code>ios</code> simulator (valid values: com.apple.coresimulator.simruntime.ios-10-3, com.apple.coresimulator.simruntime.ios-12-1, com.apple.coresimulator.simruntime.ios-8-1, com.apple.coresimulator.simruntime.tvos-12-1, com.apple.coresimulator.simruntime.watchos-5-1). Ensure that Xcode -&gt; Window -&gt; Devices has at least one <code>ios</code> simulator listed or otherwise add one.</p>
+<p> </p>
+<h1 id="解决办法："><a href="#解决办法：" class="headerlink" title="解决办法："></a>解决办法：</h1><h2 id="1，-升级CocoaPods（使用的gem-源：-https-gems-ruby-china-com-）"><a href="#1，-升级CocoaPods（使用的gem-源：-https-gems-ruby-china-com-）" class="headerlink" title="1， 升级CocoaPods（使用的gem 源： https://gems.ruby-china.com/）"></a>1， 升级CocoaPods（使用的gem 源： <a href="https://gems.ruby-china.com/%EF%BC%89">https://gems.ruby-china.com/）</a></h2><h2 id="sudo-gem-install-cocoapods"><a href="#sudo-gem-install-cocoapods" class="headerlink" title="sudo gem install cocoapods"></a>sudo gem install cocoapods</h2><h2 id="再次执行-pod-spec-lint-–verbose-–allow-warnings-–use-libraries"><a href="#再次执行-pod-spec-lint-–verbose-–allow-warnings-–use-libraries" class="headerlink" title="再次执行    pod spec lint –verbose –allow-warnings –use-libraries"></a>再次执行    pod spec lint –verbose –allow-warnings –use-libraries</h2><p>验证通过</p>
+]]></content>
+      <categories>
+        <category>Cocoapods</category>
+      </categories>
+      <tags>
+        <tag>pod</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>sanmi</title>
+    <url>/2019/06/10/sanmi/</url>
+    <content><![CDATA[<p><a href="http://mmbiz.qpic.cn/mmbiz/O5Gzjw1OKBMPChho8fVPqnomc2mcXMFlUIMicGsmyp8blLicm9m6YnNHJYX0icKO2jeee2srOKZ4kpmMv2csafuvQ/640?wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">http://mmbiz.qpic.cn/mmbiz/O5Gzjw1OKBMPChho8fVPqnomc2mcXMFlUIMicGsmyp8blLicm9m6YnNHJYX0icKO2jeee2srOKZ4kpmMv2csafuvQ/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1</a></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>screen使用</title>
+    <url>/2019/06/20/screen%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<p>主要使用</p>
+<p>安装<br>首先可以先查看是否安装screen，通过命令<br>screen -ls<br>若出现</p>
+<p>The program ‘screen’ is currently not installed. You can install it by typing:<br>sudo apt install screen</p>
+<p>说明尚未安装，安装提示，通过命令：<br>sudo apt install screen 安装screen</p>
+<p>新建窗口<br>1）可直接通过命令screen新建一个窗口，并进入窗口。但通过这种方式新建的窗口没有名字，只有系统分配给它的一个id。当需要恢复窗口时，只能通过id号来恢复。<br>2）通过命令screen -S name，这样就可以新建一个名字为name的窗口，同样系统也会分配给它一个id，当恢复该窗口时既可以通过id号也可以通过窗口名。</p>
+<p>分离会话<br>退出当前新建的窗口，通过快键键Ctrl+a+d实现分离，此时窗口会跳出[detached]的提示，并回到主窗口。</p>
+<p>恢复会话窗口<br>首先查看当前有哪些screen窗口，通过命令：<br>screen -ls 将列出窗口列表</p>
+<p>由以上可知，当前有两个窗口，其中test窗口已经被杀死，test2窗口分离。可以通过以下命令恢复test2窗口：<br>screen -r test2 或 screen -r 27582<br>这样就返回了test2窗口</p>
+<p>杀死会话窗口<br>通过命令kill -9 threadnum<br>注意此处只能通过id号来杀死窗口。</p>
+<p>清除死去窗口<br>通过命令screen -wipe<br>这个命令将自动清除所有处于dead状态的窗口</p>
+]]></content>
+      <categories>
+        <category>ubuntu</category>
+      </categories>
+      <tags>
+        <tag>screen</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>专业版测试问题文档</title>
+    <url>/2019/06/11/%E4%B8%93%E4%B8%9A%E7%89%88%E6%B5%8B%E8%AF%95%E9%97%AE%E9%A2%98%E6%96%87%E6%A1%A3/</url>
+    <content><![CDATA[<h1 id="专业版测试"><a href="#专业版测试" class="headerlink" title="专业版测试"></a>专业版测试</h1><p><strong>日期:20190611  测试人员:孔德志</strong></p>
+<h1 id="测试出的问题"><a href="#测试出的问题" class="headerlink" title="测试出的问题"></a>测试出的问题</h1><h2 id="安卓"><a href="#安卓" class="headerlink" title="安卓"></a>安卓</h2><h3 id="bug"><a href="#bug" class="headerlink" title="bug"></a>bug</h3><ul>
+<li>1.先点击注册协议 再完善信息，完善所有信息后，注册按钮依然不能点击，需要取消再同意后才能点击注册。</li>
+<li>2.三台设备，用同一账号，一台设备登录，另外两台同时再登录，可能出现，都登不进去，也可能都能登录进去。</li>
+</ul>
+<h3 id="体验"><a href="#体验" class="headerlink" title="体验"></a>体验</h3><ul>
+<li>1.安卓昵称长度是10位字符，iOS是8位字符。</li>
+<li>2.密码没有提示长度。iOS密码没有长度限制，安卓6-15位限制。</li>
+<li>3.提示文字 在其他<em>“安卓”</em>设备登录</li>
+</ul>
+<span id="more"></span> 
+
+<h2 id="iOS"><a href="#iOS" class="headerlink" title="iOS"></a>iOS</h2><h3 id="bug-1"><a href="#bug-1" class="headerlink" title="bug"></a>bug</h3><ul>
+<li>1.iOS注册输入手机号后获取验证码，然后重新修改输入的手机号，获取验证码依然在计时，退出返回再进来注册页面也是在计时。(修改）</li>
+<li>2.登录的IM号等显示删除。（修改）</li>
+<li>3.微博第三方登录，设置-&gt;账户安全-&gt;授权失败时，绑定开关也会打开。（修改）<br>4.通过手机号搜索SAMIM成员信息，iOS搜索不到时没有给出搜索不到的提示，没有任何提示文字。(修改）<br>5.iOS ，添加手机联系人，邀请发送短信邀请人不正确。 （修改）<br>6.iOS搜索自己的好友，只能通过昵称不能通过手机号。(修改）<br>7.群聊天播放语音消息退出页面后还继续播放问题。（修改）</li>
+</ul>
+<h3 id="体验-1"><a href="#体验-1" class="headerlink" title="体验"></a>体验</h3><ul>
+<li><p>1.通过手机号搜索SAMIM成员信息，iOS搜索不到时没有给出搜索不到的提示，没有任何提示文字。(修改）</p>
+</li>
+<li><p>2.iOS和网页版同时登录，别人添加你为好友，iOS版在添加好友通知的详细资料页面，网页版点击同意，详细资料界面状态更改了变成已同意，但是返回后的通知列表还是显示同意按钮， 没有变成已同意状态。</p>
+</li>
+<li><p>3.iOS添加安卓为好友，安卓收到加好友的通知，通知列表不能直接点击同意，需要进入详细资料界面点击同意，iOS可以直接点击同意按钮，也可以进入详细资料页面点击同意按钮。</p>
+</li>
+<li><p>4.iOS添加安卓为好友，安卓收到加好友的通知，点击同意后， iOS删除好友，安卓通知列表还有之前加好友的通知，已同意按钮状态变为同意按钮状态。 相反的操作，安卓添加iOS好友，删除好友后，iOS的通知列表没有之前加好友的通知了。</p>
+</li>
+<li><p>5.网页版和移动端同时登陆，被加好友网页版不能及时刷新，需要手动刷新， 但是网页版被删除好友可以及时刷新。</p>
+</li>
+<li><p>6.iOS ，添加手机联系人，邀请按钮状态不正确。 （修改）</p>
+</li>
+<li><p>7.iOS和安卓，添加手机联系人页面 现在没有搜索功能（手机联系人多的情况下，需要自己慢慢找）。</p>
+</li>
+<li><p>8.iOS搜索自己的好友，只能通过昵称不能通过手机号。(修改）</p>
+</li>
+<li><p>9.iOS把安卓拉黑，安卓还可以给iOS发信息，iOS收不到，但是安卓会显示发送的消息显示未读消息， 相反，安卓把iOS拉黑，iOS发送安卓的消息显示被对方拒收了。</p>
+</li>
+<li><p>10.iOS标签添加，第一次添加添加成员选择多个，完成后，返回再进来，只显示一个成员。再次编辑添加多个成员之后，返回再进来就是正常的。</p>
+</li>
+<li><p>11.标签添加，选择成员，安卓有搜索功能，iOS没有。</p>
+</li>
+<li><p>12.发送名片，点击显示详细资料，iOS的陌生人不显示标签选项，安卓显示标签选项点击提示“非好友不可设置”</p>
+</li>
+<li><p>13.语音消息iOS限制90秒，安卓限制60秒。</p>
+</li>
+<li><p>14.iOS语音播放一条语音后，滑动消息然后再滑动回来到这条消息，语音播放的动画不显示了。</p>
+</li>
+<li><p>15.安卓选择相册小视频无限制时长，iOS限制10秒。</p>
+</li>
+<li><p>16.安卓消息列表小视频消息显示为 【小视屏】。</p>
+</li>
+</ul>
+<h2 id="20190617"><a href="#20190617" class="headerlink" title="20190617"></a>20190617</h2><ul>
+<li><p>AA收款人数，iOS输入50以上人数会提示 ”最多可向50人发起收款“，安卓可以输入50人以上的可以，但是分摊金额不足0.01元，提示”每人最低收取0.01元“</p>
+</li>
+<li><p>iOS五种收藏类型，语音，文字，图片，视频，地理位置。安卓地理位置的消息收藏功能。</p>
+</li>
+<li><p>安卓阅后即焚，先显示上一张阅后即焚点开看的图片，再显示这次点击的图片</p>
+</li>
+<li><p>群聊发送拼手气红包，安卓红包个数输入100 总金额0.01，点击发送红包没有判断每个红包最低金额，点击发送，提示发送不成功请稍后再试。iOS会提示”单个红包金额不能小于0.01元“</p>
+</li>
+<li><p>显示的bug，体验的不影响功能: 群聊发普通红包，iOS先发所有成员可抢的，输入红包个数和单个金额，再点击 选择改为指定人领取的，下方显示的总金额不正确。</p>
+</li>
+</ul>
+<p>15552273792    93.08<br>15500000001    1.56<br>15500000002    8.66</p>
+<ul>
+<li>安卓的口令红包详情 有的显示 已领取 多少 个， 共 多少 元，剩余 多少 元。显示的金额是错误的。<br>*安卓</li>
+</ul>
+<h2 id="iOS口令红包需要修改-为直接点击。"><a href="#iOS口令红包需要修改-为直接点击。" class="headerlink" title="iOS口令红包需要修改 为直接点击。"></a>iOS口令红包需要修改 为直接点击。</h2><ul>
+<li><p>iOS 阅后即焚消息不可在多选中选中转发，安卓可以在多选里选中转发。</p>
+</li>
+<li><p>聊天详情  安卓点击+号创建群组后，跳转到群组聊天界面，iOS则不跳转。<br>安卓点击头像显示大图，iOS点击头像跳转到个人详情界面</p>
+</li>
+<li><p>安卓 群聊 投诉，跳转显示的和个人投诉的一样（需要修改）， iOS的投诉是群投诉页面。</p>
+</li>
+<li><p>群主消息置顶关闭后，安卓群成员的置顶消息未消失。</p>
+</li>
+<li></li>
+</ul>
+<p>iOS登录的账号是 15511110002  安卓登录的是15522220001</p>
+<p>iOS给安卓发送离线消息   安卓接受离线消息正常。<br>安卓给iOS发送离线消息   iOS接受不正常<br><em>原因在于同时登陆了手机端和网页端</em></p>
+<h2 id="畅聊"><a href="#畅聊" class="headerlink" title="畅聊"></a>畅聊</h2><p>3、账号有时候会自动掉线，安卓和网页版同时在线，网页版突然退出到登录页面，安卓也退出了，然后安卓再次登录，提示其他设备登录<br>4、会员提示收不到信息 ，手机端本来在群里的，然后退出软件，再重新进入软件后就会收不到网页版消息了，有在群里的时候也会出现消息没收到的情况，安卓和苹果都有<br>8、网页版跟手机版的消息不同步，有时候手机端发消息网页版收不到，网页版发消息手机端收不到<br>10、安卓手机有时候读取不到历史消息。<br>Cathy_Looking for love  08:58:46<br>21、安卓的有的用户会一直显示在登陆中</p>
+<h2 id="网亿密聊需修改："><a href="#网亿密聊需修改：" class="headerlink" title="网亿密聊需修改："></a>网亿密聊需修改：</h2><ul>
+<li>6、苹果版本操作群里禁言解禁后，有个别的会员还是无法解禁，需多操作几次才可以的。需修改  (没有重现）</li>
+<li>8、安卓和苹果手机不能设置管理  需修改</li>
+<li>10、安卓手机邀请人进群，本来都进群了，还是显示不在群里。需修改</li>
+<li>12、苹果手机，没有同意的也显示已经同意（苹果手机加对方好友，没同意，也显示已加好友，添加人手机有时不显示，电脑显示，不能同意）需修改</li>
+<li>18、出现找回密码失败 需修改</li>
+<li>19、如果一天没登入软件，一登入进去信息无限刷屏，直接手机发热 需修改</li>
+<li>20、自己能看到自己发的，但是出去进来就刷没了，别人看不到，电脑端发的（自己发的只能自己看到，可能信息没有完全发出去） 需修改</li>
+<li>22、没有新消息，tab上却有数字提醒</li>
+<li>23、把群里的人踢了，那个人还能继续在群里发消息，其他人还能收的到他发的消息，在已经被踢了的情况下还能发生，群禁言对他也没用</li>
+</ul>
+<p>安卓和网页同时登陆一个账号，<br>安卓扫码加别的号码的人为好友，别人同意后，安卓删除不掉该好友。<br>别人扫这个</p>
+<h2 id="畅聊-1"><a href="#畅聊-1" class="headerlink" title="畅聊"></a>畅聊</h2><p>1.安卓点击进入个人会话获取离线消息显示空白。<br>2.更改个人头像，群聊天详情中的 成员头像未更改。</p>
+<p>、安卓手机获取离线消息会迟钝。 <em>（获取个人离线消息第一次进聊天界面显示空白）</em><br>4.全体禁言 同步的网页版和安卓。网页版可以禁言。手机禁不了还可以在群里发消息。<br>禁言、同步的安卓和网页版，被禁言后，安卓手机被禁言，网页版没有被禁，还可以发消息。 <em>（iOS和网页版同时登陆，安卓把iOS禁言，网页版禁言了，iOS端没有被禁言，安卓和网页版同时登陆，iOS把安卓禁言了， 网页版禁言了，安卓端也被禁言了）</em><br>5、群里信息发多了。网页版接收迟钝。接收一半就卡死。<br>6、群聊 IOS把安卓登陆的账号从群里踢掉后，IOS不再显示，安卓群列表九宫格还是显示被踢的好友在群里。点进群之后就是空白，返回后群列表就弹掉。 <em>（重现）</em><br>7.IOS版加同步的安卓和网页版为好友，网页版同意后安卓版不同步，还需在同意、安卓版同意后。网页版同步。<br>8、同步的网页版和安卓版 网页版给好友发信息。同步的安卓手机不能直接收到信息  要返回消息界面在从进，才能收到网页版发的信息、<br>9.IOS踢掉群里同步的安卓和网页版账号。网页版直接踢掉，可安卓手机群列表还是有这个群，点进去这个群后软件会出现停止运行。 <em>（重现 和第6条重复）</em><br>10、安卓手机发信息测回后 测回的文字弹回打字框里，<em>（重现）</em><br>11、安卓版加同步的网页版和安卓版账号进群。安卓收到提醒，网页版不同步，收不到。<br>12、拉好友进群后。里面有三个好友，安卓和网页版九宫格却显示二个。群名称显示3个。点群头像进入安卓版手机只有2个人。IOS版九宫格显示2个人进去群资料却显示三个人<br>13、同步的网页版和安卓版账号，  安卓退群后。网页版没有同步退群，网页版列表还有这个群组。网页版还可以发信息、多刷新几次网页版就没有这个群了。<br>14、信息发大表情多了 有一部分显示已读，一部分显示未读。<br>15.  设置管理员退出后在登录就不是管理员状态。（安卓。IOS）<br>16、安卓手机邀请好友进群。出现停止运行 闪退。<br>17、安卓手机邀请IOS版账号进群，IOS版手机收不到邀请信息。安卓版显示发送邀请成功，</p>
+<p>我登录上账户后  消息列表出现离线消息，我点进去一个99+的 什么也没有空白 也没出现加载离线消息的框  等了将近一分钟还是没动静   然后我返回列表点击第二个99+的  进去也是一样   再点击一些小的后回来再看  第一个还是没有消息   第二个消息显示加载了出来  再等一会  第一个消息加载出来了   延迟太大   </p>
+<p>上面的是我点开的加入的客户的群组  刚点了我们测试的群组 显示未读99+  进去就三条消息   下拉也没冻结不动  就和只有三条消息一样 </p>
+<p>1、（停留消息列表大量接收时）私聊收到大量离线消息，进入聊天后出来离线加载，加载到现在还在加载，不知道是不是消息太多的原因；因为一直加载，一直加载都没加载出来，其他操作不了<br>2、（退出登录接收大量消息，点击登录）进入其中一个群后先闪现满屏的消息一秒后变成就显示最后一条；如果消息少的话就是闪现3条信息后最后显示一条<br>3、（退出登录接收大量消息，点击登录）进入其中一个群，进去后就出来加载离线的缓冲，加载几秒后就没了，然后手动下拉消息列表无动静，多下拉几次就又出现了加载离线的，这回数据出来了，继续下拉也有新数据了</p>
+<h2 id="网亿密聊需修改：-1"><a href="#网亿密聊需修改：-1" class="headerlink" title="网亿密聊需修改："></a>网亿密聊需修改：</h2><p>6、苹果版本操作群里禁言解禁后，有个别的会员还是无法解禁，需多操作几次才可以的。需修改<br>8、安卓和苹果手机不能设置管理  需修改<br>10、安卓手机邀请人进群，本来都进群了，还是显示不在群里。需修改<br>12、苹果手机，没有同意的也显示已经同意（苹果手机加对方好友，没同意，也显示已加好友，添加人手机有时不显示，电脑显示，不能同意）需修改<br>18、出现找回密码失败 需修改<br>19、如果一天没登入软件，一登入进去信息无限刷屏，直接手机发热 需修改<br>20、自己能看到自己发的，但是出去进来就刷没了，别人看不到，电脑端发的（自己发的只能自己看到，可能信息没有完全发出去） 需修改<br>22、没有新消息，tab上却有数字提醒<br>23、把群里的人踢了，那个人还能继续在群里发消息，其他人还能收的到他发的消息，在已经被踢了的情况下还能发生，群禁言对他也没用<br>24、手机端同一张图片，两个手机显示不一样，ios出现的多，安卓的少</p>
+<h2 id="侧事故太短板"><a href="#侧事故太短板" class="headerlink" title="侧事故太短板"></a>侧事故太短板</h2><p>加好友，删好友</p>
+<p>别人邀请进群，自己拉人进群，其他人进群，搜索进群（群主设置验证）</p>
+<p>主动退群，被踢出群，群内删除成员，退群后再次进群</p>
+<ul>
+<li>群主，管理员，群成员 三种身份</li>
+</ul>
+<p>禁言，撤回</p>
+<p>转让群，解散群</p>
+<p>更换头像，名称</p>
+<p>网页版与手机版消息同步</p>
+<p>安卓<br>1.消息列表一个群有未读消息数字提醒，点进去后显示空白，再返回消息列表再点击去聊天页面才显示。<br>2.进去群聊先显示加载数据，加载完数据，先显示表情，再下拉刷新显示最后发的数字。（我们测试是先发送大量的表情，最后发了十几条数字的信息）</p>
+<p>ios</p>
+<ul>
+<li>发送转账，发送方显示 出现重复的两个转账</li>
+</ul>
+<p>离线消息，登录上后，消息列表显示数字提醒，但点击进去没有消息，显示空白。返回再进去也是空白。<br>在线消息，vivo 三星（小的）没有收到消息，退出登录后，有消息提醒了，点击进去后显示空白。</p>
+<p>ios 阅后即焚 看完后，退出再进来聊天界面，有的阅后即焚消息还是显示未读，还可以看。</p>
+]]></content>
+      <categories>
+        <category>有慧测试</category>
+      </categories>
+      <tags>
+        <tag>有慧测试</tag>
+        <tag>SAMIM专业版</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>凡凡添加好友流程</title>
+    <url>/2020/06/15/%E5%87%A1%E5%87%A1%E6%B7%BB%E5%8A%A0%E5%A5%BD%E5%8F%8B%E6%B5%81%E7%A8%8B/</url>
+    <content><![CDATA[<p>1.进入通讯录-添加朋友界面，输入手机号搜索用户信息。<br>2.搜索到调用接口发送添加好友信息。</p>
+<p>20200616<br>凡凡<br>1.消息下滑到顶部时自动拉取上一页信息显示添加。<br>2.时间戳显示添加，全局配置时间戳显示时间间隔。（删除和插入消息的时间戳显示进行中）<br>3.选择联系人界面添加。<br>4.添加创建群组接口，群管理类封装创建群接口。（后台暂未返回群ID）<br>5.添加查询用户群列表接口（后台返回结果暂时是空）</p>
+<p>20200617<br>凡凡<br>1.发送消息插入时间戳显示逻辑优化。<br>2.发送消息生成消息ID的唯一标识符方法修改。<br>3.发送图片消息的构造方法修改，用消息ID+文件名构造消息一一对应的缓存文件，方便消息的缓存管理。<br>4.压缩图片获取缩略图的资源文件管理方法修改。<br>5.音频和视频消息构造和缓存处理方法修改，用消息ID+文件名构造消息一一对应的缓存文件（进行中）<br>Online<br>1.iOS13.5通知收不到处理，通知设置更新。</p>
+<p>filePath &#x3D; [SIMFileLocationHelper filepathForAudio:audioObject.path];</p>
+]]></content>
+      <categories>
+        <category>iOS</category>
+      </categories>
+      <tags>
+        <tag>iOS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>为什么说基于TCP的移动端IM仍然需要心跳保活？ </title>
+    <url>/2020/07/20/%E4%B8%BA%E4%BB%80%E4%B9%88%E8%AF%B4%E5%9F%BA%E4%BA%8ETCP%E7%9A%84%E7%A7%BB%E5%8A%A8%E7%AB%AFIM%E4%BB%8D%E7%84%B6%E9%9C%80%E8%A6%81%E5%BF%83%E8%B7%B3%E4%BF%9D%E6%B4%BB%EF%BC%9F/</url>
+    <content><![CDATA[<h1 id="为什么说基于TCP的移动端IM仍然需要心跳保活？"><a href="#为什么说基于TCP的移动端IM仍然需要心跳保活？" class="headerlink" title="为什么说基于TCP的移动端IM仍然需要心跳保活？"></a>为什么说基于TCP的移动端IM仍然需要心跳保活？</h1><p>(转自 <a href="http://www.52im.net/thread-281-1-1.html">http://www.52im.net/thread-281-1-1.html</a>)</p>
+<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>很多人认为，TCP协议自身先天就有KeepAlive机制，为何基于它的通讯链接，仍然需要在应用层实现额外的心跳保活？本文将从移动端IM实践的角度告诉你，即使使用的是TCP协议，应用层的心跳保活仍旧必不可少。</p>
+<p>在使用 TCP 长连接的 IM 服务设计中，往往都会涉及到心跳。心跳一般是指某端(绝大多数情况下是客户端)每隔一定时间向对端发送自定义指令，以判断双方是否存活，因其按照一定间隔发送，类似于心跳，故被称为心跳指令。</p>
+<h3 id="TCP协议不是自带KeepAlive的吗？"><a href="#TCP协议不是自带KeepAlive的吗？" class="headerlink" title="TCP协议不是自带KeepAlive的吗？"></a>TCP协议不是自带KeepAlive的吗？</h3><p>那么问题就随之而来了：为什么需要在应用层做心跳，难道 TCP 不是个可靠连接吗？我们不能够依赖 TCP 做断线检测吗？比如使用 TCP 的 KeepAlive 机制来实现。应用层心跳是目前的最佳实践吗？怎么样的心跳才是最佳实践。</p>
+<p>很多做移动端IM的同行，以前确实没有仔细考虑过这些问题，潜意识里想当然的认为这仅仅只是个简单的心跳而已啊。好吧，事实并非这么简单，请继续往下看。</p>
+<h3 id="IM中保持有效长连接的重要性"><a href="#IM中保持有效长连接的重要性" class="headerlink" title="IM中保持有效长连接的重要性"></a>IM中保持有效长连接的重要性</h3><p>对于客户端而言，使用 TCP 长连接来实现业务的最大驱动力在于：在当前连接可用的情况下，每一次请求都只是简单的数据发送和接受，免去了 DNS 解析，连接建立等时间，大大加快了请求的速度，同时也有利于接受服务器的实时消息。但前提是连接可用。</p>
+<p>如果连接无法很好地保持，每次请求就会变成撞大运：运气好，通过长连接发送请求并收到反馈。运气差，当前连接已失效，请求迟迟没有收到反馈直到超时，又需要一次连接建立的过程，其效率甚至还不如 HTTP。而连接保持的前提必然是检测连接的可用性，并在连接不可用时主动放弃当前连接并建立新的连接。</p>
+<p>基于这个前提，必须要有一种机制用于检测连接可用性。同时移动网络的特殊性也要求客户端需要在空余时间发送一定的信令，避免连接被回收。详见微信和运营商的撕B（另一篇针对微信的信令风暴技术研究文章请见：《微信对网络影响的技术试验及分析》）。</p>
+<p>而对于服务器而言，能够及时获悉连接可用性也非常重要：一方面服务器需要及时清理无效连接以减轻负载，另一方面也是业务的需求，如游戏副本中服务器需要及时处理玩家掉线带来的问题。</p>
+<h3 id="TCP的KeepAlive无法替代应用层心跳保活机制的原因"><a href="#TCP的KeepAlive无法替代应用层心跳保活机制的原因" class="headerlink" title="TCP的KeepAlive无法替代应用层心跳保活机制的原因"></a>TCP的KeepAlive无法替代应用层心跳保活机制的原因</h3><p>上面说了保持连接的重要性，那么现在回到具体实现上。为什么我们需要使用应用层心跳来做检测，而不是直接使用 TCP 的特性呢？</p>
+<p>我们知道 TCP 是一个基于连接的协议，其连接状态是由一个状态机进行维护，连接完毕后，双方都会处于 established 状态，这之后的状态并不会主动进行变化。这意味着如果上层不进行任何调用，一直使 TCP 连接空闲，那么这个连接虽然没有任何数据，但仍是保持连接状态，一天、一星期、甚至一个月，即使在这期间中间路由崩溃重启无数次。举个现实中经常遇到的栗子：当我们 ssh 到自己的 VPS 上，然后不小心踢掉网线，此时的网络变化并不会被 TCP 检测出，当我们重新插回网线，仍旧可以正常使用 ssh，同时此时并没有发生任何 TCP 的重连。</p>
+<p>有人会说 TCP 不是有 KeepAlive 机制么，通过这个机制来实现不就可以了吗？但是事实上，TCP KeepAlive 的机制其实并不适用于此。Keep Alive 机制开启后，TCP 层将在定时时间到后发送相应的 KeepAlive 探针以确定连接可用性。一般时间为 7200 s（详情请参见《TCP&#x2F;IP详解》中第23章），失败后重试 10 次，每次超时时间 75 s。显然默认值无法满足我们的需求，而修改过设置后就可以满足了吗？答案仍旧是否定的。</p>
+<p>因为 TCP KeepAlive 是用于检测连接的死活，而心跳机制则附带一个额外的功能：检测通讯双方的存活状态。两者听起来似乎是一个意思，但实际上却大相径庭。</p>
+<p>考虑一种情况，某台服务器因为某些原因导致负载超高，CPU 100%，无法响应任何业务请求，但是使用 TCP 探针则仍旧能够确定连接状态，这就是典型的连接活着但业务提供方已死的状态，对客户端而言，这时的最好选择就是断线后重新连接其他服务器，而不是一直认为当前服务器是可用状态，一直向当前服务器发送些必然会失败的请求。</p>
+<p>从上面我们可以知道，KeepAlive 并不适用于检测双方存活的场景，这种场景还得依赖于应用层的心跳。应用层心跳有着更大的灵活性，可以控制检测时机，间隔和处理流程，甚至可以在心跳包上附带额外信息。从这个角度而言，应用层的心跳的确是最佳实践。</p>
+<h3 id="心跳保活机制的实现方案参考"><a href="#心跳保活机制的实现方案参考" class="headerlink" title="心跳保活机制的实现方案参考"></a>心跳保活机制的实现方案参考</h3><p>从上面我们可以得出结论，目前而言，应用层心跳的确是检测连接有效性，双方是否存活的最佳实践，那么剩下的问题就是怎么实现。</p>
+<p>最简单粗暴做法当然是定时心跳，如每隔 30 秒心跳一次，15 秒内没有收到心跳回包则认为当前连接已失效，断开连接并进行重连。这种做法最直接，实现也简单。唯一的问题是比较耗电和耗流量。以一个协议包 5 个字节计算，一天收发 2880 个心跳包，一个月就是 5 * 2 * 2880 * 30 &#x3D; 0.8 M 的流量，如果手机上多装几个 IM 软件，每个月光心跳就好几兆流量没了，更不用说频繁的心跳带来的电量损耗。</p>
+<p>既然频繁心跳会带来耗电和耗流量的弊端，改进的方向自然是减少心跳频率，但也不能过于影响连接检测的实时性。基于这个需求，一般可以将心跳间隔根据程序状态进行调整，当程序在后台时(这里主要考虑安卓)，尽量拉长心跳间隔，5 分钟、甚至 10 分钟都可以。</p>
+<p>而当 App 在前台时则按照原来规则操作。连接可靠性的判断也可以放宽，避免一次心跳超时就认为连接无效的情况，使用错误积累，只在心跳超时 n 次后才判定当前连接不可用。当然还有一些小 trick 比如从收到的最后一个指令包进行心跳包周期计时而不是固定时间，这样也能够一定程度减少心跳次数。</p>
+]]></content>
+      <categories>
+        <category>iOS</category>
+      </categories>
+      <tags>
+        <tag>iOS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>初识OpenGL ES</title>
+    <url>/2020/07/07/%E5%88%9D%E8%AF%86OpenGL-ES/</url>
+    <content><![CDATA[<h1 id="初识OpenGL-ES"><a href="#初识OpenGL-ES" class="headerlink" title="初识OpenGL ES"></a>初识OpenGL ES</h1><blockquote>
+<p>OpenGL是用于可视化的二维和三维数据。它是一个多用途开放标准图形库，支持2D和3D数字内容创建，机械和建筑设计，虚拟原型，飞行模拟，视频游戏等应用。您可以使用OpenGL配置3D图形管道并提交数据。顶点被变换和点亮，组合成原始图像，并进行光栅化以创建2D图像。OpenGL旨在将函数调用转换为可发送到底层图形硬件的图形命令。因为这个底层硬件专门用于处理图形命令，因此OpenGL绘图通常非常快。<br>用于嵌入式系统的OpenGL（OpenGL ES）是OpenGL的简化版本，可以消除冗余功能，从而提供更容易学习和易于在移动图形硬件中实现的库。<br>OpenGL ES允许应用程序利用底层图形处理器的功能。iOS设备上的GPU可以执行复杂的2D和3D绘图，以及最终图像中每个像素的复杂阴影计算。您应该使用OpenGL ES，如果您的应用程序的设计要求要求最直接和全面的访问可能对GPU硬件</p>
+</blockquote>
+<p>在iOS中构建OpenGL ES应用程序需要几个注意事项，其中一些是OpenGL ES编程的通用，其中一些特定于iOS。</p>
+<ul>
+<li>1.确定哪个版本的OpenGL ES具有适合您应用程序的功能集，并创建一个OpenGL ES上下文。</li>
+<li>2.在运行时验证设备是否支持您要使用的OpenGL ES功能。</li>
+<li>3.选择在哪里渲染您的OpenGL ES内容。</li>
+<li>4.确保您的应用程序在iOS中正常运行。</li>
+<li>5.实现您的渲染引擎。</li>
+<li>6.使用Xcode和Instruments调试您的OpenGL ES应用程序，并调整它以获得最佳性能。</li>
+</ul>
+<h2 id="选择哪些OpenGL-ES版本支持"><a href="#选择哪些OpenGL-ES版本支持" class="headerlink" title="选择哪些OpenGL ES版本支持"></a>选择哪些OpenGL ES版本支持</h2><p>决定您的应用程序是否应支持OpenGL ES 3.0，OpenGL ES 2.0，OpenGL ES 1.1或多个版本。<br>OpenGL ES 3.0是iOS 7中的新功能。它增加了许多新功能，可以实现更高性能，通用GPU计算技术，以及以前只能在桌面级硬件和游戏机上使用更复杂的视觉效果。<br>OpenGL ES 2.0是iOS设备的基准配置文件，具有基于可编程着色器的可配置图形流水线。<br>OpenGL ES 1.1仅提供基本的固定功能图形管道，主要用于向后兼容的iOS中。</p>
+<h2 id="配置OpenGL-ES上下文"><a href="#配置OpenGL-ES上下文" class="headerlink" title="配置OpenGL ES上下文"></a>配置OpenGL ES上下文</h2><h3 id="EAGL是iOS实现的OpenGL-ES渲染上下文"><a href="#EAGL是iOS实现的OpenGL-ES渲染上下文" class="headerlink" title="EAGL是iOS实现的OpenGL ES渲染上下文"></a>EAGL是iOS实现的OpenGL ES渲染上下文</h3><p>在您的应用程序可以调用任何OpenGL ES函数之前，它必须初始化一个<br>EAGLContext对象。EAGLContext类还提供用于OpenGL ES的内容与核心动画结合的方法。</p>
+<h3 id="每个上下文定位一个特定版本的OpenGL-ES"><a href="#每个上下文定位一个特定版本的OpenGL-ES" class="headerlink" title="每个上下文定位一个特定版本的OpenGL ES"></a>每个上下文定位一个特定版本的OpenGL ES</h3><p>一个EAGLContext对象只支持一个版本的OpenGL ES。例如，为OpenGL ES 1.1编写的代码与OpenGL ES 2.0或3.0上下文不兼容。使用核心OpenGL ES 2.0功能的代码与OpenGL ES 3.0上下文兼容，为OpenGL ES 2.0扩展设计的代码通常可以在OpenGL ES 3.0上下文中进行微小更改。许多新的OpenGL ES 3.0功能和增加的硬件功能需要OpenGL ES 3.0上下文。<br>您的应用程序决定时，它支持哪种OpenGL ES的版本创建和初始化的EAGLContext对象。如果设备不支持所需版本的OpenGL ES，则该initWithAPI返回nil。您的应用程序必须进行测试，以确保在使用之前成功初始化上下文。<br>为了支持OpenGL ES的多个版本作为应用程序中的渲染选项，您应该首先尝试初始化要定位的最新版本的渲染上下文。如果返回的对象是nil，则初始化旧版本的上下文。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">- (EAGLContext *)createBestEAGLContext &#123;</span><br><span class="line">    EAGLContext * context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES3];</span><br><span class="line">    if(context == nil)&#123;</span><br><span class="line">        context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];</span><br><span class="line">    &#125;</span><br><span class="line">    return context;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="绘制OpenGL-ES和GLKit"><a href="#绘制OpenGL-ES和GLKit" class="headerlink" title="绘制OpenGL ES和GLKit"></a>绘制OpenGL ES和GLKit</h2><p>GLKit框架提供视图和视图控制器类，可以消除绘图和动画化OpenGL ES内容所需的设置和维护代码。本GLKView类管理OpenGL ES的基础设施，为您的绘制代码提供一个场所，而GLKViewController类提供了在GLKit视图的OpenGL ES内容的流畅的动画渲染循环。这些类扩展了用于绘制视图内容和管理视图呈现的标准UIKit设计模式。因此，您可以将重点放在OpenGL ES渲染代码上，使您的应用程序快速启动并运行。GLKit框架还提供了其他功能来简化OpenGL ES 2.0和3.0开发。</p>
+<p>使用GLKit视图渲染OpenGL ES内容</p>
+<img src="/2020/07/07/%E5%88%9D%E8%AF%86OpenGL-ES/123.png" class="">
+
+
+
+
+<p><a href="https://kongdezhi.com/2020/07/07/初识OpenGL-ES/OpenGL-ES-iOS-master.zip" download="OpenGL-ES-iOS-master.zip">点击下载 OpenGL+ES应用开发实践指南：iOS卷 源码</a></p>
+]]></content>
+      <categories>
+        <category>OpenGL</category>
+      </categories>
+      <tags>
+        <tag>OpenGL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>彻底理解JS中的回调(Callback)函数</title>
+    <url>/2019/06/04/%E5%BD%BB%E5%BA%95%E7%90%86%E8%A7%A3JS%E4%B8%AD%E7%9A%84%E5%9B%9E%E8%B0%83-Callback-%E5%87%BD%E6%95%B0/</url>
+    <content><![CDATA[<p>作为JS的核心，回调函数和异步执行是紧密相关的，也是必须跨过去的一道个门槛。</p>
+<p>那么究竟什么是回调函数(Callback)，网上有许多的文章，这些文章大概分成两类，第一类术语太多，看不懂。另一类反过来，太过于生活化，讲的是一些脱离编程的例子，还是看的人晕头转向。<br>其实回调函数并不复杂，明白两个重点即可：</p>
+<h1 id="1-函数可以作为一个参数在另一个函数中被调用"><a href="#1-函数可以作为一个参数在另一个函数中被调用" class="headerlink" title="1. 函数可以作为一个参数在另一个函数中被调用"></a>1. 函数可以作为一个参数在另一个函数中被调用</h1><h1 id="2-大多数语言都是同步编程语言，比如现在我们有3行代码，那么系统一定是一行一行按顺序向下执行的，第一行执行完了，执行第二行，紧跟着最后执行第三行，你可能会说这不是废话吗？且慢，在JS里则不尽然，比如有3行代码，并不是排在最前面的代码就是最先执行完毕的，很有可能是最后一行语句最先执行完，然后排在最前面的那行反而是最后执行完毕的，所以我们说JS是异步编程语言。"><a href="#2-大多数语言都是同步编程语言，比如现在我们有3行代码，那么系统一定是一行一行按顺序向下执行的，第一行执行完了，执行第二行，紧跟着最后执行第三行，你可能会说这不是废话吗？且慢，在JS里则不尽然，比如有3行代码，并不是排在最前面的代码就是最先执行完毕的，很有可能是最后一行语句最先执行完，然后排在最前面的那行反而是最后执行完毕的，所以我们说JS是异步编程语言。" class="headerlink" title="2. 大多数语言都是同步编程语言，比如现在我们有3行代码，那么系统一定是一行一行按顺序向下执行的，第一行执行完了，执行第二行，紧跟着最后执行第三行，你可能会说这不是废话吗？且慢，在JS里则不尽然，比如有3行代码，并不是排在最前面的代码就是最先执行完毕的，很有可能是最后一行语句最先执行完，然后排在最前面的那行反而是最后执行完毕的，所以我们说JS是异步编程语言。"></a>2. 大多数语言都是同步编程语言，比如现在我们有3行代码，那么系统一定是一行一行按顺序向下执行的，第一行执行完了，执行第二行，紧跟着最后执行第三行，你可能会说这不是废话吗？且慢，在JS里则不尽然，比如有3行代码，并不是排在最前面的代码就是最先执行完毕的，很有可能是最后一行语句最先执行完，然后排在最前面的那行反而是最后执行完毕的，所以我们说JS是异步编程语言。</h1><p>下面以node.js为例，举一个例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">var fs = require(&quot;fs&quot;);</span><br><span class="line">var c = 0</span><br><span class="line"> </span><br><span class="line">function f(x) &#123;</span><br><span class="line">    console.log(x)</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">function writeFile() &#123;</span><br><span class="line">    fs.writeFile(&#x27;input.txt&#x27;, &#x27;我是通过fs.writeFile 写入文件的内容&#x27;, function (err) &#123;</span><br><span class="line">        if (!err) &#123;</span><br><span class="line">            c = 1</span><br><span class="line">            console.log(&quot;文件写入完毕!&quot;)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">writeFile()</span><br><span class="line">f(c)</span><br></pre></td></tr></table></figure>
+<p>以上代码不难理解，就是设置一个全局变量c &#x3D; 0，然后执行writeFile函数（也就是写入一个文件input.txt），写完之后让c&#x3D;1，然后再调用f()函数，f()函数简单至极，就是把打印一个变量，仅此而已。</p>
+<p>按照正常逻辑，首先c&#x3D;0，然后在调用writeFile函数的时候里面有一句c&#x3D;1，我们先调用的writeFile，所以c&#x3D;1肯定是会被执行到的，那么结果应该是打印1，但是万万想不到，结果是0，明明我们在writeFile函数里我们重新对c进行了赋值，为什么结果还是0呢？</p>
+<p>因为程序运行到writeFile()这一行的时候，是一个比较耗时的IO操作，系统并不会卡在此处，死等writeFile执行完毕再执行下一条语句，而是直接下一条代码，即f(c)，而此时c并没有被重新赋值为1，所以打印出来的结果还是0 ! </p>
+<p>这时候就需要搬出我们的主角“回调函数”了，改写一下writeFile函数：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">var fs = require(&quot;fs&quot;);</span><br><span class="line"> </span><br><span class="line">function f(x) &#123;</span><br><span class="line">    console.log(x)</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">function writeFile(callback) &#123; //关键字callback，在这里就是指f()</span><br><span class="line">    fs.writeFile(&#x27;input.txt&#x27;, &#x27;我是通过fs.writeFile 写入文件的内容&#x27;, function (err) &#123;</span><br><span class="line">        if (!err) &#123;</span><br><span class="line">            console.log(&quot;文件写入完毕!&quot;)</span><br><span class="line">            c = 1</span><br><span class="line">            callback(c) // 此行相当于f(c)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line">var c = 0</span><br><span class="line">writeFile(f) // 函数f作为一个参数传进writeFile函数</span><br></pre></td></tr></table></figure>
+<p>我们在writeFile函数的形参里加入了一个关键字callback，表示这是一个回调函数，也就是前面所说的重点1，即所谓的“以函数为参数”，然后当文件写入完毕后，我们执行c&#x3D;1, 然后再用一次callback关键字，在这里，关键字”callback”就是f()函数的化身，表示我们在此处调用一次f()函数.</p>
+<p>如果你看明白上面的代码，那么我们现在开始用一句话攻略做一个总结：</p>
+<p><strong>【在大多数编程语言中，函数的形参总是由外往内向函数体传递参数，但在JS里如果形参是关键字”callback”则完全相反，它表示函数体在完成某种操作后由内向外调用某个外部函数】</strong><br>所谓的“回调”，就是回头调用的意思。本例子中即是：让我先写文件，写操作结束后，我再回头调用f()函数。</p>
+<p>有时候，我们会看到一些回调函数并没有使用callback关键字，这种连callback关键字和函数名都省略了，直接在函数的形参中嵌入一个function的写法，在js代码中更为常见，其本质上仍然是回调函数。</p>
+]]></content>
+      <categories>
+        <category>Node.js</category>
+      </categories>
+      <tags>
+        <tag>JS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>微信红包系统是如何应对高并发的</title>
+    <url>/2019/05/26/%E5%BE%AE%E4%BF%A1%E7%BA%A2%E5%8C%85%E7%B3%BB%E7%BB%9F%E6%98%AF%E5%A6%82%E4%BD%95%E5%BA%94%E5%AF%B9%E9%AB%98%E5%B9%B6%E5%8F%91%E7%9A%84/</url>
+    <content><![CDATA[<h1 id="社交软件红包技术解密-四-：微信红包系统是如何应对高并发的"><a href="#社交软件红包技术解密-四-：微信红包系统是如何应对高并发的" class="headerlink" title="社交软件红包技术解密(四)：微信红包系统是如何应对高并发的"></a>社交软件红包技术解密(四)：微信红包系统是如何应对高并发的</h1><p>本文来自微信团队工程师方乐明的技术分享，原文地址：infoq.cn&#x2F;article&#x2F;2017hongbao-weixin，感谢原作者的分享。 <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2650995437&idx=1&sn=fefff4bff3e183d656a2d242e4c0a382">点此进入原文</a>。</p>
+<h2 id="一、引言"><a href="#一、引言" class="headerlink" title="一、引言"></a>一、引言</h2><p>每年节假日，微信红包的收发数量都会暴涨，尤以除夕为最。如此大规模、高峰值的业务需要，背后需要怎样的技术支撑？百亿级别的红包规模，如何保证并发性能与资金安全？</p>
+<p>本文将为读者介绍微信百亿级别红包背后的高并发设计实践，内容包括微信红包系统的技术难点、解决高并发问题通常使用的方案，以及微信红包系统的所采用高并发解决方案。</p>
+<h2 id="二、分享者"><a href="#二、分享者" class="headerlink" title="二、分享者"></a>二、分享者</h2><p>方乐明：现任微信支付应用产品系统负责人，主要从事微信红包、微信转账、微信群收款等支付应用产品的系统设计、可用性提升、高性能解决方案设计等，曾连续多年负责春节微信红包系统的性能优化与稳定性提升，取得良好的效果。</p>
+<h2 id="三、微信红包的两大业务特点"><a href="#三、微信红包的两大业务特点" class="headerlink" title="三、微信红包的两大业务特点"></a>三、微信红包的两大业务特点</h2><p>微信红包（尤其是发在微信群里的红包，即群红包），业务形态上很类似网上的普通商品“秒杀”活动。<br> <span id="more"></span> </p>
+<h3 id="就像下面这样："><a href="#就像下面这样：" class="headerlink" title="就像下面这样："></a>就像下面这样：</h3><ul>
+<li>1）用户在微信群里发一个红包，等同于是普通商品“秒杀”活动的商品上架；</li>
+<li>2）微信群里的所有用户抢红包的动作，等同于“秒杀”活动中的查询库存；</li>
+<li>3）用户抢到红包后拆红包的动作，则对应“秒杀”活动中用户的“秒杀”动作。</li>
+</ul>
+<p>不过除了上面的相同点之外，微信红包在业务形态上与普通商品“秒杀”活动相比，还具备自身的特点。<br>首先：微信红包业务比普通商品“秒杀”有更海量的并发要求。</p>
+<p>微信红包用户在微信群里发一个红包，等同于在网上发布一次商品“秒杀”活动。假设同一时间有 10 万个群里的用户同时在发红包，那就相当于同一时间有 10 万个“秒杀”活动发布出去。10 万个微信群里的用户同时抢红包，将产生海量的并发请求。</p>
+<p>其次：微信红包业务要求更严格的安全级别。</p>
+<p>微信红包业务本质上是资金交易。微信红包是微信支付的一个商户，提供资金流转服务。</p>
+<p>用户发红包时，相当于在微信红包这个商户上使用微信支付购买一笔“钱”，并且收货地址是微信群。当用户支付成功后，红包“发货”到微信群里，群里的用户拆开红包后，微信红包提供了将“钱”转入折红包用户微信零钱的服务。</p>
+<p>资金交易业务比普通商品“秒杀”活动有更高的安全级别要求。普通的商品“秒杀”商品由商户提供，库存是商户预设的，“秒杀”时可以允许存在“超卖”（即实际被抢的商品数量比计划的库存多）、“少卖”（即实际被抢的商户数量比计划的库存少）的情况。但是对于微信红包，用户发 100 元的红包绝对不可以被拆出 101 元；用户发 100 元只被领取 99 元时，剩下的 1 元在 24 小时过期后要精确地退还给发红包用户，不能多也不能少。</p>
+<p>以上是微信红包业务模型上的两大特点。</p>
+<h2 id="四、-微信红包系统的技术难点"><a href="#四、-微信红包系统的技术难点" class="headerlink" title="四、 微信红包系统的技术难点"></a>四、 微信红包系统的技术难点</h2><p>在介绍微信红包系统的技术难点之前，先介绍下简单的、典型的商品“秒杀”系统的架构设计，如下图所示。</p>
+<img src="/2019/05/26/%E5%BE%AE%E4%BF%A1%E7%BA%A2%E5%8C%85%E7%B3%BB%E7%BB%9F%E6%98%AF%E5%A6%82%E4%BD%95%E5%BA%94%E5%AF%B9%E9%AB%98%E5%B9%B6%E5%8F%91%E7%9A%84/15588323447069/15588335587948.jpg" class="">
+
+<h3 id="该系统由接入层、逻辑服务层、存储层与缓存构成："><a href="#该系统由接入层、逻辑服务层、存储层与缓存构成：" class="headerlink" title="该系统由接入层、逻辑服务层、存储层与缓存构成："></a>该系统由接入层、逻辑服务层、存储层与缓存构成：</h3><ul>
+<li>1）Proxy 处理请求接入；</li>
+<li>2）Server 承载主要的业务逻辑；</li>
+<li>3）Cache 用于缓存库存数量；</li>
+<li>4）DB 则用于数据持久化。<br>一个“秒杀”活动，对应 DB 中的一条库存记录。当用户进行商品“秒杀”时，系统的主要逻辑在于 DB 中库存的操作上。</li>
+</ul>
+<h3 id="一般来说，对-DB-的操作流程有以下三步："><a href="#一般来说，对-DB-的操作流程有以下三步：" class="headerlink" title="一般来说，对 DB 的操作流程有以下三步："></a>一般来说，对 DB 的操作流程有以下三步：</h3><ul>
+<li>1）锁库存；</li>
+<li>2）插入“秒杀”记录；</li>
+<li>3）更新库存。<br>其中，锁库存是为了避免并发请求时出现“超卖”情况。同时要求这三步操作需要在一个事务中完成（所谓的事务，是指作为单个逻辑工作单元执行的一系列操作，要么完全地执行，要么完全地不执行）。</li>
+</ul>
+<p>“秒杀”系统的设计难点就在这个事务操作上。商品库存在 DB 中记为一行，大量用户同时“秒杀”同一商品时，第一个到达 DB 的请求锁住了这行库存记录。在第一个事务完成提交之前这个锁一直被第一个请求占用，后面的所有请求需要排队等待。同时参与“秒杀”的用户越多，并发进 DB 的请求越多，请求排队越严重。因此，并发请求抢锁，是典型的商品“秒杀”系统的设计难点。</p>
+<p>微信红包业务相比普通商品“秒杀”活动，具有海量并发、高安全级别要求的特点。</p>
+<h3 id="在微信红包系统的设计上，除了并发请求抢锁之外，还有以下两个突出难点："><a href="#在微信红包系统的设计上，除了并发请求抢锁之外，还有以下两个突出难点：" class="headerlink" title="在微信红包系统的设计上，除了并发请求抢锁之外，还有以下两个突出难点："></a>在微信红包系统的设计上，除了并发请求抢锁之外，还有以下两个突出难点：</h3><ul>
+<li>首先，事务级操作量级大：<br>上文介绍微信红包业务特点时提到，普遍情况下同时会有数以万计的微信群在发红包。这个业务特点映射到微信红包系统设计上，就是有数以万计的“并发请求抢锁”同时在进行。这使得 DB 的压力比普通单个商品“库存”被锁要大很多倍；</li>
+<li>其次，事务性要求严格：<br>微信红包系统本质上是一个资金交易系统，相比普通商品“秒杀”系统有更高的事务级别要求。</li>
+</ul>
+<h2 id="五、解决高并发问题通常使用的方案"><a href="#五、解决高并发问题通常使用的方案" class="headerlink" title="五、解决高并发问题通常使用的方案"></a>五、解决高并发问题通常使用的方案</h2><p>普通商品“秒杀”活动系统，解决高并发问题的方案，大体有以下几种。</p>
+<h3 id="5-1-方案一：使用内存操作替代实时的-DB-事务操作"><a href="#5-1-方案一：使用内存操作替代实时的-DB-事务操作" class="headerlink" title="5.1 方案一：使用内存操作替代实时的 DB 事务操作"></a>5.1 方案一：使用内存操作替代实时的 DB 事务操作</h3><p>如图 2 所示，将“实时扣库存”的行为上移到内存 Cache 中操作，内存 Cache 操作成功直接给 Server 返回成功，然后异步落 DB 持久化。</p>
+<img src="/2019/05/26/%E5%BE%AE%E4%BF%A1%E7%BA%A2%E5%8C%85%E7%B3%BB%E7%BB%9F%E6%98%AF%E5%A6%82%E4%BD%95%E5%BA%94%E5%AF%B9%E9%AB%98%E5%B9%B6%E5%8F%91%E7%9A%84/15588323447069/15588338017360.jpg" class="">
+
+<p>这个方案的优点是用内存操作替代磁盘操作，提高了并发性能。</p>
+<p>但是缺点也很明显，在内存操作成功但DB持久化失败，或者内存Cache故障的情况下，DB持久化会丢数据，不适合微信红包这种资金交易系统。</p>
+<h3 id="5-2-方案二，使用乐观锁替代悲观锁。"><a href="#5-2-方案二，使用乐观锁替代悲观锁。" class="headerlink" title="5.2 方案二，使用乐观锁替代悲观锁。"></a>5.2 方案二，使用乐观锁替代悲观锁。</h3><p>所谓悲观锁，是关系数据库管理系统里的一种并发控制的方法。它可以阻止一个事务以影响其他用户的方式来修改数据。如果一个事务执行的操作对某行数据应用了锁，那只有当这个事务把锁释放，其他事务才能够执行与该锁冲突的操作。对应于上文分析中的“并发请求抢锁”行为。</p>
+<p>所谓乐观锁，它假设多用户并发的事务在处理时不会彼此互相影响，各事务能够在不产生锁的情况下处理各自影响的那部分数据。在提交数据更新之前，每个事务会先检查在该事务读取数据后，有没有其他事务又修改了该数据。如果其他事务有更新的话，正在提交的事务会进行回滚。</p>
+<p>商品“秒杀”系统中，乐观锁的具体应用方法，是在DB的“库存”记录中维护一个版本号。在更新“库存”的操作进行前，先去DB获取当前版本号。在更新库存的事务提交时，检查该版本号是否已被其他事务修改。如果版本没被修改，则提交事务，且版本号加1；如果版本号已经被其他事务修改，则回滚事务，并给上层报错。</p>
+<p>这个方案解决了“并发请求抢锁”的问题，可以提高DB的并发处理能力。</p>
+<p>但是如果应用于微信红包系统，则会存在下面三个问题：</p>
+<ul>
+<li><p>1.如果拆红包采用乐观锁，那么在并发抢到相同版本号的拆红包请求中，只有一个能拆红包成功，其他的请求将事务回滚并返回失败，给用户报错，用户体验完全不可接受。</p>
+</li>
+<li><p>2.如果采用乐观锁，将会导致第一时间同时拆红包的用户有一部分直接返回失败，反而那些“手慢”的用户，有可能因为并发减小后拆红包成功，这会带来用户体验上的负面影响。</p>
+</li>
+<li><p>3.如果采用乐观锁的方式，会带来大数量的无效更新请求、事务回滚，给DB造成不必要的额外压力。<br>基于以上原因，微信红包系统不能采用乐观锁的方式解决并发抢锁问题。</p>
+</li>
+</ul>
+<h2 id="六、微信红包系统的高并发解决方案"><a href="#六、微信红包系统的高并发解决方案" class="headerlink" title="六、微信红包系统的高并发解决方案"></a>六、微信红包系统的高并发解决方案</h2><p>综合上面的分析，微信红包系统针对相应的技术难点，采用了下面几个方案，解决高并发问题。</p>
+<h3 id="1-系统垂直SET化，分而治之。"><a href="#1-系统垂直SET化，分而治之。" class="headerlink" title="1.系统垂直SET化，分而治之。"></a>1.系统垂直SET化，分而治之。</h3><p>微信红包用户发一个红包时，微信红包系统生成一个ID作为这个红包的唯一标识。接下来这个红包的所有发红包、抢红包、拆红包、查询红包详情等操作，都根据这个ID关联。</p>
+<p>红包系统根据这个红包ID，按一定的规则（如按ID尾号取模等），垂直上下切分。切分后，一个垂直链条上的逻辑Server服务器、DB统称为一个SET。</p>
+<p>各个SET之间相互独立，互相解耦。并且同一个红包ID的所有请求，包括发红包、抢红包、拆红包、查详情详情等，垂直stick到同一个SET内处理，高度内聚。通过这样的方式，系统将所有红包请求这个巨大的洪流分散为多股小流，互不影响，分而治之，如下图所示。</p>
+<img src="/2019/05/26/%E5%BE%AE%E4%BF%A1%E7%BA%A2%E5%8C%85%E7%B3%BB%E7%BB%9F%E6%98%AF%E5%A6%82%E4%BD%95%E5%BA%94%E5%AF%B9%E9%AB%98%E5%B9%B6%E5%8F%91%E7%9A%84/15588323447069/15588341324142.jpg" class="">
+
+<p>这个方案解决了同时存在海量事务级操作的问题，将海量化为小量。</p>
+<h3 id="2-逻辑Server层将请求排队，解决DB并发问题。"><a href="#2-逻辑Server层将请求排队，解决DB并发问题。" class="headerlink" title="2.逻辑Server层将请求排队，解决DB并发问题。"></a>2.逻辑Server层将请求排队，解决DB并发问题。</h3><p>红包系统是资金交易系统，DB操作的事务性无法避免，所以会存在“并发抢锁”问题。但是如果到达DB的事务操作（也即拆红包行为）不是并发的，而是串行的，就不会存在“并发抢锁”的问题了。</p>
+<p>按这个思路，为了使拆红包的事务操作串行地进入DB，只需要将请求在Server层以FIFO（先进先出）的方式排队，就可以达到这个效果。从而问题就集中到Server的FIFO队列设计上。</p>
+<p>微信红包系统设计了分布式的、轻巧的、灵活的FIFO队列方案。其具体实现如下：</p>
+<p>首先，将同一个红包ID的所有请求stick到同一台Server。</p>
+<p>上面SET化方案已经介绍，同个红包ID的所有请求，按红包ID stick到同个SET中。不过在同个SET中，会存在多台Server服务器同时连接同一台DB（基于容灾、性能考虑，需要多台Server互备、均衡压力）。</p>
+<p>为了使同一个红包ID的所有请求，stick到同一台Server服务器上，在SET化的设计之外，微信红包系统添加了一层基于红包ID hash值的分流，如下图所示。</p>
+<img src="/2019/05/26/%E5%BE%AE%E4%BF%A1%E7%BA%A2%E5%8C%85%E7%B3%BB%E7%BB%9F%E6%98%AF%E5%A6%82%E4%BD%95%E5%BA%94%E5%AF%B9%E9%AB%98%E5%B9%B6%E5%8F%91%E7%9A%84/15588323447069/15588341659387.jpg" class="">
+
+<p>其次，设计单机请求排队方案。</p>
+<p>将stick到同一台Server上的所有请求在被接收进程接收后，按红包ID进行排队。然后串行地进入worker进程（执行业务逻辑）进行处理，从而达到排队的效果，如下图所示。</p>
+<img src="/2019/05/26/%E5%BE%AE%E4%BF%A1%E7%BA%A2%E5%8C%85%E7%B3%BB%E7%BB%9F%E6%98%AF%E5%A6%82%E4%BD%95%E5%BA%94%E5%AF%B9%E9%AB%98%E5%B9%B6%E5%8F%91%E7%9A%84/15588323447069/15588341852755.jpg" class="">
+
+<p>最后，增加memcached控制并发。</p>
+<p>为了防止Server中的请求队列过载导致队列被降级，从而所有请求拥进DB，系统增加了与Server服务器同机部署的memcached，用于控制拆同一个红包的请求并发数。</p>
+<p>具体来说，利用memcached的CAS原子累增操作，控制同时进入DB执行拆红包事务的请求数，超过预先设定数值则直接拒绝服务。用于DB负载升高时的降级体验。</p>
+<p>通过以上三个措施，系统有效地控制了DB的“并发抢锁”情况。</p>
+<h3 id="3-双维度库表设计，保障系统性能稳定"><a href="#3-双维度库表设计，保障系统性能稳定" class="headerlink" title="3.双维度库表设计，保障系统性能稳定"></a>3.双维度库表设计，保障系统性能稳定</h3><p>红包系统的分库表规则，初期是根据红包ID的hash值分为多库多表。随着红包数据量逐渐增大，单表数据量也逐渐增加。而DB的性能与单表数据量有一定相关性。当单表数据量达到一定程度时，DB性能会有大幅度下降，影响系统性能稳定性。采用冷热分离，将历史冷数据与当前热数据分开存储，可以解决这个问题。</p>
+<p>处理微信红包数据的冷热分离时，系统在以红包ID维度分库表的基础上，增加了以循环天分表的维度，形成了双维度分库表的特色。</p>
+<p>具体来说，就是分库表规则像db_xx.t_y_dd设计，其中，xx&#x2F;y是红包ID的hash值后三位，dd的取值范围在01~31，代表一个月天数最多31天。</p>
+<p>通过这种双维度分库表方式，解决了DB单表数据量膨胀导致性能下降的问题，保障了系统性能的稳定性。同时，在热冷分离的问题上，又使得数据搬迁变得简单而优雅。</p>
+<p>综上所述，微信红包系统在解决高并发问题上的设计，主要采用了SET化分治、请求排队、双维度分库表等方案，使得单组DB的并发性能提升了8倍左右，取得了很好的效果。</p>
+<h2 id="七、最后总结"><a href="#七、最后总结" class="headerlink" title="七、最后总结"></a>七、最后总结</h2><p>微信红包系统是一个高并发的资金交易系统，最大的技术挑战是保障并发性能与资金安全。这种全新的技术挑战，传统的“秒杀”系统设计方案已不能完全解决。在分析了业界“秒杀”系统解决方案的基础上，微信红包采用了SET化、请求排队串行化、双维度分库表等设计，形成了独特的高并发、资金安全系统解决方案，并在平时节假日、2015和2016春节实践中充分证明了可行性，取得了显著的效果。在刚刚过去的2017鸡年除夕夜，微信红包收发峰值达到76万每秒，收发微信红包142亿个，微信红包系统的表现稳定，实现了除夕夜系统零故障。</p>
+]]></content>
+      <categories>
+        <category>IM</category>
+      </categories>
+      <tags>
+        <tag>IM</tag>
+        <tag>社交</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>有感并困惑</title>
+    <url>/2020/05/19/%E6%9C%89%E6%84%9F%E5%B9%B6%E5%9B%B0%E6%83%91/</url>
+    <content><![CDATA[<p>1.人怎样虐待动物，就会怎样虐待人。并不见得哪个民族是多么恶，而是集体作恶和作恶的“机遇”条件塑造的。并不见得某泱泱大国就。。。只是在某个时间某个条件下释放了人性的恶。</p>
+<p>2.万事万物的源头究竟是什么呢？意识是什么呢？<br>我相信人是精心设计出来的，地球上动植物的基因都是设计好的。</p>
+]]></content>
+      <categories>
+        <category>生活</category>
+      </categories>
+      <tags>
+        <tag>生活</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>鲁东大学毕业调查</title>
+    <url>/2020/07/19/%E9%B2%81%E4%B8%9C%E5%A4%A7%E5%AD%A6%E6%AF%95%E4%B8%9A%E8%B0%83%E6%9F%A5/</url>
+    <content><![CDATA[<img src="/2020/07/19/%E9%B2%81%E4%B8%9C%E5%A4%A7%E5%AD%A6%E6%AF%95%E4%B8%9A%E8%B0%83%E6%9F%A5/daxue1.png" class="">
+]]></content>
+      <categories>
+        <category>杂项</category>
+      </categories>
+      <tags>
+        <tag>杂项</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>零碎代码记录</title>
+    <url>/2020/04/25/%E9%9B%B6%E7%A2%8E%E4%BB%A3%E7%A0%81%E8%AE%B0%E5%BD%95/</url>
+    <content><![CDATA[<p>&#x2F;&#x2F;        [socket on:@”chat” callback:^(NSArray *dataArray, SocketAckEmitter *ackEmitter) {<br>&#x2F;&#x2F;            &#x2F;&#x2F;NSLog(@”chat dataArray:%@”,dataArray);<br>&#x2F;&#x2F;            if (dataArray.count &gt; 0) {<br>&#x2F;&#x2F;                NSString *messageStr &#x3D; dataArray.firstObject;<br>&#x2F;&#x2F;                NSString *desDeStr &#x3D; [messageStr desDecryptWithKey:deskey];<br>&#x2F;&#x2F;                if ([NSString isBlankWithStr:desDeStr]) {<br>&#x2F;&#x2F;                    NSLog(@”数据解密失败”);<br>&#x2F;&#x2F;                    return ;<br>&#x2F;&#x2F;                }<br>&#x2F;&#x2F;                NSLog(@”desDeStr:%@”,desDeStr);<br>&#x2F;&#x2F;                NSDictionary *messageDict &#x3D; [self dictionaryWithJsonString:desDeStr];<br>&#x2F;&#x2F;<br>&#x2F;&#x2F;                NSLog(@”messageDict:%@”,messageDict);<br>&#x2F;&#x2F;                NSString *msgId &#x3D; messageDict[@”msgId”];<br>&#x2F;&#x2F;                &#x2F;&#x2F;                NSLog(@”ackEmitter.expected:%d”,ackEmitter.expected);<br>&#x2F;&#x2F;                #pragma mark –19年11-19修改<br>&#x2F;&#x2F;                &#x2F;&#x2F;                NSDictionary *dic &#x3D; @{@”fromId”:[NSString acquireUserId],@”msgId”:msgId,@”msgBody”:dataArray.firstObject};<br>&#x2F;&#x2F;                                NSDictionary * dic &#x3D; [NSDictionary dictionaryWithObjectsAndKeys:[NSString acquireUserId],@”fromId”,msgId,@”msgId”,messageDict,@”msgBody”,nil];<br>&#x2F;&#x2F;                &#x2F;&#x2F;                [ackEmitter with:@[msgId]];<br>&#x2F;&#x2F;                                [ackEmitter with:@[[JSON stringWithObject:dic]]];<br>&#x2F;&#x2F;                                [weakSelf receiveSocketMessageWith:@[messageDict]];<br>&#x2F;&#x2F;<br>&#x2F;&#x2F;&#x2F;&#x2F;                NSDictionary *messageDict &#x3D; dataArray.firstObject;<br>&#x2F;&#x2F;&#x2F;&#x2F;                NSString *msgId &#x3D; messageDict[@”msgId”];<br>&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;                NSLog(@”ackEmitter.expected:%d”,ackEmitter.expected);<br>&#x2F;&#x2F;&#x2F;&#x2F;#pragma mark –19年11-19修改<br>&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;                NSDictionary *dic &#x3D; @{@”fromId”:[NSString acquireUserId],@”msgId”:msgId,@”msgBody”:dataArray.firstObject};<br>&#x2F;&#x2F;&#x2F;&#x2F;                NSDictionary * dic &#x3D; [NSDictionary dictionaryWithObjectsAndKeys:[NSString acquireUserId],@”fromId”,msgId,@”msgId”,dataArray.firstObject,@”msgBody”,nil];<br>&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;                [ackEmitter with:@[msgId]];<br>&#x2F;&#x2F;&#x2F;&#x2F;                [ackEmitter with:@[[JSON stringWithObject:dic]]];<br>&#x2F;&#x2F;&#x2F;&#x2F;                [weakSelf receiveSocketMessageWith:dataArray];<br>&#x2F;&#x2F;            }<br>&#x2F;&#x2F;        }];</p>
+]]></content>
+      <categories>
+        <category>iOS</category>
+      </categories>
+      <tags>
+        <tag>iOS</tag>
+      </tags>
+  </entry>
+</search>
