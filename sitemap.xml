@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://appservice.club/2024/11/09/Xcode16%E6%96%B0%E5%BB%BA%E9%A1%B9%E7%9B%AEpod%E6%8A%A5%E9%94%99%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/</loc>
+    
+    <lastmod>2024-11-09</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>http://appservice.club/2020/07/20/%E4%B8%BA%E4%BB%80%E4%B9%88%E8%AF%B4%E5%9F%BA%E4%BA%8ETCP%E7%9A%84%E7%A7%BB%E5%8A%A8%E7%AB%AFIM%E4%BB%8D%E7%84%B6%E9%9C%80%E8%A6%81%E5%BF%83%E8%B7%B3%E4%BF%9D%E6%B4%BB%EF%BC%9F/</loc>
     
     <lastmod>2020-07-20</lastmod>
@@ -288,13 +297,6 @@
   </url>
   
   <url>
-    <loc>http://appservice.club/tags/%E5%9B%BE%E7%89%87%E8%A3%81%E5%89%AA/</loc>
-    <lastmod>2024-11-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>http://appservice.club/tags/HiChat/</loc>
     <lastmod>2024-11-09</lastmod>
     <changefreq>weekly</changefreq>
@@ -309,7 +311,7 @@
   </url>
   
   <url>
-    <loc>http://appservice.club/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/</loc>
+    <loc>http://appservice.club/tags/%E5%9B%BE%E7%89%87%E8%A3%81%E5%89%AA/</loc>
     <lastmod>2024-11-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -317,6 +319,13 @@
   
   <url>
     <loc>http://appservice.club/tags/SAMIM/</loc>
+    <lastmod>2024-11-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://appservice.club/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/</loc>
     <lastmod>2024-11-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -421,14 +430,14 @@
   </url>
   
   <url>
-    <loc>http://appservice.club/tags/%E7%94%9F%E6%B4%BB/</loc>
+    <loc>http://appservice.club/tags/%E6%9D%82%E9%A1%B9/</loc>
     <lastmod>2024-11-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>http://appservice.club/tags/%E6%9D%82%E9%A1%B9/</loc>
+    <loc>http://appservice.club/tags/%E7%94%9F%E6%B4%BB/</loc>
     <lastmod>2024-11-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -444,13 +453,6 @@
   </url>
   
   <url>
-    <loc>http://appservice.club/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/</loc>
-    <lastmod>2024-11-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>http://appservice.club/categories/SAMIM/</loc>
     <lastmod>2024-11-09</lastmod>
     <changefreq>weekly</changefreq>
@@ -458,7 +460,7 @@
   </url>
   
   <url>
-    <loc>http://appservice.club/categories/Cocoapods/</loc>
+    <loc>http://appservice.club/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/</loc>
     <lastmod>2024-11-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -466,6 +468,13 @@
   
   <url>
     <loc>http://appservice.club/categories/iOS/HiChat/</loc>
+    <lastmod>2024-11-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://appservice.club/categories/Cocoapods/</loc>
     <lastmod>2024-11-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -521,14 +530,14 @@
   </url>
   
   <url>
-    <loc>http://appservice.club/categories/%E7%94%9F%E6%B4%BB/</loc>
+    <loc>http://appservice.club/categories/%E6%9D%82%E9%A1%B9/</loc>
     <lastmod>2024-11-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>http://appservice.club/categories/%E6%9D%82%E9%A1%B9/</loc>
+    <loc>http://appservice.club/categories/%E7%94%9F%E6%B4%BB/</loc>
     <lastmod>2024-11-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>

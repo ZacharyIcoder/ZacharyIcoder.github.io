@@ -1,23 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>IOS 将图片转化裁剪为圆形头像</title>
-    <url>/2019/06/04/IOS-%E5%B0%86%E5%9B%BE%E7%89%87%E8%BD%AC%E5%8C%96%E8%A3%81%E5%89%AA%E4%B8%BA%E5%9C%86%E5%BD%A2%E5%A4%B4%E5%83%8F/</url>
-    <content><![CDATA[<p>将图片转化裁剪为圆形的头像</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-(UIImage*) imageToHeadView:(UIImage*)image withParam:(CGFloat)inset&#123;</span><br><span class="line">  </span><br><span class="line">  //先获取大小</span><br><span class="line">  CGFloat lengthW = CGImageGetWidth(image.CGImage);</span><br><span class="line">  CGFloat lengthH = CGImageGetHeight(image.CGImage);</span><br><span class="line">  CGFloat cutSzie;</span><br><span class="line">  //判断长宽比,获得最大正方形裁剪值</span><br><span class="line">  if(lengthW&gt;= lengthH)&#123;</span><br><span class="line">      cutSzie = lengthH;</span><br><span class="line">  &#125;</span><br><span class="line">  else cutSzie = lengthW;</span><br><span class="line">  //执行裁剪(为正方形)</span><br><span class="line">  CGImageRef sourceImageRef = [image CGImage]; //将UIImage转换成CGImageRef</span><br><span class="line">  CGRect rect = CGRectMake(lengthW/2-cutSzie/2, lengthH/2 - cutSzie/2, cutSzie, cutSzie);  //构建裁剪区</span><br><span class="line">  CGImageRef newImageRef = CGImageCreateWithImageInRect(sourceImageRef, rect);    //按照给定的矩形区域进行剪裁</span><br><span class="line">  UIImage *newImage = [UIImage imageWithCGImage:newImageRef];                     //将CGImageRef转换成UIImage</span><br><span class="line">  //取圆形</span><br><span class="line">  UIGraphicsBeginImageContextWithOptions(newImage.size, NO, 0);</span><br><span class="line">  CGContextRef context = UIGraphicsGetCurrentContext();</span><br><span class="line">  CGContextSetFillColorWithColor(context, [UIColor clearColor].CGColor);</span><br><span class="line">  CGContextFillPath(context);</span><br><span class="line">  CGContextSetLineWidth(context, .5);</span><br><span class="line">  CGContextSetStrokeColorWithColor(context, [UIColor clearColor].CGColor);</span><br><span class="line">  CGRect newrect = CGRectMake(inset, inset, newImage.size.width - inset * 2.0f, newImage.size.height - inset * 2.0f);</span><br><span class="line">  CGContextAddEllipseInRect(context, newrect);</span><br><span class="line">  CGContextClip(context);</span><br><span class="line">  </span><br><span class="line">  [newImage drawInRect:newrect];</span><br><span class="line">  CGContextAddEllipseInRect(context, newrect);</span><br><span class="line">  CGContextStrokePath(context);</span><br><span class="line">  UIImage *circleImg = UIGraphicsGetImageFromCurrentImageContext();</span><br><span class="line">  UIGraphicsEndImageContext();</span><br><span class="line">  return circleImg;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>调用:</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">UIImage *img = [UIImage imageNamed:@&quot;edit_background1.jpg&quot;];</span><br><span class="line">img = [self imageToHeadView:img withParam:0];      //封装的方法,从中间裁剪为圆形,后面参数为偏移量</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>iOS</category>
-      </categories>
-      <tags>
-        <tag>iOS</tag>
-        <tag>图片裁剪</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>HiChat-iOS文档</title>
     <url>/2019/06/26/HiChat-iOS%E6%96%87%E6%A1%A3/</url>
     <content><![CDATA[<h1 id="HiChat-iOS文档"><a href="#HiChat-iOS文档" class="headerlink" title="HiChat-iOS文档"></a>HiChat-iOS文档</h1><h2 id="请求加好友消息"><a href="#请求加好友消息" class="headerlink" title="请求加好友消息"></a>请求加好友消息</h2><p>收到的消息 </p>
@@ -37,17 +20,20 @@
       </tags>
   </entry>
   <entry>
-    <title>NAT(Network Address Translation)</title>
-    <url>/2020/07/18/NAT-Network-Address-Translation/</url>
-    <content><![CDATA[<h1 id="NAT（Network-Address-Translation）"><a href="#NAT（Network-Address-Translation）" class="headerlink" title="NAT（Network Address Translation）"></a>NAT（Network Address Translation）</h1><p>   NAT（Network Address Translation，网络地址转换）是1994年提出的。当在专用网内部的一些主机本来已经分配到了本地IP地址（即仅在本专用网内使用的专用地址），但现在又想和因特网上的主机通信（并不需要加密）时，可使用NAT方法。<br>   这种方法需要在专用网连接到因特网的路由器上安装NAT软件。装有NAT软件的路由器叫做NAT路由器，它至少有一个有效的外部全球IP地址。这样，所有使用本地地址的主机在和外界通信时，都要在NAT路由器上将其本地地址转换成全球IP地址，才能和因特网连接。</p>
-<h2 id="1-NAT功能"><a href="#1-NAT功能" class="headerlink" title="1.NAT功能"></a>1.NAT功能</h2><p>   NAT不仅能解决了lP地址不足的问题，而且还能够有效地避免来自网络外部的攻击，隐藏并保护网络内部的计算机。<br>    1.宽带分享：这是 NAT 主机的最大功能。<br>    2.安全防护：NAT 之内的 PC 联机到 Internet 上面时，他所显示的 IP 是 NAT 主机的公共 IP，所以 Client 端的 PC 当然就具有一定程度的安全了，外界在进行 portscan（端口扫描） 的时候，就侦测不到源Client 端的 PC 。</p>
-<h2 id="２-NAT实现方式"><a href="#２-NAT实现方式" class="headerlink" title="２. NAT实现方式"></a>２. NAT实现方式</h2><p>   NAT的实现方式有三种，即静态转换Static Nat、动态转换Dynamic Nat和端口多路复用OverLoad。<br>   静态 转换是指将内部网络的私有IP地址转换为公有IP地址，IP地址对是一对一的，是一成不变的，某个私有IP地址只转换为某个公有IP地址。借助于静态转换，可以实现外部网络对内部网络中某些特定设备（如服务器）的访问。<br>   动态转换是指将内部网络的私有IP地址转换为公用IP地址时，IP地址是不确定的，是随机的，所有被授权访问上Internet的私有IP地址可随机转换为任何指定的合法IP地址。也就是说，只要指定哪些内部地址可以进行转换，以及用哪些合法地址作为外部地址时，就可以进行动态转换。动态转换可以使用多个合法外部地址集。当ISP提供的合法IP地址略少于网络内部的计算机数量时。可以采用动态转换的方式。<br>   端口多路复用（ Port address Translation,PAT)是指改变外出数据包的源端口并进行端口转换，即端口地址转换（PAT，Port Address Translation).采用端口多路复用方式。内部网络的所有主机均可共享一个合法外部IP地址实现对Internet的访问，从而可以最大限度地节约IP地址资源。同时，又可隐藏网络内部的所有主机，有效避免来自internet的攻击。因此，目前网络中应用最多的就是端口多路复用方式。</p>
+    <title>IOS 将图片转化裁剪为圆形头像</title>
+    <url>/2019/06/04/IOS-%E5%B0%86%E5%9B%BE%E7%89%87%E8%BD%AC%E5%8C%96%E8%A3%81%E5%89%AA%E4%B8%BA%E5%9C%86%E5%BD%A2%E5%A4%B4%E5%83%8F/</url>
+    <content><![CDATA[<p>将图片转化裁剪为圆形的头像</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-(UIImage*) imageToHeadView:(UIImage*)image withParam:(CGFloat)inset&#123;</span><br><span class="line">  </span><br><span class="line">  //先获取大小</span><br><span class="line">  CGFloat lengthW = CGImageGetWidth(image.CGImage);</span><br><span class="line">  CGFloat lengthH = CGImageGetHeight(image.CGImage);</span><br><span class="line">  CGFloat cutSzie;</span><br><span class="line">  //判断长宽比,获得最大正方形裁剪值</span><br><span class="line">  if(lengthW&gt;= lengthH)&#123;</span><br><span class="line">      cutSzie = lengthH;</span><br><span class="line">  &#125;</span><br><span class="line">  else cutSzie = lengthW;</span><br><span class="line">  //执行裁剪(为正方形)</span><br><span class="line">  CGImageRef sourceImageRef = [image CGImage]; //将UIImage转换成CGImageRef</span><br><span class="line">  CGRect rect = CGRectMake(lengthW/2-cutSzie/2, lengthH/2 - cutSzie/2, cutSzie, cutSzie);  //构建裁剪区</span><br><span class="line">  CGImageRef newImageRef = CGImageCreateWithImageInRect(sourceImageRef, rect);    //按照给定的矩形区域进行剪裁</span><br><span class="line">  UIImage *newImage = [UIImage imageWithCGImage:newImageRef];                     //将CGImageRef转换成UIImage</span><br><span class="line">  //取圆形</span><br><span class="line">  UIGraphicsBeginImageContextWithOptions(newImage.size, NO, 0);</span><br><span class="line">  CGContextRef context = UIGraphicsGetCurrentContext();</span><br><span class="line">  CGContextSetFillColorWithColor(context, [UIColor clearColor].CGColor);</span><br><span class="line">  CGContextFillPath(context);</span><br><span class="line">  CGContextSetLineWidth(context, .5);</span><br><span class="line">  CGContextSetStrokeColorWithColor(context, [UIColor clearColor].CGColor);</span><br><span class="line">  CGRect newrect = CGRectMake(inset, inset, newImage.size.width - inset * 2.0f, newImage.size.height - inset * 2.0f);</span><br><span class="line">  CGContextAddEllipseInRect(context, newrect);</span><br><span class="line">  CGContextClip(context);</span><br><span class="line">  </span><br><span class="line">  [newImage drawInRect:newrect];</span><br><span class="line">  CGContextAddEllipseInRect(context, newrect);</span><br><span class="line">  CGContextStrokePath(context);</span><br><span class="line">  UIImage *circleImg = UIGraphicsGetImageFromCurrentImageContext();</span><br><span class="line">  UIGraphicsEndImageContext();</span><br><span class="line">  return circleImg;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>调用:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">UIImage *img = [UIImage imageNamed:@&quot;edit_background1.jpg&quot;];</span><br><span class="line">img = [self imageToHeadView:img withParam:0];      //封装的方法,从中间裁剪为圆形,后面参数为偏移量</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
-        <category>计算机网络</category>
+        <category>iOS</category>
       </categories>
       <tags>
-        <tag>计算机网络</tag>
+        <tag>iOS</tag>
+        <tag>图片裁剪</tag>
       </tags>
   </entry>
   <entry>
@@ -86,22 +72,17 @@
       </tags>
   </entry>
   <entry>
-    <title>Cocoapods 遇到You don&#39;t have write permissions for the /usr/bin directory.</title>
-    <url>/2019/05/31/cocoapods-problem/</url>
-    <content><![CDATA[<h1 id="Cocoapods-遇到You-don’t-have-write-permissions-for-the-usr-bin-directory"><a href="#Cocoapods-遇到You-don’t-have-write-permissions-for-the-usr-bin-directory" class="headerlink" title="Cocoapods 遇到You don’t have write permissions for the &#x2F;usr&#x2F;bin directory."></a>Cocoapods 遇到You don’t have write permissions for the &#x2F;usr&#x2F;bin directory.</h1><p>安装cocoapods时候</p>
-<p>命令 sudo gem install cocopods</p>
-<p>提示</p>
-<p>tiantaodeMacBook-Pro:~ tiantao$ sudo gem install cocoapods</p>
-<p>ERROR: While executing gem … (Gem::FilePermissionError)</p>
-<p>You don’t have write permissions for the &#x2F;usr&#x2F;bin directory.</p>
-<p>解决方案 有人说 前面加sudo 明明已经加了 是无写入到&#x2F;usr&#x2F;bin directory 权限</p>
-<p>执行此命令即可</p>
-<h1 id="sudo-gem-install-cocoapods-n-usr-local-bin"><a href="#sudo-gem-install-cocoapods-n-usr-local-bin" class="headerlink" title="sudo gem install cocoapods -n &#x2F;usr&#x2F;local&#x2F;bin"></a>sudo gem install cocoapods -n &#x2F;usr&#x2F;local&#x2F;bin</h1>]]></content>
+    <title>NAT(Network Address Translation)</title>
+    <url>/2020/07/18/NAT-Network-Address-Translation/</url>
+    <content><![CDATA[<h1 id="NAT（Network-Address-Translation）"><a href="#NAT（Network-Address-Translation）" class="headerlink" title="NAT（Network Address Translation）"></a>NAT（Network Address Translation）</h1><p>   NAT（Network Address Translation，网络地址转换）是1994年提出的。当在专用网内部的一些主机本来已经分配到了本地IP地址（即仅在本专用网内使用的专用地址），但现在又想和因特网上的主机通信（并不需要加密）时，可使用NAT方法。<br>   这种方法需要在专用网连接到因特网的路由器上安装NAT软件。装有NAT软件的路由器叫做NAT路由器，它至少有一个有效的外部全球IP地址。这样，所有使用本地地址的主机在和外界通信时，都要在NAT路由器上将其本地地址转换成全球IP地址，才能和因特网连接。</p>
+<h2 id="1-NAT功能"><a href="#1-NAT功能" class="headerlink" title="1.NAT功能"></a>1.NAT功能</h2><p>   NAT不仅能解决了lP地址不足的问题，而且还能够有效地避免来自网络外部的攻击，隐藏并保护网络内部的计算机。<br>    1.宽带分享：这是 NAT 主机的最大功能。<br>    2.安全防护：NAT 之内的 PC 联机到 Internet 上面时，他所显示的 IP 是 NAT 主机的公共 IP，所以 Client 端的 PC 当然就具有一定程度的安全了，外界在进行 portscan（端口扫描） 的时候，就侦测不到源Client 端的 PC 。</p>
+<h2 id="２-NAT实现方式"><a href="#２-NAT实现方式" class="headerlink" title="２. NAT实现方式"></a>２. NAT实现方式</h2><p>   NAT的实现方式有三种，即静态转换Static Nat、动态转换Dynamic Nat和端口多路复用OverLoad。<br>   静态 转换是指将内部网络的私有IP地址转换为公有IP地址，IP地址对是一对一的，是一成不变的，某个私有IP地址只转换为某个公有IP地址。借助于静态转换，可以实现外部网络对内部网络中某些特定设备（如服务器）的访问。<br>   动态转换是指将内部网络的私有IP地址转换为公用IP地址时，IP地址是不确定的，是随机的，所有被授权访问上Internet的私有IP地址可随机转换为任何指定的合法IP地址。也就是说，只要指定哪些内部地址可以进行转换，以及用哪些合法地址作为外部地址时，就可以进行动态转换。动态转换可以使用多个合法外部地址集。当ISP提供的合法IP地址略少于网络内部的计算机数量时。可以采用动态转换的方式。<br>   端口多路复用（ Port address Translation,PAT)是指改变外出数据包的源端口并进行端口转换，即端口地址转换（PAT，Port Address Translation).采用端口多路复用方式。内部网络的所有主机均可共享一个合法外部IP地址实现对Internet的访问，从而可以最大限度地节约IP地址资源。同时，又可隐藏网络内部的所有主机，有效避免来自internet的攻击。因此，目前网络中应用最多的就是端口多路复用方式。</p>
+]]></content>
       <categories>
-        <category>Cocoapods</category>
+        <category>计算机网络</category>
       </categories>
       <tags>
-        <tag>permissions</tag>
+        <tag>计算机网络</tag>
       </tags>
   </entry>
   <entry>
@@ -219,6 +200,51 @@
       </tags>
   </entry>
   <entry>
+    <title>Cocoapods 遇到You don&#39;t have write permissions for the /usr/bin directory.</title>
+    <url>/2019/05/31/cocoapods-problem/</url>
+    <content><![CDATA[<h1 id="Cocoapods-遇到You-don’t-have-write-permissions-for-the-usr-bin-directory"><a href="#Cocoapods-遇到You-don’t-have-write-permissions-for-the-usr-bin-directory" class="headerlink" title="Cocoapods 遇到You don’t have write permissions for the &#x2F;usr&#x2F;bin directory."></a>Cocoapods 遇到You don’t have write permissions for the &#x2F;usr&#x2F;bin directory.</h1><p>安装cocoapods时候</p>
+<p>命令 sudo gem install cocopods</p>
+<p>提示</p>
+<p>tiantaodeMacBook-Pro:~ tiantao$ sudo gem install cocoapods</p>
+<p>ERROR: While executing gem … (Gem::FilePermissionError)</p>
+<p>You don’t have write permissions for the &#x2F;usr&#x2F;bin directory.</p>
+<p>解决方案 有人说 前面加sudo 明明已经加了 是无写入到&#x2F;usr&#x2F;bin directory 权限</p>
+<p>执行此命令即可</p>
+<h1 id="sudo-gem-install-cocoapods-n-usr-local-bin"><a href="#sudo-gem-install-cocoapods-n-usr-local-bin" class="headerlink" title="sudo gem install cocoapods -n &#x2F;usr&#x2F;local&#x2F;bin"></a>sudo gem install cocoapods -n &#x2F;usr&#x2F;local&#x2F;bin</h1>]]></content>
+      <categories>
+        <category>Cocoapods</category>
+      </categories>
+      <tags>
+        <tag>permissions</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Xcode16新建项目pod报错问题记录</title>
+    <url>/2024/11/09/Xcode16%E6%96%B0%E5%BB%BA%E9%A1%B9%E7%9B%AEpod%E6%8A%A5%E9%94%99%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/</url>
+    <content><![CDATA[<p>Pod修改为清华源 <code>source &#39;https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git&#39;</code></p>
+<p>参见 <a href="https://mirrors.tuna.tsinghua.edu.cn/">清华大学开源软件镜像站</a></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2019/05/29/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+ <span id="more"></span> 
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/deployment.html">Deployment</a></p>
+]]></content>
+  </entry>
+  <entry>
     <title>iOS逆向工程 - fishhook原理</title>
     <url>/2019/05/27/fishhook%E5%8E%9F%E7%90%86/</url>
     <content><![CDATA[<h1 id="iOS逆向工程-fishhook原理"><a href="#iOS逆向工程-fishhook原理" class="headerlink" title="iOS逆向工程 - fishhook原理"></a>iOS逆向工程 - fishhook原理</h1><p> fishhook是Facebook提供的一个动态修改链接mach-O文件的工具。利用MachO文件加载原理，通过修改懒加载和非懒加载两个表的指针达到C函数HOOK的目的。</p>
@@ -300,25 +326,6 @@ nslogBind.replaced = (void *)&amp;old_nslog;
         <tag>fishhook</tag>
         <tag>逆向</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>Hello World</title>
-    <url>/2019/05/29/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
- <span id="more"></span> 
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/deployment.html">Deployment</a></p>
-]]></content>
   </entry>
   <entry>
     <title>iOS 制作自己的Framework（引入第三方库）</title>
@@ -673,21 +680,6 @@ nslogBind.replaced = (void *)&amp;old_nslog;
       </tags>
   </entry>
   <entry>
-    <title>凡凡添加好友流程</title>
-    <url>/2020/06/15/%E5%87%A1%E5%87%A1%E6%B7%BB%E5%8A%A0%E5%A5%BD%E5%8F%8B%E6%B5%81%E7%A8%8B/</url>
-    <content><![CDATA[<p>1.进入通讯录-添加朋友界面，输入手机号搜索用户信息。<br>2.搜索到调用接口发送添加好友信息。</p>
-<p>20200616<br>凡凡<br>1.消息下滑到顶部时自动拉取上一页信息显示添加。<br>2.时间戳显示添加，全局配置时间戳显示时间间隔。（删除和插入消息的时间戳显示进行中）<br>3.选择联系人界面添加。<br>4.添加创建群组接口，群管理类封装创建群接口。（后台暂未返回群ID）<br>5.添加查询用户群列表接口（后台返回结果暂时是空）</p>
-<p>20200617<br>凡凡<br>1.发送消息插入时间戳显示逻辑优化。<br>2.发送消息生成消息ID的唯一标识符方法修改。<br>3.发送图片消息的构造方法修改，用消息ID+文件名构造消息一一对应的缓存文件，方便消息的缓存管理。<br>4.压缩图片获取缩略图的资源文件管理方法修改。<br>5.音频和视频消息构造和缓存处理方法修改，用消息ID+文件名构造消息一一对应的缓存文件（进行中）<br>Online<br>1.iOS13.5通知收不到处理，通知设置更新。</p>
-<p>filePath &#x3D; [SIMFileLocationHelper filepathForAudio:audioObject.path];</p>
-]]></content>
-      <categories>
-        <category>iOS</category>
-      </categories>
-      <tags>
-        <tag>iOS</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>为什么说基于TCP的移动端IM仍然需要心跳保活？ </title>
     <url>/2020/07/20/%E4%B8%BA%E4%BB%80%E4%B9%88%E8%AF%B4%E5%9F%BA%E4%BA%8ETCP%E7%9A%84%E7%A7%BB%E5%8A%A8%E7%AB%AFIM%E4%BB%8D%E7%84%B6%E9%9C%80%E8%A6%81%E5%BF%83%E8%B7%B3%E4%BF%9D%E6%B4%BB%EF%BC%9F/</url>
     <content><![CDATA[<h1 id="为什么说基于TCP的移动端IM仍然需要心跳保活？"><a href="#为什么说基于TCP的移动端IM仍然需要心跳保活？" class="headerlink" title="为什么说基于TCP的移动端IM仍然需要心跳保活？"></a>为什么说基于TCP的移动端IM仍然需要心跳保活？</h1><p>(转自 <a href="http://www.52im.net/thread-281-1-1.html">http://www.52im.net/thread-281-1-1.html</a>)</p>
@@ -709,6 +701,21 @@ nslogBind.replaced = (void *)&amp;old_nslog;
 <p>最简单粗暴做法当然是定时心跳，如每隔 30 秒心跳一次，15 秒内没有收到心跳回包则认为当前连接已失效，断开连接并进行重连。这种做法最直接，实现也简单。唯一的问题是比较耗电和耗流量。以一个协议包 5 个字节计算，一天收发 2880 个心跳包，一个月就是 5 * 2 * 2880 * 30 &#x3D; 0.8 M 的流量，如果手机上多装几个 IM 软件，每个月光心跳就好几兆流量没了，更不用说频繁的心跳带来的电量损耗。</p>
 <p>既然频繁心跳会带来耗电和耗流量的弊端，改进的方向自然是减少心跳频率，但也不能过于影响连接检测的实时性。基于这个需求，一般可以将心跳间隔根据程序状态进行调整，当程序在后台时(这里主要考虑安卓)，尽量拉长心跳间隔，5 分钟、甚至 10 分钟都可以。</p>
 <p>而当 App 在前台时则按照原来规则操作。连接可靠性的判断也可以放宽，避免一次心跳超时就认为连接无效的情况，使用错误积累，只在心跳超时 n 次后才判定当前连接不可用。当然还有一些小 trick 比如从收到的最后一个指令包进行心跳包周期计时而不是固定时间，这样也能够一定程度减少心跳次数。</p>
+]]></content>
+      <categories>
+        <category>iOS</category>
+      </categories>
+      <tags>
+        <tag>iOS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>凡凡添加好友流程</title>
+    <url>/2020/06/15/%E5%87%A1%E5%87%A1%E6%B7%BB%E5%8A%A0%E5%A5%BD%E5%8F%8B%E6%B5%81%E7%A8%8B/</url>
+    <content><![CDATA[<p>1.进入通讯录-添加朋友界面，输入手机号搜索用户信息。<br>2.搜索到调用接口发送添加好友信息。</p>
+<p>20200616<br>凡凡<br>1.消息下滑到顶部时自动拉取上一页信息显示添加。<br>2.时间戳显示添加，全局配置时间戳显示时间间隔。（删除和插入消息的时间戳显示进行中）<br>3.选择联系人界面添加。<br>4.添加创建群组接口，群管理类封装创建群接口。（后台暂未返回群ID）<br>5.添加查询用户群列表接口（后台返回结果暂时是空）</p>
+<p>20200617<br>凡凡<br>1.发送消息插入时间戳显示逻辑优化。<br>2.发送消息生成消息ID的唯一标识符方法修改。<br>3.发送图片消息的构造方法修改，用消息ID+文件名构造消息一一对应的缓存文件，方便消息的缓存管理。<br>4.压缩图片获取缩略图的资源文件管理方法修改。<br>5.音频和视频消息构造和缓存处理方法修改，用消息ID+文件名构造消息一一对应的缓存文件（进行中）<br>Online<br>1.iOS13.5通知收不到处理，通知设置更新。</p>
+<p>filePath &#x3D; [SIMFileLocationHelper filepathForAudio:audioObject.path];</p>
 ]]></content>
       <categories>
         <category>iOS</category>
@@ -875,16 +882,15 @@ nslogBind.replaced = (void *)&amp;old_nslog;
       </tags>
   </entry>
   <entry>
-    <title>有感并困惑</title>
-    <url>/2020/05/19/%E6%9C%89%E6%84%9F%E5%B9%B6%E5%9B%B0%E6%83%91/</url>
-    <content><![CDATA[<p>1.人怎样虐待动物，就会怎样虐待人。并不见得哪个民族是多么恶，而是集体作恶和作恶的“机遇”条件塑造的。并不见得某泱泱大国就。。。只是在某个时间某个条件下释放了人性的恶。</p>
-<p>2.万事万物的源头究竟是什么呢？意识是什么呢？<br>我相信人是精心设计出来的，地球上动植物的基因都是设计好的。</p>
+    <title>零碎代码记录</title>
+    <url>/2020/04/25/%E9%9B%B6%E7%A2%8E%E4%BB%A3%E7%A0%81%E8%AE%B0%E5%BD%95/</url>
+    <content><![CDATA[<p>&#x2F;&#x2F;        [socket on:@”chat” callback:^(NSArray *dataArray, SocketAckEmitter *ackEmitter) {<br>&#x2F;&#x2F;            &#x2F;&#x2F;NSLog(@”chat dataArray:%@”,dataArray);<br>&#x2F;&#x2F;            if (dataArray.count &gt; 0) {<br>&#x2F;&#x2F;                NSString *messageStr &#x3D; dataArray.firstObject;<br>&#x2F;&#x2F;                NSString *desDeStr &#x3D; [messageStr desDecryptWithKey:deskey];<br>&#x2F;&#x2F;                if ([NSString isBlankWithStr:desDeStr]) {<br>&#x2F;&#x2F;                    NSLog(@”数据解密失败”);<br>&#x2F;&#x2F;                    return ;<br>&#x2F;&#x2F;                }<br>&#x2F;&#x2F;                NSLog(@”desDeStr:%@”,desDeStr);<br>&#x2F;&#x2F;                NSDictionary *messageDict &#x3D; [self dictionaryWithJsonString:desDeStr];<br>&#x2F;&#x2F;<br>&#x2F;&#x2F;                NSLog(@”messageDict:%@”,messageDict);<br>&#x2F;&#x2F;                NSString *msgId &#x3D; messageDict[@”msgId”];<br>&#x2F;&#x2F;                &#x2F;&#x2F;                NSLog(@”ackEmitter.expected:%d”,ackEmitter.expected);<br>&#x2F;&#x2F;                #pragma mark –19年11-19修改<br>&#x2F;&#x2F;                &#x2F;&#x2F;                NSDictionary *dic &#x3D; @{@”fromId”:[NSString acquireUserId],@”msgId”:msgId,@”msgBody”:dataArray.firstObject};<br>&#x2F;&#x2F;                                NSDictionary * dic &#x3D; [NSDictionary dictionaryWithObjectsAndKeys:[NSString acquireUserId],@”fromId”,msgId,@”msgId”,messageDict,@”msgBody”,nil];<br>&#x2F;&#x2F;                &#x2F;&#x2F;                [ackEmitter with:@[msgId]];<br>&#x2F;&#x2F;                                [ackEmitter with:@[[JSON stringWithObject:dic]]];<br>&#x2F;&#x2F;                                [weakSelf receiveSocketMessageWith:@[messageDict]];<br>&#x2F;&#x2F;<br>&#x2F;&#x2F;&#x2F;&#x2F;                NSDictionary *messageDict &#x3D; dataArray.firstObject;<br>&#x2F;&#x2F;&#x2F;&#x2F;                NSString *msgId &#x3D; messageDict[@”msgId”];<br>&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;                NSLog(@”ackEmitter.expected:%d”,ackEmitter.expected);<br>&#x2F;&#x2F;&#x2F;&#x2F;#pragma mark –19年11-19修改<br>&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;                NSDictionary *dic &#x3D; @{@”fromId”:[NSString acquireUserId],@”msgId”:msgId,@”msgBody”:dataArray.firstObject};<br>&#x2F;&#x2F;&#x2F;&#x2F;                NSDictionary * dic &#x3D; [NSDictionary dictionaryWithObjectsAndKeys:[NSString acquireUserId],@”fromId”,msgId,@”msgId”,dataArray.firstObject,@”msgBody”,nil];<br>&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;                [ackEmitter with:@[msgId]];<br>&#x2F;&#x2F;&#x2F;&#x2F;                [ackEmitter with:@[[JSON stringWithObject:dic]]];<br>&#x2F;&#x2F;&#x2F;&#x2F;                [weakSelf receiveSocketMessageWith:dataArray];<br>&#x2F;&#x2F;            }<br>&#x2F;&#x2F;        }];</p>
 ]]></content>
       <categories>
-        <category>生活</category>
+        <category>iOS</category>
       </categories>
       <tags>
-        <tag>生活</tag>
+        <tag>iOS</tag>
       </tags>
   </entry>
   <entry>
@@ -900,15 +906,16 @@ nslogBind.replaced = (void *)&amp;old_nslog;
       </tags>
   </entry>
   <entry>
-    <title>零碎代码记录</title>
-    <url>/2020/04/25/%E9%9B%B6%E7%A2%8E%E4%BB%A3%E7%A0%81%E8%AE%B0%E5%BD%95/</url>
-    <content><![CDATA[<p>&#x2F;&#x2F;        [socket on:@”chat” callback:^(NSArray *dataArray, SocketAckEmitter *ackEmitter) {<br>&#x2F;&#x2F;            &#x2F;&#x2F;NSLog(@”chat dataArray:%@”,dataArray);<br>&#x2F;&#x2F;            if (dataArray.count &gt; 0) {<br>&#x2F;&#x2F;                NSString *messageStr &#x3D; dataArray.firstObject;<br>&#x2F;&#x2F;                NSString *desDeStr &#x3D; [messageStr desDecryptWithKey:deskey];<br>&#x2F;&#x2F;                if ([NSString isBlankWithStr:desDeStr]) {<br>&#x2F;&#x2F;                    NSLog(@”数据解密失败”);<br>&#x2F;&#x2F;                    return ;<br>&#x2F;&#x2F;                }<br>&#x2F;&#x2F;                NSLog(@”desDeStr:%@”,desDeStr);<br>&#x2F;&#x2F;                NSDictionary *messageDict &#x3D; [self dictionaryWithJsonString:desDeStr];<br>&#x2F;&#x2F;<br>&#x2F;&#x2F;                NSLog(@”messageDict:%@”,messageDict);<br>&#x2F;&#x2F;                NSString *msgId &#x3D; messageDict[@”msgId”];<br>&#x2F;&#x2F;                &#x2F;&#x2F;                NSLog(@”ackEmitter.expected:%d”,ackEmitter.expected);<br>&#x2F;&#x2F;                #pragma mark –19年11-19修改<br>&#x2F;&#x2F;                &#x2F;&#x2F;                NSDictionary *dic &#x3D; @{@”fromId”:[NSString acquireUserId],@”msgId”:msgId,@”msgBody”:dataArray.firstObject};<br>&#x2F;&#x2F;                                NSDictionary * dic &#x3D; [NSDictionary dictionaryWithObjectsAndKeys:[NSString acquireUserId],@”fromId”,msgId,@”msgId”,messageDict,@”msgBody”,nil];<br>&#x2F;&#x2F;                &#x2F;&#x2F;                [ackEmitter with:@[msgId]];<br>&#x2F;&#x2F;                                [ackEmitter with:@[[JSON stringWithObject:dic]]];<br>&#x2F;&#x2F;                                [weakSelf receiveSocketMessageWith:@[messageDict]];<br>&#x2F;&#x2F;<br>&#x2F;&#x2F;&#x2F;&#x2F;                NSDictionary *messageDict &#x3D; dataArray.firstObject;<br>&#x2F;&#x2F;&#x2F;&#x2F;                NSString *msgId &#x3D; messageDict[@”msgId”];<br>&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;                NSLog(@”ackEmitter.expected:%d”,ackEmitter.expected);<br>&#x2F;&#x2F;&#x2F;&#x2F;#pragma mark –19年11-19修改<br>&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;                NSDictionary *dic &#x3D; @{@”fromId”:[NSString acquireUserId],@”msgId”:msgId,@”msgBody”:dataArray.firstObject};<br>&#x2F;&#x2F;&#x2F;&#x2F;                NSDictionary * dic &#x3D; [NSDictionary dictionaryWithObjectsAndKeys:[NSString acquireUserId],@”fromId”,msgId,@”msgId”,dataArray.firstObject,@”msgBody”,nil];<br>&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;                [ackEmitter with:@[msgId]];<br>&#x2F;&#x2F;&#x2F;&#x2F;                [ackEmitter with:@[[JSON stringWithObject:dic]]];<br>&#x2F;&#x2F;&#x2F;&#x2F;                [weakSelf receiveSocketMessageWith:dataArray];<br>&#x2F;&#x2F;            }<br>&#x2F;&#x2F;        }];</p>
+    <title>有感并困惑</title>
+    <url>/2020/05/19/%E6%9C%89%E6%84%9F%E5%B9%B6%E5%9B%B0%E6%83%91/</url>
+    <content><![CDATA[<p>1.人怎样虐待动物，就会怎样虐待人。并不见得哪个民族是多么恶，而是集体作恶和作恶的“机遇”条件塑造的。并不见得某泱泱大国就。。。只是在某个时间某个条件下释放了人性的恶。</p>
+<p>2.万事万物的源头究竟是什么呢？意识是什么呢？<br>我相信人是精心设计出来的，地球上动植物的基因都是设计好的。</p>
 ]]></content>
       <categories>
-        <category>iOS</category>
+        <category>生活</category>
       </categories>
       <tags>
-        <tag>iOS</tag>
+        <tag>生活</tag>
       </tags>
   </entry>
 </search>

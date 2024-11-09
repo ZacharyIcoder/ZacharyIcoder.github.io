@@ -149,6 +149,74 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://appservice.club/2020/04/25/%E9%9B%B6%E7%A2%8E%E4%BB%A3%E7%A0%81%E8%AE%B0%E5%BD%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ZacharyIcoderKong">
+      <meta itemprop="description" content="一切有为法，如梦幻泡影，如露亦如电，应作如是观。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="梦幻泡影">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/04/25/%E9%9B%B6%E7%A2%8E%E4%BB%A3%E7%A0%81%E8%AE%B0%E5%BD%95/" class="post-title-link" itemprop="url">零碎代码记录</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-04-25 18:07:17 / 修改时间：18:08:44" itemprop="dateCreated datePublished" datetime="2020-04-25T18:07:17+08:00">2020-04-25</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/iOS/" itemprop="url" rel="index"><span itemprop="name">iOS</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>&#x2F;&#x2F;        [socket on:@”chat” callback:^(NSArray *dataArray, SocketAckEmitter *ackEmitter) {<br>&#x2F;&#x2F;            &#x2F;&#x2F;NSLog(@”chat dataArray:%@”,dataArray);<br>&#x2F;&#x2F;            if (dataArray.count &gt; 0) {<br>&#x2F;&#x2F;                NSString *messageStr &#x3D; dataArray.firstObject;<br>&#x2F;&#x2F;                NSString *desDeStr &#x3D; [messageStr desDecryptWithKey:deskey];<br>&#x2F;&#x2F;                if ([NSString isBlankWithStr:desDeStr]) {<br>&#x2F;&#x2F;                    NSLog(@”数据解密失败”);<br>&#x2F;&#x2F;                    return ;<br>&#x2F;&#x2F;                }<br>&#x2F;&#x2F;                NSLog(@”desDeStr:%@”,desDeStr);<br>&#x2F;&#x2F;                NSDictionary *messageDict &#x3D; [self dictionaryWithJsonString:desDeStr];<br>&#x2F;&#x2F;<br>&#x2F;&#x2F;                NSLog(@”messageDict:%@”,messageDict);<br>&#x2F;&#x2F;                NSString *msgId &#x3D; messageDict[@”msgId”];<br>&#x2F;&#x2F;                &#x2F;&#x2F;                NSLog(@”ackEmitter.expected:%d”,ackEmitter.expected);<br>&#x2F;&#x2F;                #pragma mark –19年11-19修改<br>&#x2F;&#x2F;                &#x2F;&#x2F;                NSDictionary *dic &#x3D; @{@”fromId”:[NSString acquireUserId],@”msgId”:msgId,@”msgBody”:dataArray.firstObject};<br>&#x2F;&#x2F;                                NSDictionary * dic &#x3D; [NSDictionary dictionaryWithObjectsAndKeys:[NSString acquireUserId],@”fromId”,msgId,@”msgId”,messageDict,@”msgBody”,nil];<br>&#x2F;&#x2F;                &#x2F;&#x2F;                [ackEmitter with:@[msgId]];<br>&#x2F;&#x2F;                                [ackEmitter with:@[[JSON stringWithObject:dic]]];<br>&#x2F;&#x2F;                                [weakSelf receiveSocketMessageWith:@[messageDict]];<br>&#x2F;&#x2F;<br>&#x2F;&#x2F;&#x2F;&#x2F;                NSDictionary *messageDict &#x3D; dataArray.firstObject;<br>&#x2F;&#x2F;&#x2F;&#x2F;                NSString *msgId &#x3D; messageDict[@”msgId”];<br>&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;                NSLog(@”ackEmitter.expected:%d”,ackEmitter.expected);<br>&#x2F;&#x2F;&#x2F;&#x2F;#pragma mark –19年11-19修改<br>&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;                NSDictionary *dic &#x3D; @{@”fromId”:[NSString acquireUserId],@”msgId”:msgId,@”msgBody”:dataArray.firstObject};<br>&#x2F;&#x2F;&#x2F;&#x2F;                NSDictionary * dic &#x3D; [NSDictionary dictionaryWithObjectsAndKeys:[NSString acquireUserId],@”fromId”,msgId,@”msgId”,dataArray.firstObject,@”msgBody”,nil];<br>&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;                [ackEmitter with:@[msgId]];<br>&#x2F;&#x2F;&#x2F;&#x2F;                [ackEmitter with:@[[JSON stringWithObject:dic]]];<br>&#x2F;&#x2F;&#x2F;&#x2F;                [weakSelf receiveSocketMessageWith:dataArray];<br>&#x2F;&#x2F;            }<br>&#x2F;&#x2F;        }];</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://appservice.club/2020/04/24/iOS-%E5%88%B6%E4%BD%9C%E8%87%AA%E5%B7%B1%E7%9A%84Framework%EF%BC%88%E5%BC%95%E5%85%A5%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -884,86 +952,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://appservice.club/2019/06/04/%E5%BD%BB%E5%BA%95%E7%90%86%E8%A7%A3JS%E4%B8%AD%E7%9A%84%E5%9B%9E%E8%B0%83-Callback-%E5%87%BD%E6%95%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="ZacharyIcoderKong">
-      <meta itemprop="description" content="一切有为法，如梦幻泡影，如露亦如电，应作如是观。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="梦幻泡影">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/06/04/%E5%BD%BB%E5%BA%95%E7%90%86%E8%A7%A3JS%E4%B8%AD%E7%9A%84%E5%9B%9E%E8%B0%83-Callback-%E5%87%BD%E6%95%B0/" class="post-title-link" itemprop="url">彻底理解JS中的回调(Callback)函数</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2019-06-04 08:51:26 / 修改时间：08:56:05" itemprop="dateCreated datePublished" datetime="2019-06-04T08:51:26+08:00">2019-06-04</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Node-js/" itemprop="url" rel="index"><span itemprop="name">Node.js</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>作为JS的核心，回调函数和异步执行是紧密相关的，也是必须跨过去的一道个门槛。</p>
-<p>那么究竟什么是回调函数(Callback)，网上有许多的文章，这些文章大概分成两类，第一类术语太多，看不懂。另一类反过来，太过于生活化，讲的是一些脱离编程的例子，还是看的人晕头转向。<br>其实回调函数并不复杂，明白两个重点即可：</p>
-<h1 id="1-函数可以作为一个参数在另一个函数中被调用"><a href="#1-函数可以作为一个参数在另一个函数中被调用" class="headerlink" title="1. 函数可以作为一个参数在另一个函数中被调用"></a>1. 函数可以作为一个参数在另一个函数中被调用</h1><h1 id="2-大多数语言都是同步编程语言，比如现在我们有3行代码，那么系统一定是一行一行按顺序向下执行的，第一行执行完了，执行第二行，紧跟着最后执行第三行，你可能会说这不是废话吗？且慢，在JS里则不尽然，比如有3行代码，并不是排在最前面的代码就是最先执行完毕的，很有可能是最后一行语句最先执行完，然后排在最前面的那行反而是最后执行完毕的，所以我们说JS是异步编程语言。"><a href="#2-大多数语言都是同步编程语言，比如现在我们有3行代码，那么系统一定是一行一行按顺序向下执行的，第一行执行完了，执行第二行，紧跟着最后执行第三行，你可能会说这不是废话吗？且慢，在JS里则不尽然，比如有3行代码，并不是排在最前面的代码就是最先执行完毕的，很有可能是最后一行语句最先执行完，然后排在最前面的那行反而是最后执行完毕的，所以我们说JS是异步编程语言。" class="headerlink" title="2. 大多数语言都是同步编程语言，比如现在我们有3行代码，那么系统一定是一行一行按顺序向下执行的，第一行执行完了，执行第二行，紧跟着最后执行第三行，你可能会说这不是废话吗？且慢，在JS里则不尽然，比如有3行代码，并不是排在最前面的代码就是最先执行完毕的，很有可能是最后一行语句最先执行完，然后排在最前面的那行反而是最后执行完毕的，所以我们说JS是异步编程语言。"></a>2. 大多数语言都是同步编程语言，比如现在我们有3行代码，那么系统一定是一行一行按顺序向下执行的，第一行执行完了，执行第二行，紧跟着最后执行第三行，你可能会说这不是废话吗？且慢，在JS里则不尽然，比如有3行代码，并不是排在最前面的代码就是最先执行完毕的，很有可能是最后一行语句最先执行完，然后排在最前面的那行反而是最后执行完毕的，所以我们说JS是异步编程语言。</h1><p>下面以node.js为例，举一个例子：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">var fs = require(&quot;fs&quot;);</span><br><span class="line">var c = 0</span><br><span class="line"> </span><br><span class="line">function f(x) &#123;</span><br><span class="line">    console.log(x)</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">function writeFile() &#123;</span><br><span class="line">    fs.writeFile(&#x27;input.txt&#x27;, &#x27;我是通过fs.writeFile 写入文件的内容&#x27;, function (err) &#123;</span><br><span class="line">        if (!err) &#123;</span><br><span class="line">            c = 1</span><br><span class="line">            console.log(&quot;文件写入完毕!&quot;)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">writeFile()</span><br><span class="line">f(c)</span><br></pre></td></tr></table></figure>
-<p>以上代码不难理解，就是设置一个全局变量c &#x3D; 0，然后执行writeFile函数（也就是写入一个文件input.txt），写完之后让c&#x3D;1，然后再调用f()函数，f()函数简单至极，就是把打印一个变量，仅此而已。</p>
-<p>按照正常逻辑，首先c&#x3D;0，然后在调用writeFile函数的时候里面有一句c&#x3D;1，我们先调用的writeFile，所以c&#x3D;1肯定是会被执行到的，那么结果应该是打印1，但是万万想不到，结果是0，明明我们在writeFile函数里我们重新对c进行了赋值，为什么结果还是0呢？</p>
-<p>因为程序运行到writeFile()这一行的时候，是一个比较耗时的IO操作，系统并不会卡在此处，死等writeFile执行完毕再执行下一条语句，而是直接下一条代码，即f(c)，而此时c并没有被重新赋值为1，所以打印出来的结果还是0 ! </p>
-<p>这时候就需要搬出我们的主角“回调函数”了，改写一下writeFile函数：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">var fs = require(&quot;fs&quot;);</span><br><span class="line"> </span><br><span class="line">function f(x) &#123;</span><br><span class="line">    console.log(x)</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">function writeFile(callback) &#123; //关键字callback，在这里就是指f()</span><br><span class="line">    fs.writeFile(&#x27;input.txt&#x27;, &#x27;我是通过fs.writeFile 写入文件的内容&#x27;, function (err) &#123;</span><br><span class="line">        if (!err) &#123;</span><br><span class="line">            console.log(&quot;文件写入完毕!&quot;)</span><br><span class="line">            c = 1</span><br><span class="line">            callback(c) // 此行相当于f(c)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line">var c = 0</span><br><span class="line">writeFile(f) // 函数f作为一个参数传进writeFile函数</span><br></pre></td></tr></table></figure>
-<p>我们在writeFile函数的形参里加入了一个关键字callback，表示这是一个回调函数，也就是前面所说的重点1，即所谓的“以函数为参数”，然后当文件写入完毕后，我们执行c&#x3D;1, 然后再用一次callback关键字，在这里，关键字”callback”就是f()函数的化身，表示我们在此处调用一次f()函数.</p>
-<p>如果你看明白上面的代码，那么我们现在开始用一句话攻略做一个总结：</p>
-<p><strong>【在大多数编程语言中，函数的形参总是由外往内向函数体传递参数，但在JS里如果形参是关键字”callback”则完全相反，它表示函数体在完成某种操作后由内向外调用某个外部函数】</strong><br>所谓的“回调”，就是回头调用的意思。本例子中即是：让我先写文件，写操作结束后，我再回头调用f()函数。</p>
-<p>有时候，我们会看到一些回调函数并没有使用callback关键字，这种连callback关键字和函数名都省略了，直接在函数的形参中嵌入一个function的写法，在js代码中更为常见，其本质上仍然是回调函数。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1033,7 +1021,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">25</span>
+          <span class="site-state-item-count">26</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
