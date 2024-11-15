@@ -149,6 +149,105 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://appservice.club/2024/11/15/git%E5%B0%86%E4%B8%80%E4%B8%AA%E8%BF%9C%E7%A8%8B%E5%88%86%E6%94%AF%E7%9A%84%E9%83%A8%E5%88%86%E4%BF%AE%E6%94%B9%E6%8F%90%E4%BA%A4%E5%88%B0%E5%8F%A6%E4%B8%80%E4%B8%AA%E8%BF%9C%E7%A8%8B%E5%88%86%E6%94%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ZacharyIcoderKong">
+      <meta itemprop="description" content="一切有为法，如梦幻泡影，如露亦如电，应作如是观。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="梦幻泡影">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/11/15/git%E5%B0%86%E4%B8%80%E4%B8%AA%E8%BF%9C%E7%A8%8B%E5%88%86%E6%94%AF%E7%9A%84%E9%83%A8%E5%88%86%E4%BF%AE%E6%94%B9%E6%8F%90%E4%BA%A4%E5%88%B0%E5%8F%A6%E4%B8%80%E4%B8%AA%E8%BF%9C%E7%A8%8B%E5%88%86%E6%94%AF/" class="post-title-link" itemprop="url">git将一个远程分支的部分修改提交到另一个远程分支</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-11-15 21:06:33 / 修改时间：21:08:04" itemprop="dateCreated datePublished" datetime="2024-11-15T21:06:33+08:00">2024-11-15</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="将一个远程分支的部分修改提交到另一个远程分支"><a href="#将一个远程分支的部分修改提交到另一个远程分支" class="headerlink" title="将一个远程分支的部分修改提交到另一个远程分支"></a>将一个远程分支的部分修改提交到另一个远程分支</h3><p>将一个远程分支的部分修改提交到另一个远程分支，可以使用 <code>git cherry-pick</code> 命令。这个命令可以选择特定的提交（commit）从一个分支应用到另一个分支。</p>
+<ol>
+<li><strong>切换到目标本地分支</strong>：<br>首先，确保您在您的本地机器上切换到了目标分支（即您想要应用修改的分支）。例如，想将修改应用到 <code>master</code> 分支，应该先切换到该分支：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout master</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>确保本地分支是最新的：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git pull origin master</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><strong>找到特定的提交</strong>：<br>在另一个分支上，找出想要应用的特定提交。可以使用 <code>git log</code> 命令查看提交历史：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git log origin/feature-branch</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>找到您想要的提交，并复制它的提交哈希（commit hash）。</li>
+<li><strong>使用 cherry-pick 应用修改</strong>：<br>使用 <code>git cherry-pick</code> 命令将该提交应用到当前的分支上：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git cherry-pick &lt;commit-hash&gt;</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>如果想应用多个连续的提交，可以使用提交范围：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git cherry-pick &lt;start-commit-hash&gt;^..&lt;end-commit-hash&gt;</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><strong>解决可能出现的冲突</strong>：<br>如果 <code>cherry-pick</code> 过程中出现冲突，需要解决这些冲突。完成后，继续 <code>cherry-pick</code> 过程：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git add .</span><br><span class="line">git cherry-pick --continue</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>或者，如果决定不进行 <code>cherry-pick</code>，可以取消：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git cherry-pick --abort</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><strong>推送到远程仓库</strong>：<br>一旦完成，将您的更改推送到远程仓库：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push origin master</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://appservice.club/2024/11/09/Xcode16%E6%96%B0%E5%BB%BA%E9%A1%B9%E7%9B%AEpod%E6%8A%A5%E9%94%99%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -840,91 +939,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://appservice.club/2020/04/25/npm%E6%9B%B4%E6%96%B0%E6%A8%A1%E5%9D%97%E5%B9%B6%E5%90%8C%E6%AD%A5%E5%88%B0package-json%E4%B8%AD/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="ZacharyIcoderKong">
-      <meta itemprop="description" content="一切有为法，如梦幻泡影，如露亦如电，应作如是观。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="梦幻泡影">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/04/25/npm%E6%9B%B4%E6%96%B0%E6%A8%A1%E5%9D%97%E5%B9%B6%E5%90%8C%E6%AD%A5%E5%88%B0package-json%E4%B8%AD/" class="post-title-link" itemprop="url">npm更新模块并同步到package.json中</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-04-25 18:16:31 / 修改时间：18:26:51" itemprop="dateCreated datePublished" datetime="2020-04-25T18:16:31+08:00">2020-04-25</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/NodeJS/" itemprop="url" rel="index"><span itemprop="name">NodeJS</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="npm更新模块并同步到package-json中"><a href="#npm更新模块并同步到package-json中" class="headerlink" title="npm更新模块并同步到package.json中"></a>npm更新模块并同步到package.json中</h1><p>使用原始npm<br>1.查看需要更新的版本</p>
-<p><code>npm outdated</code><br>该命令会列出所有需要更新的项目</p>
-<p>2.修改package.json中需要更新的包对应的版本号</p>
-<p><code>npm update</code><br>由于npm update只能按照package.json中指定的版本号进行更新,太繁琐复杂,接下来使用插件更新</p>
-<p>使用 <code>npm-check-updates</code><br>1.安装</p>
-<p><code>npm install -g npm-check-updates</code><br>2.查看需要更新的版本</p>
-<p><code>npm-check-updates</code><br>可以简写为ncu，该命令会列出需要更新的包。</p>
-<p>3.更新</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ncu -a</span><br></pre></td></tr></table></figure>
-
-<p>更新包的同时更新package.json文件</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/04/25/npm%E6%9B%B4%E6%96%B0%E6%A8%A1%E5%9D%97%E5%B9%B6%E5%90%8C%E6%AD%A5%E5%88%B0package-json%E4%B8%AD/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -994,7 +1008,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-count">27</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

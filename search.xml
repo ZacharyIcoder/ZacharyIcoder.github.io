@@ -918,4 +918,50 @@ nslogBind.replaced = (void *)&amp;old_nslog;
         <tag>生活</tag>
       </tags>
   </entry>
+  <entry>
+    <title>git将一个远程分支的部分修改提交到另一个远程分支</title>
+    <url>/2024/11/15/git%E5%B0%86%E4%B8%80%E4%B8%AA%E8%BF%9C%E7%A8%8B%E5%88%86%E6%94%AF%E7%9A%84%E9%83%A8%E5%88%86%E4%BF%AE%E6%94%B9%E6%8F%90%E4%BA%A4%E5%88%B0%E5%8F%A6%E4%B8%80%E4%B8%AA%E8%BF%9C%E7%A8%8B%E5%88%86%E6%94%AF/</url>
+    <content><![CDATA[<h3 id="将一个远程分支的部分修改提交到另一个远程分支"><a href="#将一个远程分支的部分修改提交到另一个远程分支" class="headerlink" title="将一个远程分支的部分修改提交到另一个远程分支"></a>将一个远程分支的部分修改提交到另一个远程分支</h3><p>将一个远程分支的部分修改提交到另一个远程分支，可以使用 <code>git cherry-pick</code> 命令。这个命令可以选择特定的提交（commit）从一个分支应用到另一个分支。</p>
+<ol>
+<li><strong>切换到目标本地分支</strong>：<br>首先，确保您在您的本地机器上切换到了目标分支（即您想要应用修改的分支）。例如，想将修改应用到 <code>master</code> 分支，应该先切换到该分支：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git checkout master</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>确保本地分支是最新的：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git pull origin master</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><strong>找到特定的提交</strong>：<br>在另一个分支上，找出想要应用的特定提交。可以使用 <code>git log</code> 命令查看提交历史：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git log origin/feature-branch</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>找到您想要的提交，并复制它的提交哈希（commit hash）。</li>
+<li><strong>使用 cherry-pick 应用修改</strong>：<br>使用 <code>git cherry-pick</code> 命令将该提交应用到当前的分支上：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git cherry-pick &lt;commit-hash&gt;</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>如果想应用多个连续的提交，可以使用提交范围：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git cherry-pick &lt;start-commit-hash&gt;^..&lt;end-commit-hash&gt;</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><strong>解决可能出现的冲突</strong>：<br>如果 <code>cherry-pick</code> 过程中出现冲突，需要解决这些冲突。完成后，继续 <code>cherry-pick</code> 过程：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git add .</span><br><span class="line">git cherry-pick --continue</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>或者，如果决定不进行 <code>cherry-pick</code>，可以取消：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git cherry-pick --abort</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><strong>推送到远程仓库</strong>：<br>一旦完成，将您的更改推送到远程仓库：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git push origin master</span><br></pre></td></tr></table></figure>
+]]></content>
+  </entry>
 </search>
