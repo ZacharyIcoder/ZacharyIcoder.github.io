@@ -37,6 +37,20 @@
       </tags>
   </entry>
   <entry>
+    <title>NAT(Network Address Translation)</title>
+    <url>/2020/07/18/NAT-Network-Address-Translation/</url>
+    <content><![CDATA[<h1 id="NAT（Network-Address-Translation）"><a href="#NAT（Network-Address-Translation）" class="headerlink" title="NAT（Network Address Translation）"></a>NAT（Network Address Translation）</h1><p>   NAT（Network Address Translation，网络地址转换）是1994年提出的。当在专用网内部的一些主机本来已经分配到了本地IP地址（即仅在本专用网内使用的专用地址），但现在又想和因特网上的主机通信（并不需要加密）时，可使用NAT方法。<br>   这种方法需要在专用网连接到因特网的路由器上安装NAT软件。装有NAT软件的路由器叫做NAT路由器，它至少有一个有效的外部全球IP地址。这样，所有使用本地地址的主机在和外界通信时，都要在NAT路由器上将其本地地址转换成全球IP地址，才能和因特网连接。</p>
+<h2 id="1-NAT功能"><a href="#1-NAT功能" class="headerlink" title="1.NAT功能"></a>1.NAT功能</h2><p>   NAT不仅能解决了lP地址不足的问题，而且还能够有效地避免来自网络外部的攻击，隐藏并保护网络内部的计算机。<br>    1.宽带分享：这是 NAT 主机的最大功能。<br>    2.安全防护：NAT 之内的 PC 联机到 Internet 上面时，他所显示的 IP 是 NAT 主机的公共 IP，所以 Client 端的 PC 当然就具有一定程度的安全了，外界在进行 portscan（端口扫描） 的时候，就侦测不到源Client 端的 PC 。</p>
+<h2 id="２-NAT实现方式"><a href="#２-NAT实现方式" class="headerlink" title="２. NAT实现方式"></a>２. NAT实现方式</h2><p>   NAT的实现方式有三种，即静态转换Static Nat、动态转换Dynamic Nat和端口多路复用OverLoad。<br>   静态 转换是指将内部网络的私有IP地址转换为公有IP地址，IP地址对是一对一的，是一成不变的，某个私有IP地址只转换为某个公有IP地址。借助于静态转换，可以实现外部网络对内部网络中某些特定设备（如服务器）的访问。<br>   动态转换是指将内部网络的私有IP地址转换为公用IP地址时，IP地址是不确定的，是随机的，所有被授权访问上Internet的私有IP地址可随机转换为任何指定的合法IP地址。也就是说，只要指定哪些内部地址可以进行转换，以及用哪些合法地址作为外部地址时，就可以进行动态转换。动态转换可以使用多个合法外部地址集。当ISP提供的合法IP地址略少于网络内部的计算机数量时。可以采用动态转换的方式。<br>   端口多路复用（ Port address Translation,PAT)是指改变外出数据包的源端口并进行端口转换，即端口地址转换（PAT，Port Address Translation).采用端口多路复用方式。内部网络的所有主机均可共享一个合法外部IP地址实现对Internet的访问，从而可以最大限度地节约IP地址资源。同时，又可隐藏网络内部的所有主机，有效避免来自internet的攻击。因此，目前网络中应用最多的就是端口多路复用方式。</p>
+]]></content>
+      <categories>
+        <category>计算机网络</category>
+      </categories>
+      <tags>
+        <tag>计算机网络</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Online优化记录及近期需要优化点</title>
     <url>/2020/07/19/Online%E4%BC%98%E5%8C%96%E8%AE%B0%E5%BD%95%E5%8F%8A%E8%BF%91%E6%9C%9F%E9%9C%80%E8%A6%81%E4%BC%98%E5%8C%96%E7%82%B9/</url>
     <content><![CDATA[<h1 id="Online近期优化记录及还需优化点"><a href="#Online近期优化记录及还需优化点" class="headerlink" title="Online近期优化记录及还需优化点"></a>Online近期优化记录及还需优化点</h1><h2 id="Online近期添加的新功能"><a href="#Online近期添加的新功能" class="headerlink" title="Online近期添加的新功能"></a>Online近期添加的新功能</h2><ol>
@@ -69,20 +83,6 @@
       </categories>
       <tags>
         <tag>SAMIM</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>NAT(Network Address Translation)</title>
-    <url>/2020/07/18/NAT-Network-Address-Translation/</url>
-    <content><![CDATA[<h1 id="NAT（Network-Address-Translation）"><a href="#NAT（Network-Address-Translation）" class="headerlink" title="NAT（Network Address Translation）"></a>NAT（Network Address Translation）</h1><p>   NAT（Network Address Translation，网络地址转换）是1994年提出的。当在专用网内部的一些主机本来已经分配到了本地IP地址（即仅在本专用网内使用的专用地址），但现在又想和因特网上的主机通信（并不需要加密）时，可使用NAT方法。<br>   这种方法需要在专用网连接到因特网的路由器上安装NAT软件。装有NAT软件的路由器叫做NAT路由器，它至少有一个有效的外部全球IP地址。这样，所有使用本地地址的主机在和外界通信时，都要在NAT路由器上将其本地地址转换成全球IP地址，才能和因特网连接。</p>
-<h2 id="1-NAT功能"><a href="#1-NAT功能" class="headerlink" title="1.NAT功能"></a>1.NAT功能</h2><p>   NAT不仅能解决了lP地址不足的问题，而且还能够有效地避免来自网络外部的攻击，隐藏并保护网络内部的计算机。<br>    1.宽带分享：这是 NAT 主机的最大功能。<br>    2.安全防护：NAT 之内的 PC 联机到 Internet 上面时，他所显示的 IP 是 NAT 主机的公共 IP，所以 Client 端的 PC 当然就具有一定程度的安全了，外界在进行 portscan（端口扫描） 的时候，就侦测不到源Client 端的 PC 。</p>
-<h2 id="２-NAT实现方式"><a href="#２-NAT实现方式" class="headerlink" title="２. NAT实现方式"></a>２. NAT实现方式</h2><p>   NAT的实现方式有三种，即静态转换Static Nat、动态转换Dynamic Nat和端口多路复用OverLoad。<br>   静态 转换是指将内部网络的私有IP地址转换为公有IP地址，IP地址对是一对一的，是一成不变的，某个私有IP地址只转换为某个公有IP地址。借助于静态转换，可以实现外部网络对内部网络中某些特定设备（如服务器）的访问。<br>   动态转换是指将内部网络的私有IP地址转换为公用IP地址时，IP地址是不确定的，是随机的，所有被授权访问上Internet的私有IP地址可随机转换为任何指定的合法IP地址。也就是说，只要指定哪些内部地址可以进行转换，以及用哪些合法地址作为外部地址时，就可以进行动态转换。动态转换可以使用多个合法外部地址集。当ISP提供的合法IP地址略少于网络内部的计算机数量时。可以采用动态转换的方式。<br>   端口多路复用（ Port address Translation,PAT)是指改变外出数据包的源端口并进行端口转换，即端口地址转换（PAT，Port Address Translation).采用端口多路复用方式。内部网络的所有主机均可共享一个合法外部IP地址实现对Internet的访问，从而可以最大限度地节约IP地址资源。同时，又可隐藏网络内部的所有主机，有效避免来自internet的攻击。因此，目前网络中应用最多的就是端口多路复用方式。</p>
-]]></content>
-      <categories>
-        <category>计算机网络</category>
-      </categories>
-      <tags>
-        <tag>计算机网络</tag>
       </tags>
   </entry>
   <entry>
@@ -200,6 +200,13 @@
       </tags>
   </entry>
   <entry>
+    <title>Xcode16新建项目pod报错问题记录</title>
+    <url>/2024/11/09/Xcode16%E6%96%B0%E5%BB%BA%E9%A1%B9%E7%9B%AEpod%E6%8A%A5%E9%94%99%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/</url>
+    <content><![CDATA[<p>Pod修改为清华源 <code>source &#39;https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git&#39;</code></p>
+<p>参见 <a href="https://mirrors.tuna.tsinghua.edu.cn/">清华大学开源软件镜像站</a></p>
+]]></content>
+  </entry>
+  <entry>
     <title>Cocoapods 遇到You don&#39;t have write permissions for the /usr/bin directory.</title>
     <url>/2019/05/31/cocoapods-problem/</url>
     <content><![CDATA[<h1 id="Cocoapods-遇到You-don’t-have-write-permissions-for-the-usr-bin-directory"><a href="#Cocoapods-遇到You-don’t-have-write-permissions-for-the-usr-bin-directory" class="headerlink" title="Cocoapods 遇到You don’t have write permissions for the &#x2F;usr&#x2F;bin directory."></a>Cocoapods 遇到You don’t have write permissions for the &#x2F;usr&#x2F;bin directory.</h1><p>安装cocoapods时候</p>
@@ -219,29 +226,49 @@
       </tags>
   </entry>
   <entry>
-    <title>Xcode16新建项目pod报错问题记录</title>
-    <url>/2024/11/09/Xcode16%E6%96%B0%E5%BB%BA%E9%A1%B9%E7%9B%AEpod%E6%8A%A5%E9%94%99%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/</url>
-    <content><![CDATA[<p>Pod修改为清华源 <code>source &#39;https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git&#39;</code></p>
-<p>参见 <a href="https://mirrors.tuna.tsinghua.edu.cn/">清华大学开源软件镜像站</a></p>
-]]></content>
-  </entry>
-  <entry>
-    <title>Hello World</title>
-    <url>/2019/05/29/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
- <span id="more"></span> 
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+    <title>git将一个远程分支的部分修改提交到另一个远程分支</title>
+    <url>/2024/11/15/git%E5%B0%86%E4%B8%80%E4%B8%AA%E8%BF%9C%E7%A8%8B%E5%88%86%E6%94%AF%E7%9A%84%E9%83%A8%E5%88%86%E4%BF%AE%E6%94%B9%E6%8F%90%E4%BA%A4%E5%88%B0%E5%8F%A6%E4%B8%80%E4%B8%AA%E8%BF%9C%E7%A8%8B%E5%88%86%E6%94%AF/</url>
+    <content><![CDATA[<h3 id="将一个远程分支的部分修改提交到另一个远程分支"><a href="#将一个远程分支的部分修改提交到另一个远程分支" class="headerlink" title="将一个远程分支的部分修改提交到另一个远程分支"></a>将一个远程分支的部分修改提交到另一个远程分支</h3><p>将一个远程分支的部分修改提交到另一个远程分支，可以使用 <code>git cherry-pick</code> 命令。这个命令可以选择特定的提交（commit）从一个分支应用到另一个分支。</p>
+<ol>
+<li><strong>切换到目标本地分支</strong>：<br>首先，确保您在您的本地机器上切换到了目标分支（即您想要应用修改的分支）。例如，想将修改应用到 <code>master</code> 分支，应该先切换到该分支：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git checkout master</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<ol>
+<li>确保本地分支是最新的：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git pull origin master</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<ol>
+<li><strong>找到特定的提交</strong>：<br>在另一个分支上，找出想要应用的特定提交。可以使用 <code>git log</code> 命令查看提交历史：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git log origin/feature-branch</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<ol>
+<li>找到您想要的提交，并复制它的提交哈希（commit hash）。</li>
+<li><strong>使用 cherry-pick 应用修改</strong>：<br>使用 <code>git cherry-pick</code> 命令将该提交应用到当前的分支上：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git cherry-pick &lt;commit-hash&gt;</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a href="https://hexo.io/docs/deployment.html">Deployment</a></p>
+<ol>
+<li>如果想应用多个连续的提交，可以使用提交范围：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git cherry-pick &lt;start-commit-hash&gt;^..&lt;end-commit-hash&gt;</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><strong>解决可能出现的冲突</strong>：<br>如果 <code>cherry-pick</code> 过程中出现冲突，需要解决这些冲突。完成后，继续 <code>cherry-pick</code> 过程：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git add .</span><br><span class="line">git cherry-pick --continue</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>或者，如果决定不进行 <code>cherry-pick</code>，可以取消：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git cherry-pick --abort</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><strong>推送到远程仓库</strong>：<br>一旦完成，将您的更改推送到远程仓库：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git push origin master</span><br></pre></td></tr></table></figure>
 ]]></content>
   </entry>
   <entry>
@@ -328,6 +355,25 @@ nslogBind.replaced = (void *)&amp;old_nslog;
       </tags>
   </entry>
   <entry>
+    <title>Hello World</title>
+    <url>/2019/05/29/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+ <span id="more"></span> 
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/deployment.html">Deployment</a></p>
+]]></content>
+  </entry>
+  <entry>
     <title>iOS 制作自己的Framework（引入第三方库）</title>
     <url>/2020/04/24/iOS-%E5%88%B6%E4%BD%9C%E8%87%AA%E5%B7%B1%E7%9A%84Framework%EF%BC%88%E5%BC%95%E5%85%A5%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93%EF%BC%89/</url>
     <content><![CDATA[<p>iOS 制作自己的Framework（引入第三方库）</p>
@@ -393,6 +439,61 @@ nslogBind.replaced = (void *)&amp;old_nslog;
       <tags>
         <tag>iOS</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>iOS开发报错的问题修复记录</title>
+    <url>/2024/11/20/iOS%E5%BC%80%E5%8F%91%E6%8A%A5%E9%94%99%E7%9A%84%E9%97%AE%E9%A2%98%E4%BF%AE%E5%A4%8D%E8%AE%B0%E5%BD%95/</url>
+    <content><![CDATA[<p>模拟器运行报错</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">post_install do |installer|</span><br><span class="line"></span><br><span class="line"> installer.pods_project.targets.each do |target|</span><br><span class="line"></span><br><span class="line">  target.build_configurations.each do |config|</span><br><span class="line"></span><br><span class="line">   \# 处理 M1 芯片上不支持 模拟器 运行问题：不仅仅编译活跃的架构，反之就是 i386、x86_64、arm64 等架构都编译。</span><br><span class="line"></span><br><span class="line">   config.build_settings[&#x27;ONLY_ACTIVE_ARCH&#x27;] = &#x27;NO&#x27;</span><br><span class="line"></span><br><span class="line">   config.build_settings[&#x27;EXCLUDED_ARCHS[sdk=iphonesimulator*]&#x27;] = &quot;arm64&quot;</span><br><span class="line"></span><br><span class="line">  end</span><br><span class="line"></span><br><span class="line"> end</span><br><span class="line"></span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+
+
+<p>YYText YYTextAsyncLayer UIGraphicsBeginImageContext Deprecated #984</p>
+<p><a href="https://github.com/ibireme/YYText/issues/984">https://github.com/ibireme/YYText/issues/984</a></p>
+<h1 id="iOS-18适配问题记录-Xcode16正式版"><a href="#iOS-18适配问题记录-Xcode16正式版" class="headerlink" title="iOS 18适配问题记录(Xcode16正式版)"></a>iOS 18适配问题记录(Xcode16正式版)</h1><h3 id="问题1：ADClient编译报错问题"><a href="#问题1：ADClient编译报错问题" class="headerlink" title="问题1：ADClient编译报错问题"></a>问题1：ADClient编译报错问题</h3><h4 id="报错信息"><a href="#报错信息" class="headerlink" title="报错信息"></a>报错信息</h4><img src="/2024/11/20/iOS%E5%BC%80%E5%8F%91%E6%8A%A5%E9%94%99%E7%9A%84%E9%97%AE%E9%A2%98%E4%BF%AE%E5%A4%8D%E8%AE%B0%E5%BD%95/1177260-5902fcd45ac3365c.png" class="">
+
+
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Undefined symbols <span class="keyword">for</span> architecture arm64:</span><br><span class="line">  <span class="string">&quot;_OBJC_CLASS_<span class="variable">$_ADClient</span>&quot;</span>, referenced from:</span><br><span class="line">       <span class="keyword">in</span> ViewController.o</span><br><span class="line">ld: symbol(s) not found <span class="keyword">for</span> architecture arm64</span><br><span class="line">clang: error: linker <span class="built_in">command</span> failed with <span class="built_in">exit</span> code 1 (use -v to see invocation)</span><br></pre></td></tr></table></figure>
+
+<h4 id="相关代码（demo）"><a href="#相关代码（demo）" class="headerlink" title="相关代码（demo）"></a>相关代码（demo）</h4><img src="/2024/11/20/iOS%E5%BC%80%E5%8F%91%E6%8A%A5%E9%94%99%E7%9A%84%E9%97%AE%E9%A2%98%E4%BF%AE%E5%A4%8D%E8%AE%B0%E5%BD%95/1177260-c985bd451915ac10.png" class="">
+
+
+
+<h4 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h4><p>苹果对AdClicent API加了一个标识<br> ADCLIENT_DEPRECATED_IOS_90_145_OBSOLETED_180<br> 表示：iOS7.1-iOS14.5可用，iOS18彻底废弃，会在iOS18系统上编译失败。</p>
+<img src="/2024/11/20/iOS%E5%BC%80%E5%8F%91%E6%8A%A5%E9%94%99%E7%9A%84%E9%97%AE%E9%A2%98%E4%BF%AE%E5%A4%8D%E8%AE%B0%E5%BD%95/1177260-6484670f130a6afd.png" class="">
+
+
+
+<h4 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h4><p>使用AdService库的AAAttribution替代，注意iOS14.3才可以使用。</p>
+<h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><figure class="highlight objectivec"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (@available(ios <span class="number">14.3</span>, *)) &#123;</span><br><span class="line">        <span class="built_in">NSError</span> *error;</span><br><span class="line">        <span class="built_in">NSString</span> *token = [AAAttribution attributionTokenWithError:&amp;error];</span><br><span class="line">        <span class="keyword">if</span> (token != <span class="literal">nil</span>) &#123;</span><br><span class="line">            ...</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><p><a href="https://links.jianshu.com/go?to=https://developer.apple.com/forums/thread/759156">https://developer.apple.com/forums/thread/759156</a><br> <a href="https://links.jianshu.com/go?to=https://developer.apple.com/documentation/iad?language=objc">https://developer.apple.com/documentation/iad?language=objc</a></p>
+<h3 id="问题2：Xcode16（正式版）运行时，YYCache导致crash"><a href="#问题2：Xcode16（正式版）运行时，YYCache导致crash" class="headerlink" title="问题2：Xcode16（正式版）运行时，YYCache导致crash"></a>问题2：Xcode16（正式版）运行时，YYCache导致crash</h3><h4 id="报错信息-1"><a href="#报错信息-1" class="headerlink" title="报错信息"></a>报错信息</h4><img src="/2024/11/20/iOS%E5%BC%80%E5%8F%91%E6%8A%A5%E9%94%99%E7%9A%84%E9%97%AE%E9%A2%98%E4%BF%AE%E5%A4%8D%E8%AE%B0%E5%BD%95/1177260-74e56dabcd1817a4.png" class="">
+
+
+
+<h4 id="原因-1"><a href="#原因-1" class="headerlink" title="原因"></a>原因</h4><p>在 iOS18 中，需要提前对 sqlite3_stmt 执行 sqlite3_finalize。</p>
+<h4 id="解决办法-1"><a href="#解决办法-1" class="headerlink" title="解决办法"></a>解决办法</h4><img src="/2024/11/20/iOS%E5%BC%80%E5%8F%91%E6%8A%A5%E9%94%99%E7%9A%84%E9%97%AE%E9%A2%98%E4%BF%AE%E5%A4%8D%E8%AE%B0%E5%BD%95/1177260-3b76a65dbd9d1b1f.png" class="">
+
+
+
+<h4 id="代码-1"><a href="#代码-1" class="headerlink" title="代码"></a>代码</h4><figure class="highlight objectivec"><table><tr><td class="code"><pre><span class="line">- (<span class="type">BOOL</span>)_dbClose &#123;</span><br><span class="line">    <span class="keyword">if</span> (!_db) <span class="keyword">return</span> <span class="literal">YES</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="type">int</span>  result = <span class="number">0</span>;</span><br><span class="line">    <span class="type">BOOL</span> retry = <span class="literal">NO</span>;</span><br><span class="line">    <span class="type">BOOL</span> stmtFinalized = <span class="literal">NO</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (@available(iOS <span class="number">18</span>, *)) &#123;</span><br><span class="line">        <span class="keyword">if</span> (_dbStmtCache) &#123;</span><br><span class="line">            <span class="built_in">CFIndex</span> size = <span class="built_in">CFDictionaryGetCount</span>(_dbStmtCache);</span><br><span class="line">            <span class="built_in">CFTypeRef</span> *valuesRef = (<span class="built_in">CFTypeRef</span> *)malloc(size * <span class="keyword">sizeof</span>(<span class="built_in">CFTypeRef</span>));</span><br><span class="line">            <span class="built_in">CFDictionaryGetKeysAndValues</span>(_dbStmtCache, <span class="literal">NULL</span>, (<span class="keyword">const</span> <span class="type">void</span> **)valuesRef);</span><br><span class="line">            <span class="keyword">const</span> sqlite3_stmt **stmts = (<span class="keyword">const</span> sqlite3_stmt **)valuesRef;</span><br><span class="line">            <span class="keyword">for</span> (<span class="built_in">CFIndex</span> i = <span class="number">0</span>; i &lt; size; i ++) &#123;</span><br><span class="line">                sqlite3_stmt *stmt = stmts[i];</span><br><span class="line">                sqlite3_finalize(stmt);</span><br><span class="line">            &#125;</span><br><span class="line">            free(valuesRef);</span><br><span class="line">            <span class="built_in">CFRelease</span>(_dbStmtCache);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (_dbStmtCache) <span class="built_in">CFRelease</span>(_dbStmtCache);</span><br><span class="line">        _dbStmtCache = <span class="literal">NULL</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">do</span> &#123;</span><br><span class="line">        retry = <span class="literal">NO</span>;</span><br><span class="line">        result = sqlite3_close(_db);</span><br><span class="line">        <span class="keyword">if</span> (result == SQLITE_BUSY || result == SQLITE_LOCKED) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!stmtFinalized) &#123;</span><br><span class="line">                stmtFinalized = <span class="literal">YES</span>;</span><br><span class="line">                sqlite3_stmt *stmt;</span><br><span class="line">                <span class="keyword">while</span> ((stmt = sqlite3_next_stmt(_db, <span class="literal">nil</span>)) != <span class="number">0</span>) &#123;</span><br><span class="line">                    sqlite3_finalize(stmt);</span><br><span class="line">                    retry = <span class="literal">YES</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (result != SQLITE_OK) &#123;</span><br><span class="line">            <span class="keyword">if</span> (_errorLogsEnabled) &#123;</span><br><span class="line">                <span class="built_in">NSLog</span>(<span class="string">@&quot;%s line:%d sqlite close failed (%d).&quot;</span>, __FUNCTION__, __LINE__, result);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">while</span> (retry);</span><br><span class="line">    _db = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">YES</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="参考-1"><a href="#参考-1" class="headerlink" title="参考"></a>参考</h4><p><a href="https://links.jianshu.com/go?to=https://giters.com/ibireme/YYCache/issues/166">https://giters.com/ibireme/YYCache/issues/166</a></p>
+<h3 id="问题3：Xcode16正式版，addSubView-crash-（maskView）"><a href="#问题3：Xcode16正式版，addSubView-crash-（maskView）" class="headerlink" title="问题3：Xcode16正式版，addSubView crash （maskView）"></a>问题3：Xcode16正式版，addSubView crash （maskView）</h3><h4 id="报错信息-2"><a href="#报错信息-2" class="headerlink" title="报错信息"></a>报错信息</h4><img src="/2024/11/20/iOS%E5%BC%80%E5%8F%91%E6%8A%A5%E9%94%99%E7%9A%84%E9%97%AE%E9%A2%98%E4%BF%AE%E5%A4%8D%E8%AE%B0%E5%BD%95/1177260-655dd9dd0bd287c7.png" class="">
+
+
+
+
+
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line">*** Assertion failure in -[TestMaskView _addSubview:positioned:relativeTo:], UIView.m:<span class="number">18496</span></span><br><span class="line">*** Terminating app due to uncaught exception <span class="string">&#x27;NSInternalInconsistencyException&#x27;</span>, reason: <span class="string">&#x27;Set `maskView` (&lt;UIView: 0x14a21ddd0; frame = (0 0; 0 0); layer = &lt;CALayer: 0x60000314b480&gt;&gt;) to `nil` before adding it as a subview of &lt;TestMaskView: 0x153e08350; frame = (0 0; 393 852); layer = &lt;CALayer: 0x60000314b440&gt;&gt;&#x27;</span></span><br><span class="line">*** First <span class="keyword">throw</span> call stack:</span><br><span class="line">(</span><br><span class="line">    <span class="number">0</span>   CoreFoundation                      <span class="number">0x00000001063540ec</span> __exceptionPreprocess + <span class="number">172</span></span><br><span class="line">    <span class="number">1</span>   libobjc.A.dylib                     <span class="number">0x00000001048bede8</span> objc_exception_throw + <span class="number">72</span></span><br><span class="line">    <span class="number">2</span>   Foundation                          <span class="number">0x0000000109d21aa8</span> _userInfoForFileAndLine + <span class="number">0</span></span><br><span class="line">    <span class="number">3</span>   UIKitCore                           <span class="number">0x0000000128c0151c</span> -[<span class="title function_ invoke__">UIView</span>(Internal) _addSubview:positioned:relativeTo:] + <span class="number">1124</span></span><br><span class="line">    <span class="number">4</span>   ADClientTest                        <span class="number">0x0000000104609660</span> -[TestMaskView initWithFrame:] + <span class="number">276</span></span><br><span class="line">    <span class="number">5</span>   ADClientTest                        <span class="number">0x0000000104609434</span> -[ViewController viewDidLoad] + <span class="number">164</span></span><br><span class="line">    <span class="number">6</span>   UIKitCore                           <span class="number">0x0000000127f1e69c</span> -[UIViewController _sendViewDidLoadWithAppearanceProxyObjectTaggingEnabled] + <span class="number">80</span></span><br><span class="line">    <span class="number">7</span>   UIKitCore                           <span class="number">0x0000000127f23238</span> -[UIViewController loadViewIfRequired] + <span class="number">908</span></span><br><span class="line">    <span class="number">8</span>   UIKitCore                           <span class="number">0x0000000127f234e0</span> -[UIViewController view] + <span class="number">20</span></span><br><span class="line">    <span class="number">9</span>   UIKitCore                           <span class="number">0x00000001286c3a08</span> -[UIWindow addRootViewControllerViewIfPossible] + <span class="number">132</span></span><br><span class="line">    <span class="number">10</span>  UIKitCore                           <span class="number">0x00000001286c343c</span> -[UIWindow _updateLayerOrderingAndSetLayerHidden:actionBlock:] + <span class="number">168</span></span><br><span class="line">    <span class="number">11</span>  UIKitCore                           <span class="number">0x00000001286c4288</span> -[UIWindow _setHidden:forced:] + <span class="number">228</span></span><br><span class="line">    <span class="number">12</span>  UIKitCore                           <span class="number">0x00000001286d3344</span> -[UIWindow _mainQueue_makeKeyAndVisible] + <span class="number">36</span></span><br><span class="line">    <span class="number">13</span>  UIKitCore                           <span class="number">0x000000012892dcd8</span> -[UIWindowScene _performDeferredInitialWindowUpdateForConnection] + <span class="number">204</span></span><br><span class="line">    <span class="number">14</span>  UIKitCore                           <span class="number">0x0000000127af58f0</span> +[UIScene _sceneForFBSScene:create:withSession:connectionOptions:] + <span class="number">1164</span></span><br><span class="line">    <span class="number">15</span>  UIKitCore                           <span class="number">0x000000012868f45c</span> -[UIApplication _connectUISceneFromFBSScene:transitionContext:] + <span class="number">808</span></span><br><span class="line">    <span class="number">16</span>  UIKitCore                           <span class="number">0x000000012868f70c</span> -[UIApplication workspace:didCreateScene:withTransitionContext:completion:] + <span class="number">304</span></span><br><span class="line">    <span class="number">17</span>  UIKitCore                           <span class="number">0x000000012815ec08</span> -[UIApplicationSceneClientAgent scene:didInitializeWithEvent:completion:] + <span class="number">260</span></span><br><span class="line">    <span class="number">18</span>  FrontBoardServices                  <span class="number">0x0000000113090ce4</span> __95-[FBSScene _callOutQueue_didCreateWithTransitionContext:alternativeCreationCallout:completion:]_block_invoke + <span class="number">260</span></span><br><span class="line">    <span class="number">19</span>  FrontBoardServices                  <span class="number">0x00000001130910a4</span> -[FBSScene _callOutQueue_coalesceClientSettingsUpdates:] + <span class="number">60</span></span><br><span class="line">    <span class="number">20</span>  FrontBoardServices                  <span class="number">0x0000000113090b64</span> -[FBSScene _callOutQueue_didCreateWithTransitionContext:alternativeCreationCallout:completion:] + <span class="number">408</span></span><br><span class="line">    <span class="number">21</span>  FrontBoardServices                  <span class="number">0x00000001130bdd50</span> __93-[FBSWorkspaceScenesClient _callOutQueue_sendDidCreateForScene:transitionContext:completion:]_block_invoke.<span class="number">156</span> + <span class="number">216</span></span><br><span class="line">    <span class="number">22</span>  FrontBoardServices                  <span class="number">0x000000011309d618</span> -[FBSWorkspace _calloutQueue_executeCalloutFromSource:withBlock:] + <span class="number">160</span></span><br><span class="line">    <span class="number">23</span>  FrontBoardServices                  <span class="number">0x00000001130bc220</span> -[FBSWorkspaceScenesClient _callOutQueue_sendDidCreateForScene:transitionContext:completion:] + <span class="number">388</span></span><br><span class="line">    <span class="number">24</span>  libdispatch.dylib                   <span class="number">0x000000010bdea7b8</span> _dispatch_client_callout + <span class="number">16</span></span><br><span class="line">    <span class="number">25</span>  libdispatch.dylib                   <span class="number">0x000000010bdee3bc</span> _dispatch_block_invoke_direct + <span class="number">388</span></span><br><span class="line">    <span class="number">26</span>  FrontBoardServices                  <span class="number">0x00000001130e0b58</span> __FBSSERIALQUEUE_IS_CALLING_OUT_TO_A_BLOCK__ + <span class="number">44</span></span><br><span class="line">    <span class="number">27</span>  FrontBoardServices                  <span class="number">0x00000001130e0a34</span> -[FBSMainRunLoopSerialQueue _targetQueue_performNextIfPossible] + <span class="number">196</span></span><br><span class="line">    <span class="number">28</span>  FrontBoardServices                  <span class="number">0x00000001130e0b8c</span> -[FBSMainRunLoopSerialQueue _performNextFromRunLoopSource] + <span class="number">24</span></span><br><span class="line">    <span class="number">29</span>  CoreFoundation                      <span class="number">0x00000001062b8324</span> __CFRUNLOOP_IS_CALLING_OUT_TO_A_SOURCE0_PERFORM_FUNCTION__ + <span class="number">24</span></span><br><span class="line">    <span class="number">30</span>  CoreFoundation                      <span class="number">0x00000001062b826c</span> __CFRunLoopDoSource0 + <span class="number">172</span></span><br><span class="line">    <span class="number">31</span>  CoreFoundation                      <span class="number">0x00000001062b7a2c</span> __CFRunLoopDoSources0 + <span class="number">324</span></span><br><span class="line">    <span class="number">32</span>  CoreFoundation                      <span class="number">0x00000001062b20b0</span> __CFRunLoopRun + <span class="number">788</span></span><br><span class="line">    <span class="number">33</span>  CoreFoundation                      <span class="number">0x00000001062b1960</span> CFRunLoopRunSpecific + <span class="number">536</span></span><br><span class="line">    <span class="number">34</span>  GraphicsServices                    <span class="number">0x0000000117edfb10</span> GSEventRunModal + <span class="number">160</span></span><br><span class="line">    <span class="number">35</span>  UIKitCore                           <span class="number">0x000000012868db40</span> -[UIApplication _run] + <span class="number">796</span></span><br><span class="line">    <span class="number">36</span>  UIKitCore                           <span class="number">0x0000000128691d38</span> UIApplicationMain + <span class="number">124</span></span><br><span class="line">    <span class="number">37</span>  ADClientTest                        <span class="number">0x0000000104609064</span> main + <span class="number">140</span></span><br><span class="line">    <span class="number">38</span>  dyld                                <span class="number">0x00000001047cd410</span> start_sim + <span class="number">20</span></span><br><span class="line">    <span class="number">39</span>  ???                                 <span class="number">0x000000010490a274</span> <span class="number">0x0</span> + <span class="number">4371554932</span></span><br><span class="line">)</span><br><span class="line">libc++abi: terminating due to uncaught exception of type NSException</span><br></pre></td></tr></table></figure>
+
+<h4 id="原因-2"><a href="#原因-2" class="headerlink" title="原因"></a>原因</h4><p>iOS 18 对 UIView的maskView 增加了断言，导致如果业务代码里有同名属性可能导致触发该断言。</p>
+<p>经测试发现：<br> 1.自定义UIView子视图，存在同名属性maskView，会崩溃<br> 2.自定义cell，添加到cell视图上会崩溃，添加到contentView上，则不会崩溃<br> 3.控制器里的maskView视图属性，添加到控制器view，不会崩溃</p>
+<h4 id="解决办法-2"><a href="#解决办法-2" class="headerlink" title="解决办法"></a>解决办法</h4><p>修改自定义视图，将自定义子组件名为maskView的视图进行重命名。</p>
+<h4 id="参考-2"><a href="#参考-2" class="headerlink" title="参考"></a>参考</h4><p><a href="https://links.jianshu.com/go?to=https://github.com/Tencent/QMUI_iOS/issues/1557">https://github.com/Tencent/QMUI_iOS&#x2F;issues&#x2F;1557</a></p>
+]]></content>
   </entry>
   <entry>
     <title>iOS纯代码自定义View</title>
@@ -785,6 +886,43 @@ nslogBind.replaced = (void *)&amp;old_nslog;
       </tags>
   </entry>
   <entry>
+    <title>有感并困惑</title>
+    <url>/2020/05/19/%E6%9C%89%E6%84%9F%E5%B9%B6%E5%9B%B0%E6%83%91/</url>
+    <content><![CDATA[<p>1.人怎样虐待动物，就会怎样虐待人。并不见得哪个民族是多么恶，而是集体作恶和作恶的“机遇”条件塑造的。并不见得某泱泱大国就。。。只是在某个时间某个条件下释放了人性的恶。</p>
+<p>2.万事万物的源头究竟是什么呢？意识是什么呢？<br>我相信人是精心设计出来的，地球上动植物的基因都是设计好的。</p>
+]]></content>
+      <categories>
+        <category>生活</category>
+      </categories>
+      <tags>
+        <tag>生活</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>零碎代码记录</title>
+    <url>/2020/04/25/%E9%9B%B6%E7%A2%8E%E4%BB%A3%E7%A0%81%E8%AE%B0%E5%BD%95/</url>
+    <content><![CDATA[<p>&#x2F;&#x2F;        [socket on:@”chat” callback:^(NSArray *dataArray, SocketAckEmitter *ackEmitter) {<br>&#x2F;&#x2F;            &#x2F;&#x2F;NSLog(@”chat dataArray:%@”,dataArray);<br>&#x2F;&#x2F;            if (dataArray.count &gt; 0) {<br>&#x2F;&#x2F;                NSString *messageStr &#x3D; dataArray.firstObject;<br>&#x2F;&#x2F;                NSString *desDeStr &#x3D; [messageStr desDecryptWithKey:deskey];<br>&#x2F;&#x2F;                if ([NSString isBlankWithStr:desDeStr]) {<br>&#x2F;&#x2F;                    NSLog(@”数据解密失败”);<br>&#x2F;&#x2F;                    return ;<br>&#x2F;&#x2F;                }<br>&#x2F;&#x2F;                NSLog(@”desDeStr:%@”,desDeStr);<br>&#x2F;&#x2F;                NSDictionary *messageDict &#x3D; [self dictionaryWithJsonString:desDeStr];<br>&#x2F;&#x2F;<br>&#x2F;&#x2F;                NSLog(@”messageDict:%@”,messageDict);<br>&#x2F;&#x2F;                NSString *msgId &#x3D; messageDict[@”msgId”];<br>&#x2F;&#x2F;                &#x2F;&#x2F;                NSLog(@”ackEmitter.expected:%d”,ackEmitter.expected);<br>&#x2F;&#x2F;                #pragma mark –19年11-19修改<br>&#x2F;&#x2F;                &#x2F;&#x2F;                NSDictionary *dic &#x3D; @{@”fromId”:[NSString acquireUserId],@”msgId”:msgId,@”msgBody”:dataArray.firstObject};<br>&#x2F;&#x2F;                                NSDictionary * dic &#x3D; [NSDictionary dictionaryWithObjectsAndKeys:[NSString acquireUserId],@”fromId”,msgId,@”msgId”,messageDict,@”msgBody”,nil];<br>&#x2F;&#x2F;                &#x2F;&#x2F;                [ackEmitter with:@[msgId]];<br>&#x2F;&#x2F;                                [ackEmitter with:@[[JSON stringWithObject:dic]]];<br>&#x2F;&#x2F;                                [weakSelf receiveSocketMessageWith:@[messageDict]];<br>&#x2F;&#x2F;<br>&#x2F;&#x2F;&#x2F;&#x2F;                NSDictionary *messageDict &#x3D; dataArray.firstObject;<br>&#x2F;&#x2F;&#x2F;&#x2F;                NSString *msgId &#x3D; messageDict[@”msgId”];<br>&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;                NSLog(@”ackEmitter.expected:%d”,ackEmitter.expected);<br>&#x2F;&#x2F;&#x2F;&#x2F;#pragma mark –19年11-19修改<br>&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;                NSDictionary *dic &#x3D; @{@”fromId”:[NSString acquireUserId],@”msgId”:msgId,@”msgBody”:dataArray.firstObject};<br>&#x2F;&#x2F;&#x2F;&#x2F;                NSDictionary * dic &#x3D; [NSDictionary dictionaryWithObjectsAndKeys:[NSString acquireUserId],@”fromId”,msgId,@”msgId”,dataArray.firstObject,@”msgBody”,nil];<br>&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;                [ackEmitter with:@[msgId]];<br>&#x2F;&#x2F;&#x2F;&#x2F;                [ackEmitter with:@[[JSON stringWithObject:dic]]];<br>&#x2F;&#x2F;&#x2F;&#x2F;                [weakSelf receiveSocketMessageWith:dataArray];<br>&#x2F;&#x2F;            }<br>&#x2F;&#x2F;        }];</p>
+]]></content>
+      <categories>
+        <category>iOS</category>
+      </categories>
+      <tags>
+        <tag>iOS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>鲁东大学毕业调查</title>
+    <url>/2020/07/19/%E9%B2%81%E4%B8%9C%E5%A4%A7%E5%AD%A6%E6%AF%95%E4%B8%9A%E8%B0%83%E6%9F%A5/</url>
+    <content><![CDATA[<img src="/2020/07/19/%E9%B2%81%E4%B8%9C%E5%A4%A7%E5%AD%A6%E6%AF%95%E4%B8%9A%E8%B0%83%E6%9F%A5/daxue1.png" class="">
+]]></content>
+      <categories>
+        <category>杂项</category>
+      </categories>
+      <tags>
+        <tag>杂项</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>微信红包系统是如何应对高并发的</title>
     <url>/2019/05/26/%E5%BE%AE%E4%BF%A1%E7%BA%A2%E5%8C%85%E7%B3%BB%E7%BB%9F%E6%98%AF%E5%A6%82%E4%BD%95%E5%BA%94%E5%AF%B9%E9%AB%98%E5%B9%B6%E5%8F%91%E7%9A%84/</url>
     <content><![CDATA[<h1 id="社交软件红包技术解密-四-：微信红包系统是如何应对高并发的"><a href="#社交软件红包技术解密-四-：微信红包系统是如何应对高并发的" class="headerlink" title="社交软件红包技术解密(四)：微信红包系统是如何应对高并发的"></a>社交软件红包技术解密(四)：微信红包系统是如何应对高并发的</h1><p>本文来自微信团队工程师方乐明的技术分享，原文地址：infoq.cn&#x2F;article&#x2F;2017hongbao-weixin，感谢原作者的分享。 <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2650995437&idx=1&sn=fefff4bff3e183d656a2d242e4c0a382">点此进入原文</a>。</p>
@@ -880,135 +1018,5 @@ nslogBind.replaced = (void *)&amp;old_nslog;
         <tag>IM</tag>
         <tag>社交</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>零碎代码记录</title>
-    <url>/2020/04/25/%E9%9B%B6%E7%A2%8E%E4%BB%A3%E7%A0%81%E8%AE%B0%E5%BD%95/</url>
-    <content><![CDATA[<p>&#x2F;&#x2F;        [socket on:@”chat” callback:^(NSArray *dataArray, SocketAckEmitter *ackEmitter) {<br>&#x2F;&#x2F;            &#x2F;&#x2F;NSLog(@”chat dataArray:%@”,dataArray);<br>&#x2F;&#x2F;            if (dataArray.count &gt; 0) {<br>&#x2F;&#x2F;                NSString *messageStr &#x3D; dataArray.firstObject;<br>&#x2F;&#x2F;                NSString *desDeStr &#x3D; [messageStr desDecryptWithKey:deskey];<br>&#x2F;&#x2F;                if ([NSString isBlankWithStr:desDeStr]) {<br>&#x2F;&#x2F;                    NSLog(@”数据解密失败”);<br>&#x2F;&#x2F;                    return ;<br>&#x2F;&#x2F;                }<br>&#x2F;&#x2F;                NSLog(@”desDeStr:%@”,desDeStr);<br>&#x2F;&#x2F;                NSDictionary *messageDict &#x3D; [self dictionaryWithJsonString:desDeStr];<br>&#x2F;&#x2F;<br>&#x2F;&#x2F;                NSLog(@”messageDict:%@”,messageDict);<br>&#x2F;&#x2F;                NSString *msgId &#x3D; messageDict[@”msgId”];<br>&#x2F;&#x2F;                &#x2F;&#x2F;                NSLog(@”ackEmitter.expected:%d”,ackEmitter.expected);<br>&#x2F;&#x2F;                #pragma mark –19年11-19修改<br>&#x2F;&#x2F;                &#x2F;&#x2F;                NSDictionary *dic &#x3D; @{@”fromId”:[NSString acquireUserId],@”msgId”:msgId,@”msgBody”:dataArray.firstObject};<br>&#x2F;&#x2F;                                NSDictionary * dic &#x3D; [NSDictionary dictionaryWithObjectsAndKeys:[NSString acquireUserId],@”fromId”,msgId,@”msgId”,messageDict,@”msgBody”,nil];<br>&#x2F;&#x2F;                &#x2F;&#x2F;                [ackEmitter with:@[msgId]];<br>&#x2F;&#x2F;                                [ackEmitter with:@[[JSON stringWithObject:dic]]];<br>&#x2F;&#x2F;                                [weakSelf receiveSocketMessageWith:@[messageDict]];<br>&#x2F;&#x2F;<br>&#x2F;&#x2F;&#x2F;&#x2F;                NSDictionary *messageDict &#x3D; dataArray.firstObject;<br>&#x2F;&#x2F;&#x2F;&#x2F;                NSString *msgId &#x3D; messageDict[@”msgId”];<br>&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;                NSLog(@”ackEmitter.expected:%d”,ackEmitter.expected);<br>&#x2F;&#x2F;&#x2F;&#x2F;#pragma mark –19年11-19修改<br>&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;                NSDictionary *dic &#x3D; @{@”fromId”:[NSString acquireUserId],@”msgId”:msgId,@”msgBody”:dataArray.firstObject};<br>&#x2F;&#x2F;&#x2F;&#x2F;                NSDictionary * dic &#x3D; [NSDictionary dictionaryWithObjectsAndKeys:[NSString acquireUserId],@”fromId”,msgId,@”msgId”,dataArray.firstObject,@”msgBody”,nil];<br>&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;                [ackEmitter with:@[msgId]];<br>&#x2F;&#x2F;&#x2F;&#x2F;                [ackEmitter with:@[[JSON stringWithObject:dic]]];<br>&#x2F;&#x2F;&#x2F;&#x2F;                [weakSelf receiveSocketMessageWith:dataArray];<br>&#x2F;&#x2F;            }<br>&#x2F;&#x2F;        }];</p>
-]]></content>
-      <categories>
-        <category>iOS</category>
-      </categories>
-      <tags>
-        <tag>iOS</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>鲁东大学毕业调查</title>
-    <url>/2020/07/19/%E9%B2%81%E4%B8%9C%E5%A4%A7%E5%AD%A6%E6%AF%95%E4%B8%9A%E8%B0%83%E6%9F%A5/</url>
-    <content><![CDATA[<img src="/2020/07/19/%E9%B2%81%E4%B8%9C%E5%A4%A7%E5%AD%A6%E6%AF%95%E4%B8%9A%E8%B0%83%E6%9F%A5/daxue1.png" class="">
-]]></content>
-      <categories>
-        <category>杂项</category>
-      </categories>
-      <tags>
-        <tag>杂项</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>有感并困惑</title>
-    <url>/2020/05/19/%E6%9C%89%E6%84%9F%E5%B9%B6%E5%9B%B0%E6%83%91/</url>
-    <content><![CDATA[<p>1.人怎样虐待动物，就会怎样虐待人。并不见得哪个民族是多么恶，而是集体作恶和作恶的“机遇”条件塑造的。并不见得某泱泱大国就。。。只是在某个时间某个条件下释放了人性的恶。</p>
-<p>2.万事万物的源头究竟是什么呢？意识是什么呢？<br>我相信人是精心设计出来的，地球上动植物的基因都是设计好的。</p>
-]]></content>
-      <categories>
-        <category>生活</category>
-      </categories>
-      <tags>
-        <tag>生活</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>git将一个远程分支的部分修改提交到另一个远程分支</title>
-    <url>/2024/11/15/git%E5%B0%86%E4%B8%80%E4%B8%AA%E8%BF%9C%E7%A8%8B%E5%88%86%E6%94%AF%E7%9A%84%E9%83%A8%E5%88%86%E4%BF%AE%E6%94%B9%E6%8F%90%E4%BA%A4%E5%88%B0%E5%8F%A6%E4%B8%80%E4%B8%AA%E8%BF%9C%E7%A8%8B%E5%88%86%E6%94%AF/</url>
-    <content><![CDATA[<h3 id="将一个远程分支的部分修改提交到另一个远程分支"><a href="#将一个远程分支的部分修改提交到另一个远程分支" class="headerlink" title="将一个远程分支的部分修改提交到另一个远程分支"></a>将一个远程分支的部分修改提交到另一个远程分支</h3><p>将一个远程分支的部分修改提交到另一个远程分支，可以使用 <code>git cherry-pick</code> 命令。这个命令可以选择特定的提交（commit）从一个分支应用到另一个分支。</p>
-<ol>
-<li><strong>切换到目标本地分支</strong>：<br>首先，确保您在您的本地机器上切换到了目标分支（即您想要应用修改的分支）。例如，想将修改应用到 <code>master</code> 分支，应该先切换到该分支：</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git checkout master</span><br></pre></td></tr></table></figure>
-
-<ol>
-<li>确保本地分支是最新的：</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git pull origin master</span><br></pre></td></tr></table></figure>
-
-<ol>
-<li><strong>找到特定的提交</strong>：<br>在另一个分支上，找出想要应用的特定提交。可以使用 <code>git log</code> 命令查看提交历史：</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git log origin/feature-branch</span><br></pre></td></tr></table></figure>
-
-<ol>
-<li>找到您想要的提交，并复制它的提交哈希（commit hash）。</li>
-<li><strong>使用 cherry-pick 应用修改</strong>：<br>使用 <code>git cherry-pick</code> 命令将该提交应用到当前的分支上：</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git cherry-pick &lt;commit-hash&gt;</span><br></pre></td></tr></table></figure>
-
-<ol>
-<li>如果想应用多个连续的提交，可以使用提交范围：</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git cherry-pick &lt;start-commit-hash&gt;^..&lt;end-commit-hash&gt;</span><br></pre></td></tr></table></figure>
-
-<ol>
-<li><strong>解决可能出现的冲突</strong>：<br>如果 <code>cherry-pick</code> 过程中出现冲突，需要解决这些冲突。完成后，继续 <code>cherry-pick</code> 过程：</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git add .</span><br><span class="line">git cherry-pick --continue</span><br></pre></td></tr></table></figure>
-
-<ol>
-<li>或者，如果决定不进行 <code>cherry-pick</code>，可以取消：</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git cherry-pick --abort</span><br></pre></td></tr></table></figure>
-
-<ol>
-<li><strong>推送到远程仓库</strong>：<br>一旦完成，将您的更改推送到远程仓库：</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git push origin master</span><br></pre></td></tr></table></figure>
-]]></content>
-  </entry>
-  <entry>
-    <title>iOS开发报错的问题修复记录</title>
-    <url>/2024/11/20/iOS%E5%BC%80%E5%8F%91%E6%8A%A5%E9%94%99%E7%9A%84%E9%97%AE%E9%A2%98%E4%BF%AE%E5%A4%8D%E8%AE%B0%E5%BD%95/</url>
-    <content><![CDATA[<p>模拟器运行报错</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">post_install do |installer|</span><br><span class="line"></span><br><span class="line"> installer.pods_project.targets.each do |target|</span><br><span class="line"></span><br><span class="line">  target.build_configurations.each do |config|</span><br><span class="line"></span><br><span class="line">   \# 处理 M1 芯片上不支持 模拟器 运行问题：不仅仅编译活跃的架构，反之就是 i386、x86_64、arm64 等架构都编译。</span><br><span class="line"></span><br><span class="line">   config.build_settings[&#x27;ONLY_ACTIVE_ARCH&#x27;] = &#x27;NO&#x27;</span><br><span class="line"></span><br><span class="line">   config.build_settings[&#x27;EXCLUDED_ARCHS[sdk=iphonesimulator*]&#x27;] = &quot;arm64&quot;</span><br><span class="line"></span><br><span class="line">  end</span><br><span class="line"></span><br><span class="line"> end</span><br><span class="line"></span><br><span class="line">end</span><br></pre></td></tr></table></figure>
-
-
-
-<p>YYText YYTextAsyncLayer UIGraphicsBeginImageContext Deprecated #984</p>
-<p><a href="https://github.com/ibireme/YYText/issues/984">https://github.com/ibireme/YYText/issues/984</a></p>
-<h1 id="iOS-18适配问题记录-Xcode16正式版"><a href="#iOS-18适配问题记录-Xcode16正式版" class="headerlink" title="iOS 18适配问题记录(Xcode16正式版)"></a>iOS 18适配问题记录(Xcode16正式版)</h1><h3 id="问题1：ADClient编译报错问题"><a href="#问题1：ADClient编译报错问题" class="headerlink" title="问题1：ADClient编译报错问题"></a>问题1：ADClient编译报错问题</h3><h4 id="报错信息"><a href="#报错信息" class="headerlink" title="报错信息"></a>报错信息</h4>
-
-<p><img src="https://upload-images.jianshu.io/upload_images/1177260-5902fcd45ac3365c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Undefined symbols <span class="keyword">for</span> architecture arm64:</span><br><span class="line">  <span class="string">&quot;_OBJC_CLASS_<span class="variable">$_ADClient</span>&quot;</span>, referenced from:</span><br><span class="line">       <span class="keyword">in</span> ViewController.o</span><br><span class="line">ld: symbol(s) not found <span class="keyword">for</span> architecture arm64</span><br><span class="line">clang: error: linker <span class="built_in">command</span> failed with <span class="built_in">exit</span> code 1 (use -v to see invocation)</span><br></pre></td></tr></table></figure>
-
-<h4 id="相关代码（demo）"><a href="#相关代码（demo）" class="headerlink" title="相关代码（demo）"></a>相关代码（demo）</h4>
-
-<p><img src="https://upload-images.jianshu.io/upload_images/1177260-c985bd451915ac10.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
-<h4 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h4><p>苹果对AdClicent API加了一个标识<br> ADCLIENT_DEPRECATED_IOS_90_145_OBSOLETED_180<br> 表示：iOS7.1-iOS14.5可用，iOS18彻底废弃，会在iOS18系统上编译失败。</p>
-
-
-<p><img src="https://upload-images.jianshu.io/upload_images/1177260-6484670f130a6afd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
-<h4 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h4><p>使用AdService库的AAAttribution替代，注意iOS14.3才可以使用。</p>
-<h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><figure class="highlight objectivec"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (@available(ios <span class="number">14.3</span>, *)) &#123;</span><br><span class="line">        <span class="built_in">NSError</span> *error;</span><br><span class="line">        <span class="built_in">NSString</span> *token = [AAAttribution attributionTokenWithError:&amp;error];</span><br><span class="line">        <span class="keyword">if</span> (token != <span class="literal">nil</span>) &#123;</span><br><span class="line">            ...</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><p><a href="https://links.jianshu.com/go?to=https://developer.apple.com/forums/thread/759156">https://developer.apple.com/forums/thread/759156</a><br> <a href="https://links.jianshu.com/go?to=https://developer.apple.com/documentation/iad?language=objc">https://developer.apple.com/documentation/iad?language=objc</a></p>
-<h3 id="问题2：Xcode16（正式版）运行时，YYCache导致crash"><a href="#问题2：Xcode16（正式版）运行时，YYCache导致crash" class="headerlink" title="问题2：Xcode16（正式版）运行时，YYCache导致crash"></a>问题2：Xcode16（正式版）运行时，YYCache导致crash</h3><h4 id="报错信息-1"><a href="#报错信息-1" class="headerlink" title="报错信息"></a>报错信息</h4>
-
-<p><img src="https://upload-images.jianshu.io/upload_images/1177260-74e56dabcd1817a4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
-<h4 id="原因-1"><a href="#原因-1" class="headerlink" title="原因"></a>原因</h4><p>在 iOS18 中，需要提前对 sqlite3_stmt 执行 sqlite3_finalize。</p>
-<h4 id="解决办法-1"><a href="#解决办法-1" class="headerlink" title="解决办法"></a>解决办法</h4>
-
-<p><img src="https://upload-images.jianshu.io/upload_images/1177260-3b76a65dbd9d1b1f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
-<h4 id="代码-1"><a href="#代码-1" class="headerlink" title="代码"></a>代码</h4><figure class="highlight objectivec"><table><tr><td class="code"><pre><span class="line">- (<span class="type">BOOL</span>)_dbClose &#123;</span><br><span class="line">    <span class="keyword">if</span> (!_db) <span class="keyword">return</span> <span class="literal">YES</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="type">int</span>  result = <span class="number">0</span>;</span><br><span class="line">    <span class="type">BOOL</span> retry = <span class="literal">NO</span>;</span><br><span class="line">    <span class="type">BOOL</span> stmtFinalized = <span class="literal">NO</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (@available(iOS <span class="number">18</span>, *)) &#123;</span><br><span class="line">        <span class="keyword">if</span> (_dbStmtCache) &#123;</span><br><span class="line">            <span class="built_in">CFIndex</span> size = <span class="built_in">CFDictionaryGetCount</span>(_dbStmtCache);</span><br><span class="line">            <span class="built_in">CFTypeRef</span> *valuesRef = (<span class="built_in">CFTypeRef</span> *)malloc(size * <span class="keyword">sizeof</span>(<span class="built_in">CFTypeRef</span>));</span><br><span class="line">            <span class="built_in">CFDictionaryGetKeysAndValues</span>(_dbStmtCache, <span class="literal">NULL</span>, (<span class="keyword">const</span> <span class="type">void</span> **)valuesRef);</span><br><span class="line">            <span class="keyword">const</span> sqlite3_stmt **stmts = (<span class="keyword">const</span> sqlite3_stmt **)valuesRef;</span><br><span class="line">            <span class="keyword">for</span> (<span class="built_in">CFIndex</span> i = <span class="number">0</span>; i &lt; size; i ++) &#123;</span><br><span class="line">                sqlite3_stmt *stmt = stmts[i];</span><br><span class="line">                sqlite3_finalize(stmt);</span><br><span class="line">            &#125;</span><br><span class="line">            free(valuesRef);</span><br><span class="line">            <span class="built_in">CFRelease</span>(_dbStmtCache);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (_dbStmtCache) <span class="built_in">CFRelease</span>(_dbStmtCache);</span><br><span class="line">        _dbStmtCache = <span class="literal">NULL</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">do</span> &#123;</span><br><span class="line">        retry = <span class="literal">NO</span>;</span><br><span class="line">        result = sqlite3_close(_db);</span><br><span class="line">        <span class="keyword">if</span> (result == SQLITE_BUSY || result == SQLITE_LOCKED) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!stmtFinalized) &#123;</span><br><span class="line">                stmtFinalized = <span class="literal">YES</span>;</span><br><span class="line">                sqlite3_stmt *stmt;</span><br><span class="line">                <span class="keyword">while</span> ((stmt = sqlite3_next_stmt(_db, <span class="literal">nil</span>)) != <span class="number">0</span>) &#123;</span><br><span class="line">                    sqlite3_finalize(stmt);</span><br><span class="line">                    retry = <span class="literal">YES</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (result != SQLITE_OK) &#123;</span><br><span class="line">            <span class="keyword">if</span> (_errorLogsEnabled) &#123;</span><br><span class="line">                <span class="built_in">NSLog</span>(<span class="string">@&quot;%s line:%d sqlite close failed (%d).&quot;</span>, __FUNCTION__, __LINE__, result);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">while</span> (retry);</span><br><span class="line">    _db = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">YES</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="参考-1"><a href="#参考-1" class="headerlink" title="参考"></a>参考</h4><p><a href="https://links.jianshu.com/go?to=https://giters.com/ibireme/YYCache/issues/166">https://giters.com/ibireme/YYCache/issues/166</a></p>
-<h3 id="问题3：Xcode16正式版，addSubView-crash-（maskView）"><a href="#问题3：Xcode16正式版，addSubView-crash-（maskView）" class="headerlink" title="问题3：Xcode16正式版，addSubView crash （maskView）"></a>问题3：Xcode16正式版，addSubView crash （maskView）</h3><h4 id="报错信息-2"><a href="#报错信息-2" class="headerlink" title="报错信息"></a>报错信息</h4>
-
-<p><img src="https://upload-images.jianshu.io/upload_images/1177260-655dd9dd0bd287c7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line">*** Assertion failure in -[TestMaskView _addSubview:positioned:relativeTo:], UIView.m:<span class="number">18496</span></span><br><span class="line">*** Terminating app due to uncaught exception <span class="string">&#x27;NSInternalInconsistencyException&#x27;</span>, reason: <span class="string">&#x27;Set `maskView` (&lt;UIView: 0x14a21ddd0; frame = (0 0; 0 0); layer = &lt;CALayer: 0x60000314b480&gt;&gt;) to `nil` before adding it as a subview of &lt;TestMaskView: 0x153e08350; frame = (0 0; 393 852); layer = &lt;CALayer: 0x60000314b440&gt;&gt;&#x27;</span></span><br><span class="line">*** First <span class="keyword">throw</span> call stack:</span><br><span class="line">(</span><br><span class="line">    <span class="number">0</span>   CoreFoundation                      <span class="number">0x00000001063540ec</span> __exceptionPreprocess + <span class="number">172</span></span><br><span class="line">    <span class="number">1</span>   libobjc.A.dylib                     <span class="number">0x00000001048bede8</span> objc_exception_throw + <span class="number">72</span></span><br><span class="line">    <span class="number">2</span>   Foundation                          <span class="number">0x0000000109d21aa8</span> _userInfoForFileAndLine + <span class="number">0</span></span><br><span class="line">    <span class="number">3</span>   UIKitCore                           <span class="number">0x0000000128c0151c</span> -[<span class="title function_ invoke__">UIView</span>(Internal) _addSubview:positioned:relativeTo:] + <span class="number">1124</span></span><br><span class="line">    <span class="number">4</span>   ADClientTest                        <span class="number">0x0000000104609660</span> -[TestMaskView initWithFrame:] + <span class="number">276</span></span><br><span class="line">    <span class="number">5</span>   ADClientTest                        <span class="number">0x0000000104609434</span> -[ViewController viewDidLoad] + <span class="number">164</span></span><br><span class="line">    <span class="number">6</span>   UIKitCore                           <span class="number">0x0000000127f1e69c</span> -[UIViewController _sendViewDidLoadWithAppearanceProxyObjectTaggingEnabled] + <span class="number">80</span></span><br><span class="line">    <span class="number">7</span>   UIKitCore                           <span class="number">0x0000000127f23238</span> -[UIViewController loadViewIfRequired] + <span class="number">908</span></span><br><span class="line">    <span class="number">8</span>   UIKitCore                           <span class="number">0x0000000127f234e0</span> -[UIViewController view] + <span class="number">20</span></span><br><span class="line">    <span class="number">9</span>   UIKitCore                           <span class="number">0x00000001286c3a08</span> -[UIWindow addRootViewControllerViewIfPossible] + <span class="number">132</span></span><br><span class="line">    <span class="number">10</span>  UIKitCore                           <span class="number">0x00000001286c343c</span> -[UIWindow _updateLayerOrderingAndSetLayerHidden:actionBlock:] + <span class="number">168</span></span><br><span class="line">    <span class="number">11</span>  UIKitCore                           <span class="number">0x00000001286c4288</span> -[UIWindow _setHidden:forced:] + <span class="number">228</span></span><br><span class="line">    <span class="number">12</span>  UIKitCore                           <span class="number">0x00000001286d3344</span> -[UIWindow _mainQueue_makeKeyAndVisible] + <span class="number">36</span></span><br><span class="line">    <span class="number">13</span>  UIKitCore                           <span class="number">0x000000012892dcd8</span> -[UIWindowScene _performDeferredInitialWindowUpdateForConnection] + <span class="number">204</span></span><br><span class="line">    <span class="number">14</span>  UIKitCore                           <span class="number">0x0000000127af58f0</span> +[UIScene _sceneForFBSScene:create:withSession:connectionOptions:] + <span class="number">1164</span></span><br><span class="line">    <span class="number">15</span>  UIKitCore                           <span class="number">0x000000012868f45c</span> -[UIApplication _connectUISceneFromFBSScene:transitionContext:] + <span class="number">808</span></span><br><span class="line">    <span class="number">16</span>  UIKitCore                           <span class="number">0x000000012868f70c</span> -[UIApplication workspace:didCreateScene:withTransitionContext:completion:] + <span class="number">304</span></span><br><span class="line">    <span class="number">17</span>  UIKitCore                           <span class="number">0x000000012815ec08</span> -[UIApplicationSceneClientAgent scene:didInitializeWithEvent:completion:] + <span class="number">260</span></span><br><span class="line">    <span class="number">18</span>  FrontBoardServices                  <span class="number">0x0000000113090ce4</span> __95-[FBSScene _callOutQueue_didCreateWithTransitionContext:alternativeCreationCallout:completion:]_block_invoke + <span class="number">260</span></span><br><span class="line">    <span class="number">19</span>  FrontBoardServices                  <span class="number">0x00000001130910a4</span> -[FBSScene _callOutQueue_coalesceClientSettingsUpdates:] + <span class="number">60</span></span><br><span class="line">    <span class="number">20</span>  FrontBoardServices                  <span class="number">0x0000000113090b64</span> -[FBSScene _callOutQueue_didCreateWithTransitionContext:alternativeCreationCallout:completion:] + <span class="number">408</span></span><br><span class="line">    <span class="number">21</span>  FrontBoardServices                  <span class="number">0x00000001130bdd50</span> __93-[FBSWorkspaceScenesClient _callOutQueue_sendDidCreateForScene:transitionContext:completion:]_block_invoke.<span class="number">156</span> + <span class="number">216</span></span><br><span class="line">    <span class="number">22</span>  FrontBoardServices                  <span class="number">0x000000011309d618</span> -[FBSWorkspace _calloutQueue_executeCalloutFromSource:withBlock:] + <span class="number">160</span></span><br><span class="line">    <span class="number">23</span>  FrontBoardServices                  <span class="number">0x00000001130bc220</span> -[FBSWorkspaceScenesClient _callOutQueue_sendDidCreateForScene:transitionContext:completion:] + <span class="number">388</span></span><br><span class="line">    <span class="number">24</span>  libdispatch.dylib                   <span class="number">0x000000010bdea7b8</span> _dispatch_client_callout + <span class="number">16</span></span><br><span class="line">    <span class="number">25</span>  libdispatch.dylib                   <span class="number">0x000000010bdee3bc</span> _dispatch_block_invoke_direct + <span class="number">388</span></span><br><span class="line">    <span class="number">26</span>  FrontBoardServices                  <span class="number">0x00000001130e0b58</span> __FBSSERIALQUEUE_IS_CALLING_OUT_TO_A_BLOCK__ + <span class="number">44</span></span><br><span class="line">    <span class="number">27</span>  FrontBoardServices                  <span class="number">0x00000001130e0a34</span> -[FBSMainRunLoopSerialQueue _targetQueue_performNextIfPossible] + <span class="number">196</span></span><br><span class="line">    <span class="number">28</span>  FrontBoardServices                  <span class="number">0x00000001130e0b8c</span> -[FBSMainRunLoopSerialQueue _performNextFromRunLoopSource] + <span class="number">24</span></span><br><span class="line">    <span class="number">29</span>  CoreFoundation                      <span class="number">0x00000001062b8324</span> __CFRUNLOOP_IS_CALLING_OUT_TO_A_SOURCE0_PERFORM_FUNCTION__ + <span class="number">24</span></span><br><span class="line">    <span class="number">30</span>  CoreFoundation                      <span class="number">0x00000001062b826c</span> __CFRunLoopDoSource0 + <span class="number">172</span></span><br><span class="line">    <span class="number">31</span>  CoreFoundation                      <span class="number">0x00000001062b7a2c</span> __CFRunLoopDoSources0 + <span class="number">324</span></span><br><span class="line">    <span class="number">32</span>  CoreFoundation                      <span class="number">0x00000001062b20b0</span> __CFRunLoopRun + <span class="number">788</span></span><br><span class="line">    <span class="number">33</span>  CoreFoundation                      <span class="number">0x00000001062b1960</span> CFRunLoopRunSpecific + <span class="number">536</span></span><br><span class="line">    <span class="number">34</span>  GraphicsServices                    <span class="number">0x0000000117edfb10</span> GSEventRunModal + <span class="number">160</span></span><br><span class="line">    <span class="number">35</span>  UIKitCore                           <span class="number">0x000000012868db40</span> -[UIApplication _run] + <span class="number">796</span></span><br><span class="line">    <span class="number">36</span>  UIKitCore                           <span class="number">0x0000000128691d38</span> UIApplicationMain + <span class="number">124</span></span><br><span class="line">    <span class="number">37</span>  ADClientTest                        <span class="number">0x0000000104609064</span> main + <span class="number">140</span></span><br><span class="line">    <span class="number">38</span>  dyld                                <span class="number">0x00000001047cd410</span> start_sim + <span class="number">20</span></span><br><span class="line">    <span class="number">39</span>  ???                                 <span class="number">0x000000010490a274</span> <span class="number">0x0</span> + <span class="number">4371554932</span></span><br><span class="line">)</span><br><span class="line">libc++abi: terminating due to uncaught exception of type NSException</span><br></pre></td></tr></table></figure>
-
-<h4 id="原因-2"><a href="#原因-2" class="headerlink" title="原因"></a>原因</h4><p>iOS 18 对 UIView的maskView 增加了断言，导致如果业务代码里有同名属性可能导致触发该断言。</p>
-<p>经测试发现：<br> 1.自定义UIView子视图，存在同名属性maskView，会崩溃<br> 2.自定义cell，添加到cell视图上会崩溃，添加到contentView上，则不会崩溃<br> 3.控制器里的maskView视图属性，添加到控制器view，不会崩溃</p>
-<h4 id="解决办法-2"><a href="#解决办法-2" class="headerlink" title="解决办法"></a>解决办法</h4><p>修改自定义视图，将自定义子组件名为maskView的视图进行重命名。</p>
-<h4 id="参考-2"><a href="#参考-2" class="headerlink" title="参考"></a>参考</h4><p><a href="https://links.jianshu.com/go?to=https://github.com/Tencent/QMUI_iOS/issues/1557">https://github.com/Tencent/QMUI_iOS&#x2F;issues&#x2F;1557</a></p>
-]]></content>
   </entry>
 </search>

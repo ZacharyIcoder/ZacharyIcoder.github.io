@@ -36,8 +36,8 @@ http://appservice.club/tags/iOS/
 http://appservice.club/tags/HiChat/
 http://appservice.club/tags/%E6%96%87%E6%A1%A3%E8%AF%B4%E6%98%8E/
 http://appservice.club/tags/%E5%9B%BE%E7%89%87%E8%A3%81%E5%89%AA/
-http://appservice.club/tags/SAMIM/
 http://appservice.club/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/
+http://appservice.club/tags/SAMIM/
 http://appservice.club/tags/permissions/
 http://appservice.club/tags/fishhook/
 http://appservice.club/tags/%E9%80%86%E5%90%91/
@@ -50,13 +50,13 @@ http://appservice.club/tags/%E6%9C%89%E6%85%A7%E6%B5%8B%E8%AF%95/
 http://appservice.club/tags/SAMIM%E4%B8%93%E4%B8%9A%E7%89%88/
 http://appservice.club/tags/OpenGL/
 http://appservice.club/tags/JS/
+http://appservice.club/tags/%E7%94%9F%E6%B4%BB/
+http://appservice.club/tags/%E6%9D%82%E9%A1%B9/
 http://appservice.club/tags/IM/
 http://appservice.club/tags/%E7%A4%BE%E4%BA%A4/
-http://appservice.club/tags/%E6%9D%82%E9%A1%B9/
-http://appservice.club/tags/%E7%94%9F%E6%B4%BB/
 http://appservice.club/categories/iOS/
-http://appservice.club/categories/SAMIM/
 http://appservice.club/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/
+http://appservice.club/categories/SAMIM/
 http://appservice.club/categories/iOS/HiChat/
 http://appservice.club/categories/Cocoapods/
 http://appservice.club/categories/redis/
@@ -65,6 +65,6 @@ http://appservice.club/categories/ubuntu/
 http://appservice.club/categories/%E6%9C%89%E6%85%A7%E6%B5%8B%E8%AF%95/
 http://appservice.club/categories/OpenGL/
 http://appservice.club/categories/Node-js/
-http://appservice.club/categories/IM/
-http://appservice.club/categories/%E6%9D%82%E9%A1%B9/
 http://appservice.club/categories/%E7%94%9F%E6%B4%BB/
+http://appservice.club/categories/%E6%9D%82%E9%A1%B9/
+http://appservice.club/categories/IM/
