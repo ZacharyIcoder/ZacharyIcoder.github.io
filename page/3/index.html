@@ -149,6 +149,93 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://appservice.club/2019/06/05/mac%E4%B8%8A%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8redis/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ZacharyIcoderKong">
+      <meta itemprop="description" content="一切有为法，如梦幻泡影，如露亦如电，应作如是观。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="梦幻泡影">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/06/05/mac%E4%B8%8A%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8redis/" class="post-title-link" itemprop="url">mac上安装使用redis</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-06-05 13:36:43" itemprop="dateCreated datePublished" datetime="2019-06-05T13:36:43+08:00">2019-06-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-07-03 14:13:35" itemprop="dateModified" datetime="2019-07-03T14:13:35+08:00">2019-07-03</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/redis/" itemprop="url" rel="index"><span itemprop="name">redis</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="使用homebrew安装redis"><a href="#使用homebrew安装redis" class="headerlink" title="使用homebrew安装redis"></a>使用homebrew安装redis</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ brew install redis</span><br></pre></td></tr></table></figure>
+
+<p>终端输出</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">==&gt; Downloading http://download.redis.io/releases/redis-3.2.3.tar.gz</span><br><span class="line">######################################################################## 100.0%</span><br><span class="line">==&gt; make install PREFIX=/usr/local/Cellar/redis/3.2.3 CC=clang</span><br><span class="line">==&gt; Caveats</span><br><span class="line">To have launchd start redis now and restart at login:</span><br><span class="line">  brew services start redis</span><br><span class="line">Or, if you don&#x27;t want/need a background service you can just run:</span><br><span class="line">  redis-server /usr/local/etc/redis.conf</span><br><span class="line">==&gt; Summary</span><br><span class="line">🍺  /usr/local/Cellar/redis/3.2.3: 10 files, 1.7M, built in 21 seconds</span><br></pre></td></tr></table></figure>
+
+<p>从以上日志输出可以看出，如果需要给redis服务端指定配置文件，<br><strong>启动命令应该是这样的:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ redis-server /usr/local/etc/redis.conf</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/06/05/mac%E4%B8%8A%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8redis/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://appservice.club/2019/06/04/IOS-%E5%B0%86%E5%9B%BE%E7%89%87%E8%BD%AC%E5%8C%96%E8%A3%81%E5%89%AA%E4%B8%BA%E5%9C%86%E5%BD%A2%E5%A4%B4%E5%83%8F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -749,7 +836,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-count">28</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
